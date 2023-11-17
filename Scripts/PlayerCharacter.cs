@@ -3,6 +3,9 @@ using System;
 
 public partial class PlayerCharacter : CharacterBody3D
 {
+	[Export]
+	public MultiplayerSynchronizer MpS;
+
 	public const float Speed = 7.5f;
 	public const float JumpVelocity = 7.5f;
 	public const float CameraSpeed = 0.005f;
@@ -13,14 +16,20 @@ public partial class PlayerCharacter : CharacterBody3D
 	public Camera3D Camera;
 
 	public override void _Ready()
-	{
+    {
+        GD.Print("Player Ready: " + GetParent().Name);
+        MpS.SetMultiplayerAuthority(int.Parse(GetParent().Name));
+        
 		CameraNeck = GetNode<Node3D>("CameraNeck");
-		Camera = GetNode<Camera3D>("CameraNeck/Camera3D");
-		GD.Print("KOKKIES");
-	}
+		//Camera = GetNode<Camera3D>("CameraNeck/Camera3D");
+        //Camera.Current = IsControlled();
+    }
 
-	public override void _UnhandledInput(InputEvent @event)
-	{
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        if (!IsControlled())
+            return;
+        
 		if (@event is InputEventMouseButton)
 			Input.MouseMode = Input.MouseModeEnum.Captured;
 		else if (@event.IsActionPressed("ui_cancel"))
@@ -36,6 +45,9 @@ public partial class PlayerCharacter : CharacterBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (!IsControlled())
+			return;
+
 		Vector3 velocity = Velocity;
 
 		// Add the gravity.
@@ -63,5 +75,10 @@ public partial class PlayerCharacter : CharacterBody3D
 
 		Velocity = velocity;
 		MoveAndSlide();
+	}
+
+	private bool IsControlled()
+	{
+		return MpS.GetMultiplayerAuthority() == Multiplayer.GetUniqueId();
 	}
 }

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Kokkies"
-run/main_scene="res://Scenes/dev.tscn"
+run/main_scene="res://Scenes/multiplayerMenu.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
 config/icon="res://Assets/icon.svg"
 

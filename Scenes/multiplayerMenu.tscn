@@ -21,6 +21,7 @@ scale = Vector2(1.20885, 0.82886)
 text = "Host"
 
 [node name="Join" type="Button" parent="."]
+layout_mode = 0
 offset_left = 503.0
 offset_top = 241.0
 offset_right = 596.0
@@ -29,6 +30,7 @@ scale = Vector2(1.20885, 0.82886)
 text = "Join"
 
 [node name="Start" type="Button" parent="."]
+layout_mode = 0
 offset_left = 496.0
 offset_top = 395.0
 offset_right = 612.0
