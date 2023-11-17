@@ -16,6 +16,7 @@ public partial class PlayerCharacter : CharacterBody3D
 	{
 		CameraNeck = GetNode<Node3D>("CameraNeck");
 		Camera = GetNode<Camera3D>("CameraNeck/Camera3D");
+		GD.Print("TEST");
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
