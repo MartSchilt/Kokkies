@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://6w2a63ckgmbl"]
 
-[ext_resource type="Script" path="res://PlayerCharacter.cs" id="1_rjqof"]
+[ext_resource type="Script" path="res://Scripts/PlayerCharacter.cs" id="1_b0lce"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kvbhn"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -36,6 +36,7 @@ data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
+directional_shadow_split_3 = 0.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_tbgsu")
@@ -51,7 +52,7 @@ shape = SubResource("ConcavePolygonShape3D_o0t78")
 
 [node name="PlayerCharacter" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-script = ExtResource("1_rjqof")
+script = ExtResource("1_b0lce")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerCharacter"]
 mesh = SubResource("CapsuleMesh_job5g")
