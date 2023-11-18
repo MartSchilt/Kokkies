@@ -21,8 +21,8 @@ public partial class PlayerCharacter : CharacterBody3D
         MpS.SetMultiplayerAuthority(int.Parse(GetParent().Name));
         
 		CameraNeck = GetNode<Node3D>("CameraNeck");
-		//Camera = GetNode<Camera3D>("CameraNeck/Camera3D");
-        //Camera.Current = IsControlled();
+		Camera = GetNode<Camera3D>("CameraNeck/Camera3D");
+        Camera.Current = IsControlled();
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -79,6 +79,6 @@ public partial class PlayerCharacter : CharacterBody3D
 
 	private bool IsControlled()
 	{
-		return MpS.GetMultiplayerAuthority() == Multiplayer.GetUniqueId();
+        return MpS.GetMultiplayerAuthority() == Multiplayer.GetUniqueId();
 	}
 }

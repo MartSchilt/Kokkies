@@ -11,7 +11,6 @@ public partial class MultiplayerController : Control
 	private ENetMultiplayerPeer peer;
 	private int index = 0;
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		Multiplayer.PeerConnected += PlayerConnected;
@@ -28,7 +27,7 @@ public partial class MultiplayerController : Control
 		var scene = GD.Load<PackedScene>("res://Scenes/dev.tscn");
 		var instance = scene.Instantiate();
 		AddChild(instance);
-		this.Hide();
+		Hide();
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]
@@ -37,15 +36,16 @@ public partial class MultiplayerController : Control
 		Player player = new() { Id = id, Name = name, Score = 0, SpawnLocation = index};
 		index++;
 		GameManager.Players.Add(player);
-		GD.Print("Player Connected: " + name);
+		GD.Print("Player Connected: " + id + " - " + name);
 
 		if (Multiplayer.IsServer())
 		{
 			for (int i = 0; i < GameManager.Players.Count; i++)
-				Rpc(nameof(SendPlayerInfo), i, GameManager.Players[i].Name);
+				Rpc(nameof(SendPlayerInfo), GameManager.Players[i].Id, GameManager.Players[i].Name);
 		}
 	}
 
+	#region Peer-to-peer methods
 	private void PlayerConnected(long id)
 	{
 		// Do nothing... For now?
@@ -67,7 +67,7 @@ public partial class MultiplayerController : Control
 	{
 		GD.Print("Connection Failed!");
 	}
-
+	#endregion
 	#region Button Presses
 	private void _on_host_button_down()
 	{
