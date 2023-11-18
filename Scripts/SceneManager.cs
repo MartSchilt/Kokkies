@@ -8,6 +8,17 @@ public partial class SceneManager : Node3D
 
 	public override void _Ready()
 	{
+		if (GameManager.Players.Count <= 0)
+		{
+			GameManager.Players.Add(new()
+			{
+				Id = 1,
+				Name = "Kokkie",
+				Color = new Color(),
+				Score = 100,
+			});
+		}
+
 		var index = 0;
 		foreach(var player in GameManager.Players)
 		{

@@ -4,8 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://dqv43xmf8m3y4" path="res://Scenes/player.tscn" id="2_bva4n"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kvbhn"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+sky_top_color = Color(0.631373, 0.341176, 0.454902, 1)
+sky_horizon_color = Color(0.913725, 0.54902, 0.384314, 1)
+ground_horizon_color = Color(0.87451, 0.564706, 0.462745, 1)
 
 [sub_resource type="Sky" id="Sky_6e48r"]
 sky_material = SubResource("ProceduralSkyMaterial_kvbhn")
@@ -15,6 +16,9 @@ background_mode = 2
 sky = SubResource("Sky_6e48r")
 tonemap_mode = 2
 glow_enabled = true
+fog_enabled = true
+fog_light_color = Color(0.556863, 0.545098, 0.564706, 1)
+fog_sky_affect = 0.5
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_nlkxy"]
 size = Vector2(20, 20)

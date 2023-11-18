@@ -11,6 +11,11 @@ public class Player
     public int Score { get; set; }
 }
 
+/// <summary>
+/// Manages the active "Game" that is started by the client
+/// Gets implemented in the Project Autoload.
+/// It therefore acts similar to a Singleton, without requiring us to keep track of the instance
+/// </summary>
 public partial class GameManager : Node
 {
     public static int MaxPlayers = 10;
