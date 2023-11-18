@@ -35,8 +35,6 @@ public partial class PlayerCharacter : CharacterBody3D
 		StandardMaterial3D mat = new StandardMaterial3D();
         mat.AlbedoColor = player.Color;
 		Mesh.MaterialOverlay = mat;
-
-        GD.Print(player.Id + " COLOR: " + player.Color);
     }
 
     public override void _UnhandledInput(InputEvent @event)

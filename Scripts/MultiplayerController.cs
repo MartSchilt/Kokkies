@@ -7,7 +7,7 @@ public partial class MultiplayerController : Control
 {
 	[Export]
 	public int Port = 8910;
-   
+
 	private ENetMultiplayerPeer peer;
 	private string playerName = string.Empty;
 	private string ipAddress = string.Empty;
@@ -40,10 +40,11 @@ public partial class MultiplayerController : Control
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]
 	public void SendPlayerInfo(long id, string name, Color color)
 	{
-		Player player = new() { 
-			Id = id, 
-			Name = name, 
-			Score = 0, 
+		Player player = new()
+		{
+			Id = id,
+			Name = name,
+			Score = 0,
 			Color = color
 		};
 		GameManager.Players.Add(player);
@@ -56,18 +57,20 @@ public partial class MultiplayerController : Control
 		}
 	}
 
-	public void HostGame()
+	// Is basically a void method, but returns an Error object, just in case something goes wrong
+	public Error HostGame()
 	{
 		var error = peer.CreateServer(Port, GameManager.MaxPlayers);
 		if (error != Error.Ok)
 		{
 			GD.PrintErr("Failed to host: " + error);
-			return;
+			return error;
 		}
 
 		peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
 		Multiplayer.MultiplayerPeer = peer;
 		GD.Print("Hosting started...");
+		return error;
 	}
 
 	private Color RandomColor()
@@ -104,14 +107,14 @@ public partial class MultiplayerController : Control
 	#region Button Presses
 	private void _on_host_button_down()
 	{
-		HostGame();
-		SendPlayerInfo(Multiplayer.GetUniqueId(), playerName, RandomColor());
+		if (HostGame() == Error.Ok)
+			SendPlayerInfo(Multiplayer.GetUniqueId(), playerName, RandomColor());
 	}
 
 	private void _on_join_button_down()
 	{
 		if (ipAddress == "") // For faster debug
-			ipAddress= "127.0.0.1";
+			ipAddress = "127.0.0.1";
 
 		var error = peer.CreateClient(ipAddress, Port);
 		if (error != Error.Ok)
