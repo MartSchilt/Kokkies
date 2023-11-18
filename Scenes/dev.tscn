@@ -82,6 +82,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.49589, 2.44826, 7.39967)
 [node name="2" type="Node3D" parent="SpawnLocations" groups=["SpawnLocation"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.73967, 0.770875, -6.23409)
 
+[node name="3" type="Node3D" parent="SpawnLocations" groups=["SpawnLocation"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.47934, 1.54175, -12.4682)
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(-0.999334, 0, -0.0365042, 0, 1, 0, 0.0365042, 0, -0.999334, 5.43068, 9.64604, -45.1138)
 current = true

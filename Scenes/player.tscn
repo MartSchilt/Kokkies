@@ -7,6 +7,10 @@ properties/0/path = NodePath("PlayerCharacter:position")
 properties/0/spawn = true
 properties/0/sync = true
 properties/0/watch = false
+properties/1/path = NodePath("PlayerCharacter:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+properties/1/watch = false
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bivn6"]
 
@@ -16,12 +20,17 @@ points = PackedVector3Array(-0.125207, -0.532801, -0.480507, 0.0227831, 0.47607,
 [node name="Player" type="Node3D"]
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 0.01
 replication_config = SubResource("SceneReplicationConfig_qlk0q")
 
 [node name="PlayerCharacter" type="CharacterBody3D" parent="." node_paths=PackedStringArray("MpS")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_234yd")
 MpS = NodePath("../MultiplayerSynchronizer")
+
+[node name="NameLabel" type="Label3D" parent="PlayerCharacter"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.25834, 0)
+text = "kokkie"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerCharacter"]
 mesh = SubResource("CapsuleMesh_bivn6")

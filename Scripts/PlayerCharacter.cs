@@ -14,15 +14,20 @@ public partial class PlayerCharacter : CharacterBody3D
 	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 	public Node3D CameraNeck;
 	public Camera3D Camera;
+	public Label3D NameLabel;
 
 	public override void _Ready()
     {
-        GD.Print("Player Ready: " + GetParent().Name);
-        MpS.SetMultiplayerAuthority(int.Parse(GetParent().Name));
+		var parent = GetParent();
+        GD.Print("Player Ready: " + parent.Name);
+        MpS.SetMultiplayerAuthority(int.Parse(parent.Name));
         
 		CameraNeck = GetNode<Node3D>("CameraNeck");
 		Camera = GetNode<Camera3D>("CameraNeck/Camera3D");
         Camera.Current = IsControlled();
+
+        NameLabel = GetNode<Label3D>("NameLabel");
+		NameLabel.Text = parent.GetMeta("PlayerName").AsString();
     }
 
     public override void _UnhandledInput(InputEvent @event)
