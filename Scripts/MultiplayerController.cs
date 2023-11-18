@@ -5,8 +5,6 @@ using System.Linq;
 public partial class MultiplayerController : Control
 {
 	[Export]
-	public string Address = "127.0.0.1";
-	[Export]
 	public int Port = 8910;
    
 	private ENetMultiplayerPeer peer;
@@ -97,7 +95,7 @@ public partial class MultiplayerController : Control
 
 	private void _on_join_button_down()
 	{
-		var error = peer.CreateClient(Address, Port);
+		var error = peer.CreateClient(ipAddress, Port);
 		if (error != Error.Ok)
 		{
 			GD.Print("Failed to create client: " + error);

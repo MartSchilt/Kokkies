@@ -13,7 +13,6 @@ public class Player
 
 public partial class GameManager : Node
 {
-	[Export]
     public static int MaxPlayers = 10;
     public static List<Player> Players;
 	public static string Address;
