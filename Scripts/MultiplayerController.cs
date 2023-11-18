@@ -5,12 +5,10 @@ using System.Linq;
 
 public partial class MultiplayerController : Control
 {
-	[Export]
-	public int Port = 8910;
-
 	private ENetMultiplayerPeer peer;
 	private string playerName = string.Empty;
-	private string ipAddress = string.Empty;
+	private string ipAddress = "127.0.0.1";
+	private int Port = 8910;
 
 	public override void _Ready()
 	{
@@ -69,7 +67,7 @@ public partial class MultiplayerController : Control
 
 		peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
 		Multiplayer.MultiplayerPeer = peer;
-		GD.Print("Hosting started...");
+		GD.Print("Hosting started on " + Port + "...");
 		return error;
 	}
 
@@ -113,9 +111,6 @@ public partial class MultiplayerController : Control
 
 	private void _on_join_button_down()
 	{
-		if (ipAddress == "") // For faster debug
-			ipAddress = "127.0.0.1";
-
 		var error = peer.CreateClient(ipAddress, Port);
 		if (error != Error.Ok)
 		{
@@ -140,6 +135,10 @@ public partial class MultiplayerController : Control
 	private void _on_ip_input_text_changed(string new_text)
 	{
 		ipAddress = new_text;
+	}
+	private void _on_port_input_text_changed(string new_text)
+	{
+		Port = int.Parse(new_text);
 	}
 	#endregion
 }

@@ -46,17 +46,17 @@ text = "Host"
 [node name="Join" type="Button" parent="."]
 layout_mode = 0
 offset_left = 550.0
-offset_top = 475.0
+offset_top = 500.0
 offset_right = 650.0
-offset_bottom = 510.0
+offset_bottom = 535.0
 text = "Join"
 
 [node name="Start" type="Button" parent="."]
 layout_mode = 0
 offset_left = 550.0
-offset_top = 550.0
+offset_top = 575.0
 offset_right = 650.0
-offset_bottom = 585.0
+offset_bottom = 610.0
 text = "Start Game"
 
 [node name="Name" type="Label" parent="."]
@@ -77,12 +77,13 @@ offset_bottom = 285.0
 
 [node name="IP-Address" type="Label" parent="."]
 layout_mode = 0
-offset_left = 550.0
+offset_left = 530.0
 offset_top = 325.0
-offset_right = 650.0
+offset_right = 663.0
 offset_bottom = 360.0
-text = "IP-Address"
+text = "IP-Address + Port"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="IPInput" type="LineEdit" parent="."]
 layout_mode = 0
@@ -91,8 +92,15 @@ offset_top = 375.0
 offset_right = 800.0
 offset_bottom = 410.0
 
+[node name="PortInput" type="LineEdit" parent="."]
+offset_left = 400.0
+offset_top = 425.0
+offset_right = 800.0
+offset_bottom = 460.0
+
 [connection signal="button_down" from="Host" to="." method="_on_host_button_down"]
 [connection signal="button_down" from="Join" to="." method="_on_join_button_down"]
 [connection signal="button_down" from="Start" to="." method="_on_start_button_down"]
 [connection signal="text_changed" from="NameInput" to="." method="_on_name_input_text_changed"]
 [connection signal="text_changed" from="IPInput" to="." method="_on_ip_input_text_changed"]
+[connection signal="text_changed" from="PortInput" to="." method="_on_port_input_text_changed"]
