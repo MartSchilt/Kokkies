@@ -23,10 +23,14 @@ points = PackedVector3Array(-0.125207, -0.532801, -0.480507, 0.0227831, 0.47607,
 replication_interval = 0.01
 replication_config = SubResource("SceneReplicationConfig_qlk0q")
 
-[node name="PlayerCharacter" type="CharacterBody3D" parent="." node_paths=PackedStringArray("MpS")]
+[node name="PlayerCharacter" type="CharacterBody3D" parent="." node_paths=PackedStringArray("MpS", "Mesh", "CameraNeck", "Camera", "NameLabel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_234yd")
 MpS = NodePath("../MultiplayerSynchronizer")
+Mesh = NodePath("MeshInstance3D")
+CameraNeck = NodePath("CameraNeck")
+Camera = NodePath("CameraNeck/Camera3D")
+NameLabel = NodePath("NameLabel")
 
 [node name="NameLabel" type="Label3D" parent="PlayerCharacter"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.25834, 0)

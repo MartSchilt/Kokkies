@@ -1,33 +1,42 @@
 using Godot;
+using Kokkies;
 using System;
 
 public partial class PlayerCharacter : CharacterBody3D
 {
 	[Export]
 	public MultiplayerSynchronizer MpS;
+    [Export]
+    public MeshInstance3D Mesh;
+    [Export]
+    public Node3D CameraNeck;
+    [Export]
+    public Camera3D Camera;
+    [Export]
+    public Label3D NameLabel;
 
-	public const float Speed = 7.5f;
+    public const float Speed = 7.5f;
 	public const float JumpVelocity = 7.5f;
 	public const float CameraSpeed = 0.005f;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
-	public Node3D CameraNeck;
-	public Camera3D Camera;
-	public Label3D NameLabel;
 
-	public override void _Ready()
+    private Player player;
+
+    public override void _Ready()
     {
-		var parent = GetParent();
-        GD.Print("Player Ready: " + parent.Name);
+        var parent = GetParent();
         MpS.SetMultiplayerAuthority(int.Parse(parent.Name));
-        
-		CameraNeck = GetNode<Node3D>("CameraNeck");
-		Camera = GetNode<Camera3D>("CameraNeck/Camera3D");
-        Camera.Current = IsControlled();
+        player = GameManager.Players.Find(p => p.Id == parent.GetMeta("PlayerId").As<long>());
 
-        NameLabel = GetNode<Label3D>("NameLabel");
-		NameLabel.Text = parent.GetMeta("PlayerName").AsString();
+        Camera.Current = IsControlled();
+		NameLabel.Text = player.Name + "#" + player.Id;
+		StandardMaterial3D mat = new StandardMaterial3D();
+        mat.AlbedoColor = player.Color;
+		Mesh.MaterialOverlay = mat;
+
+        GD.Print(player.Id + " COLOR: " + player.Color);
     }
 
     public override void _UnhandledInput(InputEvent @event)
@@ -84,6 +93,13 @@ public partial class PlayerCharacter : CharacterBody3D
 
 	private bool IsControlled()
 	{
-        return MpS.GetMultiplayerAuthority() == Multiplayer.GetUniqueId();
+		try
+        {
+            return MpS.GetMultiplayerAuthority() == Multiplayer.GetUniqueId();
+        }
+		catch (Exception ex)
+		{
+			return false;
+		}
 	}
 }

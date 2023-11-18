@@ -7,8 +7,8 @@ public class Player
 {
 	public long Id { get; set; }
 	public string Name { get; set; }
-	public int Score { get; set; }
-	public int SpawnLocation { get; set; }
+    public Color Color { get; set; }
+    public int Score { get; set; }
 }
 
 public partial class GameManager : Node

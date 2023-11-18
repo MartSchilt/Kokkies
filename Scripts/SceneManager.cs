@@ -13,7 +13,7 @@ public partial class SceneManager : Node3D
 		{
 			var currentPlayer = PlayerScene.Instantiate() as Node3D;
 			currentPlayer.Name = player.Id.ToString();
-			currentPlayer.SetMeta("PlayerName", player.Name);
+			currentPlayer.SetMeta("PlayerId", player.Id);
 			AddChild(currentPlayer);
 			foreach (Node3D spawn in GetTree().GetNodesInGroup("SpawnLocation"))
 				if (spawn.Name == index.ToString())
