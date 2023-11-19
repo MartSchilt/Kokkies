@@ -3,11 +3,12 @@ using Kokkies;
 
 public partial class SceneManager : Node3D
 {
-	[Export]
 	public PackedScene PlayerScene;
 
 	public override void _Ready()
 	{
+		PlayerScene = GD.Load<PackedScene>("res://Scenes/player.tscn");
+		
 		if (GameManager.Players.Count <= 0)
 		{
 			GameManager.Players.Add(new()
