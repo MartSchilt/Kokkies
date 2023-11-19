@@ -5,6 +5,9 @@ using System.Linq;
 
 public partial class MultiplayerScene : Control
 {
+	private const string STATUS = "Status: ";
+	private const float STANDARD_INPUT_THRESHOLD = 0.005f;
+	
 	public Node Main;
 	public MultiplayerManager MPManager;
 
@@ -14,16 +17,7 @@ public partial class MultiplayerScene : Control
 	public Label statusLabel;
 	public RichTextLabel playerList;
 
-	private const string STATUS = "Status: ";
-	private const string STANDARD_NAME = "Kokkie";
-	private const string STANDARD_IP = "127.0.0.1";
-	private const int STANDARD_PORT = 8910;
-	private const float STANDARD_INPUT_THRESHOLD = 0.005f;
-
 	private ENetMultiplayerPeer peer;
-	private string playerName = STANDARD_NAME;
-	private string ipAddress = STANDARD_IP;
-	private int port = STANDARD_PORT;
 
 	public override void _Ready()
 	{
@@ -61,6 +55,7 @@ public partial class MultiplayerScene : Control
 	public void StartGame()
 	{
 		MPManager.StartMultiplayerScene("res://Scenes/dev.tscn");
+		Hide();
 	}
 
 	public void UpdateUI()
@@ -88,9 +83,8 @@ public partial class MultiplayerScene : Control
 
 		if (MPManager.HostGame() == Error.Ok)
 		{
-			statusLabel.Text = STATUS + "Hosting on " + port;
-			MPManager.SendPlayerInfo(Multiplayer.GetUniqueId(), playerName, RandomColor());
-			MPManager.VOrchestrator.Recording = true; // Make sure it records the microphone
+			statusLabel.Text = STATUS + "Hosting on " + GameManager.Port;
+			startMPButton.Disabled = false;
 		}
 		else
 		{
@@ -102,7 +96,7 @@ public partial class MultiplayerScene : Control
 	{
 		statusLabel.Text = STATUS + "Connecting...";
 
-		if (MPManager.JoinGame(ipAddress, port) == Error.Ok)
+		if (MPManager.JoinGame() == Error.Ok)
 		{
 			statusLabel.Text = STATUS + "Connected!";
 		}
@@ -111,6 +105,7 @@ public partial class MultiplayerScene : Control
 			statusLabel.Text = STATUS + "Failed to connect!";
 		}
 	}
+
 	private void _on_multiplayer_test_button_down()
 	{
 		Rpc(nameof(StartGame));
@@ -120,29 +115,27 @@ public partial class MultiplayerScene : Control
 	#region Text Inputs
 	private void _on_name_input_text_changed(string new_text)
 	{
-		if (new_text != "")
-			playerName = new_text;
-		else
-			playerName = STANDARD_NAME;
+		GameManager.SetPlayerName(new_text);
 	}
 
 	private void _on_ip_input_text_changed(string new_text)
 	{
-		if (new_text != "")
-			ipAddress = new_text;
-		else
-			ipAddress = STANDARD_IP;
+		GameManager.SetIpAddress(new_text);
 	}
 
 	private void _on_port_input_text_changed(string new_text)
 	{
+		int port;
 		if (new_text != "")
 		{
 			var parsed = int.TryParse(new_text, out port);
 			if (parsed)
+			{
+				GameManager.Port = port;
 				return;
+			}
 		}
-		port = STANDARD_PORT;
+		GameManager.Port = GameManager.STANDARD_PORT;
 	}
 	#endregion
 

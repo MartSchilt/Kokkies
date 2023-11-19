@@ -8,9 +8,6 @@ public partial class MultiplayerManager : Node
     public VoiceOrchestrator VOrchestrator;
 
     private ENetMultiplayerPeer peer;
-    private string playerName;
-    private string ipAddress;
-    private int Port;
 
     public override void _Ready()
     {
@@ -25,9 +22,9 @@ public partial class MultiplayerManager : Node
         Multiplayer.ServerDisconnected += DisconnectedFromServer;
         peer = new();
 
-        // Initializing
+        // VOIP
         VOrchestrator = new();
-        AddChild(VOrchestrator);
+        Main.AddChild(VOrchestrator);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
@@ -66,7 +63,7 @@ public partial class MultiplayerManager : Node
     // Is basically a void method, but returns an Error object, just in case something goes wrong
     public Error HostGame()
     {
-        var error = peer.CreateServer(Port, GameManager.MaxPlayers);
+        var error = peer.CreateServer(GameManager.Port, GameManager.MaxPlayers);
         if (error != Error.Ok)
         {
             GD.PrintErr("Failed to host: " + error);
@@ -75,13 +72,15 @@ public partial class MultiplayerManager : Node
 
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
-        GD.Print("Hosting started on " + Port + "...");
+        GD.Print("Hosting started on " + GameManager.Port + "...");
+        SendPlayerInfo(Multiplayer.GetUniqueId(), GameManager.PlayerName, Helper.RandomColor());
+        VOrchestrator.Recording = true; // Make sure it records the microphone
         return error;
     }
 
-    public Error JoinGame(string ipAddress, int port)
+    public Error JoinGame()
     {
-        var error = peer.CreateClient(ipAddress, port);
+        var error = peer.CreateClient(GameManager.IpAddress, GameManager.Port);
         if (error != Error.Ok)
         {
             GD.PrintErr("Failed to create client: " + error);
@@ -110,7 +109,7 @@ public partial class MultiplayerManager : Node
     {
         GD.Print("Connected To Server");
         var id = Multiplayer.GetUniqueId();
-        Rpc(nameof(SendPlayerInfo), id, playerName, Helper.RandomColor());
+        Rpc(nameof(SendPlayerInfo), id, GameManager.PlayerName, Helper.RandomColor());
     }
 
     private void DisconnectedFromServer()
