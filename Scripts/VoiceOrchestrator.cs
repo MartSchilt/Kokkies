@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
 namespace Kokkies;
@@ -28,7 +29,10 @@ public partial class VoiceOrchestrator : Node
         set
         {
             if (ID != null)
-                instances[ID ?? 0].Listen = value;
+            {
+                var instance = instances.Find(i => i.Name == ID.ToString());
+                instance.Listen = value;
+            }
 
             _listen = value;
         }
@@ -40,7 +44,10 @@ public partial class VoiceOrchestrator : Node
         set
         {
             if (ID != null)
-                instances[ID ?? 0].Recording = value;
+            {
+                var instance = instances.Find(i => i.Name == ID.ToString());
+                instance.Recording = value;
+            }
 
             _recording = value;
         }
@@ -52,7 +59,10 @@ public partial class VoiceOrchestrator : Node
         set
         {
             if (ID != null)
-                instances[ID ?? 0].InputThreshold = value;
+            {
+                var instance = instances.Find(i => i.Name == ID.ToString());
+                instance.InputThreshold = value;
+            }
 
             _inputThreshold = value;
         }
@@ -63,12 +73,12 @@ public partial class VoiceOrchestrator : Node
     private bool _listen;
     private bool _recording;
     private float _inputThreshold;
-    private Dictionary<long, VoiceInstance> instances;
+    private List<VoiceInstance> instances;
     private int? ID = null;
 
     public override void _Ready()
     {
-        instances = new Dictionary<long, VoiceInstance>();
+        instances = new List<VoiceInstance>();
 
         Multiplayer.ConnectedToServer += ConnectedOK;
         Multiplayer.ServerDisconnected += ServerDisconnected;
@@ -110,21 +120,20 @@ public partial class VoiceOrchestrator : Node
         instance.receivedVoiceData += ReceivedVoiceData;
 
         instance.Name = id.ToString();
-        instances.Add(id, instance);
+        instances.Add(instance);
         AddChild(instance);
         EmitSignal(SignalName.createdInstance);
     }
         
     public void RemoveInstance(long id)
     {
-        VoiceInstance _instance;
-        var exists = instances.TryGetValue(id, out _instance);
+        var _instance = instances.Find(i => i.Name == id.ToString());
 
         if (id == ID)
             ID = null;
 
-        if (exists)
-            instances.Remove(id);
+        if (_instance != null)
+            instances.Remove(_instance);
 
         EmitSignal(SignalName.removedInstance, id);
     }

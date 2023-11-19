@@ -17,6 +17,7 @@ public partial class MultiplayerController : Control
 	private const string STANDARD_NAME = "Kokkie";
 	private const string STANDARD_IP = "127.0.0.1";
 	private const int STANDARD_PORT = 8910;
+	private const float STANDARD_INPUT_THRESHOLD = 0.005f;
 
 	private ENetMultiplayerPeer peer;
 	private string playerName = STANDARD_NAME;
@@ -42,10 +43,10 @@ public partial class MultiplayerController : Control
 		Multiplayer.ConnectedToServer += ConnectedToServer;
 		Multiplayer.ConnectionFailed += ConnectionFailed;
 		Multiplayer.ServerDisconnected += DisconnectedFromServer;
-		peer = new();
+        peer = new();
 
-		// Change the way the game works when it is started as a server
-		if (OS.GetCmdlineArgs().Contains("--server"))
+        // Change the way the game works when it is started as a server
+        if (OS.GetCmdlineArgs().Contains("--server"))
 		{
 			GD.Print("Started as server");
 			HostGame();
@@ -58,8 +59,8 @@ public partial class MultiplayerController : Control
 			voiceOrchestrator = new();
 			AddChild(voiceOrchestrator);
 
-			spinBoxInputThreshold.Value = voiceOrchestrator.InputThreshold;
-			sliderInputThreshold.Value = voiceOrchestrator.InputThreshold;
+			spinBoxInputThreshold.Value = STANDARD_INPUT_THRESHOLD;
+			sliderInputThreshold.Value = STANDARD_INPUT_THRESHOLD;
 			statusLabel.Text = STATUS + "Ready to host or join";
 		}
 	}
@@ -105,7 +106,7 @@ public partial class MultiplayerController : Control
 	public Error HostGame()
 	{
 		statusLabel.Text = STATUS + "Starting server...";
-		var error = peer.CreateServer(Port, GameManager.MaxPlayers);
+        var error = peer.CreateServer(Port, GameManager.MaxPlayers);
 		if (error != Error.Ok)
 		{
 			GD.PrintErr("Failed to host: " + error);
@@ -162,7 +163,9 @@ public partial class MultiplayerController : Control
 	private void DisconnectedFromServer()
 	{
 		GD.Print("Disconnected From Server");
-	}
+		GameManager.Players.Clear();
+        UpdateUI();
+    }
 
 	private void ConnectionFailed()
 	{
@@ -183,7 +186,7 @@ public partial class MultiplayerController : Control
 	private void _on_join_button_down()
 	{
 		statusLabel.Text = STATUS + "Connecting...";
-		var error = peer.CreateClient(ipAddress, Port);
+        var error = peer.CreateClient(ipAddress, Port);
 		if (error != Error.Ok)
 		{
 			GD.PrintErr("Failed to create client: " + error);
