@@ -23,7 +23,7 @@ public partial class VoiceMic : AudioStreamPlayer
         AudioServer.SetBusMute(index, true);
 
         Bus = busName;
-        Stream = new();
+        Stream = new AudioStreamMicrophone();
         Play();
     }
 }

@@ -1,5 +1,4 @@
 using Godot;
-using Godot.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,11 @@ namespace Kokkies;
 
 public partial class VoiceInstance : Node3D
 {
+    [Signal]
+    public delegate void receivedVoiceDataEventHandler(float[] data, int id);
+    [Signal]
+    public delegate void sentVoiceDataEventHandler(float[] data);
+
     [Export]
     public NodePath customAudio;
 
@@ -19,12 +23,17 @@ public partial class VoiceInstance : Node3D
 
     private int recordIndex;
     private bool prevFrameRecording = false;
-    private Array<float> receiveBuffer = new Array<float>();
+    private Queue<float> receiveBuffer = new Queue<float>();
     private AudioStreamWav audioWav;
     private AudioStreamPlayer voice;
     private AudioEffectCapture effectCapture;
     private AudioStreamGeneratorPlayback playback;
     private VoiceMic Mic;
+
+    public override void _Ready()
+    {
+        GD.Print("Voice Instance Ready!");
+    }
 
     public override void _Process(double delta)
     {
@@ -37,18 +46,18 @@ public partial class VoiceInstance : Node3D
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]
     public void Speak(float[] sampleData, int id)
     {
-        GD.Print("Playback");
         if (playback == null)
             CreateVoice();
 
-        EmitSignal("receivedVoiceData", sampleData, id);
+        EmitSignal(SignalName.receivedVoiceData, sampleData, id);
 
-        receiveBuffer.AddRange(sampleData);
+        foreach (var item in sampleData)
+            receiveBuffer.Enqueue(item);
     }
 
     private void CreateVoice()
     {
-        if (customAudio != null)
+        if (customAudio != null && !customAudio.IsEmpty)
         {
             var audioStreamPlayer = GetNode(customAudio);
             if (audioStreamPlayer is AudioStreamPlayer || audioStreamPlayer is AudioStreamPlayer2D || audioStreamPlayer is AudioStreamPlayer3D)
@@ -65,9 +74,9 @@ public partial class VoiceInstance : Node3D
         AudioStreamGenerator generator = new();
         generator.BufferLength = 0.1f;
         voice.Stream = generator;
+        voice.Play();
 
         playback = voice.GetStreamPlayback() as AudioStreamGeneratorPlayback;
-        voice.Play();
     }
 
     private void ProcessVoice()
@@ -76,10 +85,7 @@ public partial class VoiceInstance : Node3D
             return;
 
         for (int i = 0; i < Math.Min(playback.GetFramesAvailable(), receiveBuffer.Count); i++)
-        {
-            playback.PushFrame(new(receiveBuffer[0], receiveBuffer[1]));
-            receiveBuffer.RemoveAt(0);
-        }
+            playback.PushFrame(new(receiveBuffer.Dequeue(), receiveBuffer.Peek()));
     }
 
     private void CreateMic()
@@ -116,15 +122,15 @@ public partial class VoiceInstance : Node3D
                 if (maxValue < InputThreshold)
                     return;
 
-                if (listen)
+                if (Listen)
                     Speak(data, Multiplayer.GetUniqueId());
 
                 Rpc(nameof(Speak), data, Multiplayer.GetUniqueId()); // should be network unique id?
-                EmitSignal("sentVoiceData", data);
+                EmitSignal(SignalName.sentVoiceData, data);
             }
         }
 
-        prevFrameRecording = recording;
+        prevFrameRecording = Recording;
     }
 
     private float GetPeakVolume()

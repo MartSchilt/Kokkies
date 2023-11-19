@@ -60,4 +60,3 @@ autoplay = true
 [node name="AudioStreamRecorder" type="AudioStreamPlayer3D" parent="PlayerCharacter/MicRecord"]
 stream = SubResource("AudioStreamMicrophone_gwmwb")
 autoplay = true
-bus = &"Record"
