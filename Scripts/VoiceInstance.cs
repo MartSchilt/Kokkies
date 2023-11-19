@@ -15,9 +15,9 @@ public partial class VoiceInstance : Node3D
     [Export]
     public NodePath customAudio;
 
-    public bool Listen = true;
-    public bool Recording = false;
-    public float InputThreshold = 0.005f;
+    public bool Listen;
+    public bool Recording;
+    public float InputThreshold;
 
     private const int MAX_SAMPLES = 10;
 

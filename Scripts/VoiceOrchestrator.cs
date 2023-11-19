@@ -58,7 +58,7 @@ public partial class VoiceOrchestrator : Node
         }
     }
     [Export]
-    public TypeVoiceInstance TVI;
+    public TypeVoiceInstance TVI = TypeVoiceInstance.CSHARP;
 
     private bool _listen;
     private bool _recording;
