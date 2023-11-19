@@ -1,5 +1,5 @@
 using Godot;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Kokkies;
 
@@ -16,7 +16,7 @@ public partial class GameManager : Node
     private const string STANDARD_IP = "127.0.0.1";
 
     public static int MaxPlayers = 10;
-    public static List<Player> Players;
+    public static ObservableCollection<Player> Players;
 	public static string Address;
     public static string PlayerName { get; private set; }
     public static string IpAddress { get; private set; }
@@ -24,7 +24,7 @@ public partial class GameManager : Node
 
     public override void _Ready()
 	{
-		Players = new List<Player>();
+		Players = new ObservableCollection<Player>();
 
         PlayerName = STANDARD_NAME;
         IpAddress = STANDARD_IP;

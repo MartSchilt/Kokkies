@@ -102,7 +102,7 @@ public partial class VoiceOrchestrator : Node
 
     public void CreateInstance(long id)
     {
-        GD.Print("Creating instance: " + id + " - " + Multiplayer.GetUniqueId());
+        GD.Print("Creating instance: " + id + " <- " + Multiplayer.GetUniqueId());
         VoiceInstance instance = new();
         // Used to be a check for different voice instance types?
 

@@ -36,6 +36,8 @@ public partial class MultiplayerScene : Control
 		statusLabel = GetNode<Label>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Status");
 		playerList = GetNode<RichTextLabel>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Players");
 
+		GameManager.Players.CollectionChanged += (s, e) => UpdateUI();
+
 		// Change the way the game works when it is started as a server
 		if (OS.GetCmdlineArgs().Contains("--server"))
 		{

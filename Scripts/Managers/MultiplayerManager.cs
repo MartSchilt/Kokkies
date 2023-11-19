@@ -1,5 +1,6 @@
 using Godot;
 using Kokkies;
+using System.Linq;
 
 public partial class MultiplayerManager : Node
 {
@@ -38,7 +39,7 @@ public partial class MultiplayerManager : Node
     public void SendPlayerInfo(long id, string name, Color color)
     {
         // Only add the player if it is not already added, otherwise ignore this
-        if (GameManager.Players.Find(p => p.Id == id) == null)
+        if (GameManager.Players.ToList().Find(p => p.Id == id) == null)
         {
             Player player = new()
             {
@@ -101,7 +102,7 @@ public partial class MultiplayerManager : Node
     private void PlayerDisconnected(long id)
     {
         GD.Print("Player Disconnected: " + id);
-        GameManager.Players.Remove(GameManager.Players.Find(p => p.Id == id));
+        GameManager.Players.Remove(GameManager.Players.ToList().Find(p => p.Id == id));
     }
 
     private void ConnectedToServer()
