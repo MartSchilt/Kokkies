@@ -4,4 +4,7 @@
 	<RollForward>LatestMajor</RollForward>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Scripts\Models\" />
+  </ItemGroup>
 </Project>
