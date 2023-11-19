@@ -84,8 +84,9 @@ public partial class VoiceInstance : Node3D
         if (playback.GetFramesAvailable() < 1)
             return;
 
-        for (int i = 0; i < Math.Min(playback.GetFramesAvailable(), receiveBuffer.Count); i++)
-            playback.PushFrame(new(receiveBuffer.Dequeue(), receiveBuffer.Peek()));
+        if (receiveBuffer.Count > 1)
+            for (int i = 0; i < Math.Min(playback.GetFramesAvailable(), receiveBuffer.Count); i++)
+                playback.PushFrame(new(receiveBuffer.Dequeue(), receiveBuffer.Peek()));
     }
 
     private void CreateMic()

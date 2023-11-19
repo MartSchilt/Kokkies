@@ -10,10 +10,14 @@ public partial class MultiplayerController : Control
 	public HSlider sliderInputThreshold;
 	public Button startButton;
 
+	private const string STANDARD_NAME = "Kokkie";
+	private const string STANDARD_IP = "127.0.0.1";
+	private const int STANDARD_PORT = 8910;
+
 	private ENetMultiplayerPeer peer;
-	private string playerName = "Kokkie";
-	private string ipAddress = "127.0.0.1";
-	private int Port = 8910;
+	private string playerName = STANDARD_NAME;
+	private string ipAddress = STANDARD_IP;
+	private int Port = STANDARD_PORT;
 
 	public override void _Ready()
 	{
@@ -161,20 +165,32 @@ public partial class MultiplayerController : Control
 	#region Text Inputs
 	private void _on_name_input_text_changed(string new_text)
 	{
-		playerName = new_text;
+		if (new_text != "")
+			playerName = new_text;
+		else
+			playerName = STANDARD_NAME;
 	}
 
 	private void _on_ip_input_text_changed(string new_text)
 	{
-		ipAddress = new_text;
+		if (new_text != "")
+			ipAddress = new_text;
+		else
+			ipAddress = STANDARD_IP;
 	}
 
 	private void _on_port_input_text_changed(string new_text)
 	{
-		Port = int.Parse(new_text);
+		if (new_text != "")
+		{
+			var parsed = int.TryParse(new_text, out Port);
+			if (parsed)
+				return;
+		}
+		Port = STANDARD_PORT;
 	}
 	#endregion
-	
+
 	private void _on_input_thresh_value_changed(float value)
 	{
 		voiceOrchestrator.InputThreshold = value;
