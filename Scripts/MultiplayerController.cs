@@ -8,8 +8,11 @@ public partial class MultiplayerController : Control
 	public VoiceOrchestrator voiceOrchestrator;
 	public SpinBox spinBoxInputThreshold;
 	public HSlider sliderInputThreshold;
-	public Button startButton;
+	public Button startMPButton;
+	public Label statusLabel;
+	public RichTextLabel playerList;
 
+	private const string STATUS = "Status: ";
 	private const string STANDARD_NAME = "Kokkie";
 	private const string STANDARD_IP = "127.0.0.1";
 	private const int STANDARD_PORT = 8910;
@@ -22,15 +25,19 @@ public partial class MultiplayerController : Control
 	public override void _Ready()
 	{
 		// UI Elements
-		spinBoxInputThreshold = GetNode<SpinBox>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer5/Value");
-		sliderInputThreshold = GetNode<HSlider>("MarginContainer/HBoxContainer/VBoxContainer/InputThreshold");
-		startButton = GetNode<Button>("MarginContainer/HBoxContainer/VBoxContainer/Start");
+		// I really hate how we need to declare the nodepath like this...
+		spinBoxInputThreshold = GetNode<SpinBox>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer5/Value");
+		sliderInputThreshold = GetNode<HSlider>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/InputThreshold");
+		startMPButton = GetNode<Button>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/MultiplayerTest");
+		statusLabel = GetNode<Label>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Status");
+		playerList = GetNode<RichTextLabel>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Players");
 
 		// Multiplayer stuff
 		Multiplayer.PeerConnected += PlayerConnected;
 		Multiplayer.PeerDisconnected += PlayerDisconnected;
 		Multiplayer.ConnectedToServer += ConnectedToServer;
 		Multiplayer.ConnectionFailed += ConnectionFailed;
+		Multiplayer.ServerDisconnected += DisconnectedFromServer;
 		peer = new();
 
 		// Change the way the game works when it is started as a server
@@ -46,11 +53,10 @@ public partial class MultiplayerController : Control
 			// Initializing
 			voiceOrchestrator = new();
 			AddChild(voiceOrchestrator);
-			voiceOrchestrator.Listen = true; // Makes us able to hear our own microphone input
-			voiceOrchestrator.Recording = true; // Make sure it records the microphone
 
 			spinBoxInputThreshold.Value = voiceOrchestrator.InputThreshold;
 			sliderInputThreshold.Value = voiceOrchestrator.InputThreshold;
+			statusLabel.Text = STATUS + "Ready to host or join";
 		}
 	}
 
@@ -77,7 +83,13 @@ public partial class MultiplayerController : Control
 				Color = color
 			};
 			GameManager.Players.Add(player);
-			GD.Print("Player Connected: " + name + "#" + id);
+			var fullName = name + "#" + id;
+			GD.Print("Player Connected: " + fullName);
+			playerList.Text += "\n - " + fullName;
+			if (id == 1)
+				playerList.Text += " (Host)";
+			if (id == Multiplayer.GetUniqueId())
+				playerList.Text += " (You)";
 		}
 
 		// Send every player info to all the clients
@@ -92,17 +104,20 @@ public partial class MultiplayerController : Control
 	// Is basically a void method, but returns an Error object, just in case something goes wrong
 	public Error HostGame()
 	{
+		statusLabel.Text = STATUS + "Starting server...";
 		var error = peer.CreateServer(Port, GameManager.MaxPlayers);
 		if (error != Error.Ok)
 		{
 			GD.PrintErr("Failed to host: " + error);
+			statusLabel.Text = STATUS + "Failed to host!";
 			return error;
 		}
 
 		peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
 		Multiplayer.MultiplayerPeer = peer;
-		startButton.Disabled = false;
+		startMPButton.Disabled = false;
 		GD.Print("Hosting started on " + Port + "...");
+		statusLabel.Text = STATUS + "Hosting on " + Port;
 		return error;
 	}
 
@@ -132,36 +147,49 @@ public partial class MultiplayerController : Control
 		Rpc(nameof(SendPlayerInfo), id, playerName, RandomColor());
 	}
 
+	private void DisconnectedFromServer()
+	{
+		GD.Print("Disconnected From Server");
+	}
+
 	private void ConnectionFailed()
 	{
 		GD.PrintErr("Connection Failed!");
 	}
 	#endregion
+	
 	#region Button Presses
 	private void _on_host_button_down()
 	{
 		if (HostGame() == Error.Ok)
-			SendPlayerInfo(Multiplayer.GetUniqueId(), playerName, RandomColor());
+		{
+            SendPlayerInfo(Multiplayer.GetUniqueId(), playerName, RandomColor());
+            voiceOrchestrator.Recording = true; // Make sure it records the microphone
+        }
 	}
 
 	private void _on_join_button_down()
 	{
+		statusLabel.Text = STATUS + "Connecting...";
 		var error = peer.CreateClient(ipAddress, Port);
 		if (error != Error.Ok)
 		{
 			GD.PrintErr("Failed to create client: " + error);
+			statusLabel.Text = STATUS + "Failed to connect!";
 			return;
 		}
 
 		peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
 		Multiplayer.MultiplayerPeer = peer;
-	}
-
-	private void _on_start_button_down()
+		statusLabel.Text = STATUS + "Connected!";
+        voiceOrchestrator.Recording = true; // Make sure it records the microphone
+    }
+	private void _on_multiplayer_test_button_down()
 	{
 		Rpc(nameof(StartGame));
 	}
 	#endregion
+	
 	#region Text Inputs
 	private void _on_name_input_text_changed(string new_text)
 	{
@@ -195,5 +223,10 @@ public partial class MultiplayerController : Control
 	{
 		voiceOrchestrator.InputThreshold = value;
 		spinBoxInputThreshold.Value = value;
-	}
+    }
+
+    private void _on_listen_toggled(bool button_pressed)
+    {
+		voiceOrchestrator.Listen = button_pressed;
+    }
 }

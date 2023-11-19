@@ -79,8 +79,6 @@ public partial class VoiceOrchestrator : Node
         Listen = false;
         Recording = false;
         InputThreshold = 0.005f;
-        
-        GD.Print("Voice Orchestra Ready!");
     }
 
     public override void _PhysicsProcess(double delta)

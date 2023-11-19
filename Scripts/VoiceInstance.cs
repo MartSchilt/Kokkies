@@ -30,11 +30,6 @@ public partial class VoiceInstance : Node3D
     private AudioStreamGeneratorPlayback playback;
     private VoiceMic Mic;
 
-    public override void _Ready()
-    {
-        GD.Print("Voice Instance Ready!");
-    }
-
     public override void _Process(double delta)
     {
         if (playback != null)
