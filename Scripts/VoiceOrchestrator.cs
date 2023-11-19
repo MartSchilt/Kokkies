@@ -6,7 +6,8 @@ namespace Kokkies;
 public enum TypeVoiceInstance
 {
     NATIVE,
-    GDSCRIPT
+    GDSCRIPT,
+    CSHARP
 }
 
 public partial class VoiceOrchestrator : Node
@@ -62,19 +63,24 @@ public partial class VoiceOrchestrator : Node
     private bool _listen;
     private bool _recording;
     private float _inputThreshold;
-    private List<VoiceInstance> instances;
-    private int? ID;
+    private Dictionary<long, VoiceInstance> instances;
+    private int? ID = null;
 
     public override void _Ready()
     {
-        instances = new List<VoiceInstance>();
+        instances = new Dictionary<long, VoiceInstance>();
 
         Multiplayer.ConnectedToServer += ConnectedOK;
         Multiplayer.ServerDisconnected += ServerDisconnected;
         Multiplayer.ConnectionFailed += ServerDisconnected;
-
         Multiplayer.PeerConnected += PlayerConnected;
         Multiplayer.PeerDisconnected += PlayerDisconnected;
+
+        Listen = false;
+        Recording = false;
+        InputThreshold = 0.005f;
+        
+        GD.Print("Voice Orchestra Ready!");
     }
 
     public override void _PhysicsProcess(double delta)
@@ -88,6 +94,7 @@ public partial class VoiceOrchestrator : Node
 
     public void CreateInstance(long id)
     {
+        GD.Print("Creating instance: " + id + " - " + Multiplayer.GetUniqueId());
         VoiceInstance instance = new();
         // Used to be a check for different voice instance types?
 
@@ -97,27 +104,29 @@ public partial class VoiceOrchestrator : Node
             instance.Listen = Listen;
             instance.InputThreshold = InputThreshold;
 
-            sentVoiceData += SentVoiceData;
+            instance.sentVoiceData += SentVoiceData;
 
             ID = (int)id;
         }
 
-        receivedVoiceData += ReceivedVoiceData;
+        instance.receivedVoiceData += ReceivedVoiceData;
 
         instance.Name = id.ToString();
-        instances[(int)id] = instance;
+        instances.Add(id, instance);
         AddChild(instance);
         EmitSignal(SignalName.createdInstance);
     }
         
     public void RemoveInstance(long id)
     {
-        var instance = instances[(int)id];
+        VoiceInstance _instance;
+        var exists = instances.TryGetValue(id, out _instance);
 
         if (id == ID)
             ID = null;
 
-        instances.Remove(instance);
+        if (exists)
+            instances.Remove(id);
 
         EmitSignal(SignalName.removedInstance, id);
     }
