@@ -38,16 +38,22 @@ public partial class MultiplayerController : Control
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]
 	public void SendPlayerInfo(long id, string name, Color color)
 	{
-		Player player = new()
+		// Only add the player if it is not already added, otherwise ignore this
+		if (GameManager.Players.Find(p => p.Id == id) == null)
 		{
-			Id = id,
-			Name = name,
-			Score = 0,
-			Color = color
-		};
-		GameManager.Players.Add(player);
-		GD.Print("Player Connected: " + name + "#" + id);
+			Player player = new()
+			{
+				Id = id,
+				Name = name,
+				Score = 0,
+				Color = color
+			};
+			GameManager.Players.Add(player);
+			GD.Print("Player Connected: " + name + "#" + id);
+		}
 
+		// Send every player info to all the clients
+		// We do this to make sure that the player that connects later also gets info on the players that connected earlier
 		if (Multiplayer.IsServer())
 		{
 			for (int i = 0; i < GameManager.Players.Count; i++)

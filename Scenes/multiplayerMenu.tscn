@@ -93,6 +93,7 @@ offset_right = 800.0
 offset_bottom = 410.0
 
 [node name="PortInput" type="LineEdit" parent="."]
+layout_mode = 0
 offset_left = 400.0
 offset_top = 425.0
 offset_right = 800.0
