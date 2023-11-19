@@ -5,6 +5,7 @@ using System.Linq;
 
 public partial class MultiplayerController : Control
 {
+	public Node Main;
 	public VoiceOrchestrator voiceOrchestrator;
 	public SpinBox spinBoxInputThreshold;
 	public HSlider sliderInputThreshold;
@@ -24,6 +25,9 @@ public partial class MultiplayerController : Control
 
 	public override void _Ready()
 	{
+		// Get the Main Node (if it is not there, just use self as Main Node)
+		Main = GetParent() ?? this;
+
 		// UI Elements
 		// I really hate how we need to declare the nodepath like this...
 		spinBoxInputThreshold = GetNode<SpinBox>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer5/Value");
@@ -65,7 +69,7 @@ public partial class MultiplayerController : Control
 	{
 		var scene = GD.Load<PackedScene>("res://Scenes/dev.tscn");
 		var instance = scene.Instantiate();
-		AddChild(instance);
+		GetParent().AddChild(instance);
 		Hide();
 	}
 
@@ -83,14 +87,10 @@ public partial class MultiplayerController : Control
 				Color = color
 			};
 			GameManager.Players.Add(player);
-			var fullName = name + "#" + id;
+            var fullName = name + "#" + id;
 			GD.Print("Player Connected: " + fullName);
-			playerList.Text += "\n - " + fullName;
-			if (id == 1)
-				playerList.Text += " (Host)";
-			if (id == Multiplayer.GetUniqueId())
-				playerList.Text += " (You)";
-		}
+            UpdateUI();
+        }
 
 		// Send every player info to all the clients
 		// We do this to make sure that the player that connects later also gets info on the players that connected earlier
@@ -121,6 +121,16 @@ public partial class MultiplayerController : Control
 		return error;
 	}
 
+	public void UpdateUI()
+	{
+		playerList.Text = "Players: ";
+		foreach(var player in GameManager.Players)
+		{
+			var playerName = player.Name + "#" + player.Id;
+            playerList.Text += "\n - " + playerName;
+		}
+	}
+
 	private Color RandomColor()
 	{
 		Random rnd = new Random();
@@ -138,7 +148,9 @@ public partial class MultiplayerController : Control
 	private void PlayerDisconnected(long id)
 	{
 		GD.Print("Player Disconnected: " + id);
-	}
+		GameManager.Players.Remove(GameManager.Players.Find(p => p.Id == id));
+        UpdateUI();
+    }
 
 	private void ConnectedToServer()
 	{

@@ -1,15 +1,9 @@
 using Godot;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace Kokkies;
-
-public class Player
-{
-	public long Id { get; set; }
-	public string Name { get; set; }
-    public Color Color { get; set; }
-    public int Score { get; set; }
-}
 
 /// <summary>
 /// Manages the active "Game" that is started by the client
