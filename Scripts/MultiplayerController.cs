@@ -6,7 +6,7 @@ using System.Linq;
 public partial class MultiplayerController : Control
 {
 	private ENetMultiplayerPeer peer;
-	private string playerName = string.Empty;
+	private string playerName = "Kokkie";
 	private string ipAddress = "127.0.0.1";
 	private int Port = 8910;
 
