@@ -68,14 +68,6 @@ public partial class MultiplayerScene : Control
 		}
 	}
 
-	private Color RandomColor()
-	{
-		Random rnd = new Random();
-		byte[] b = new byte[3];
-		rnd.NextBytes(b);
-		return Color.Color8(b[0], b[1], b[2]);
-	}
-
 	#region Button Presses
 	private void _on_host_button_down()
 	{
