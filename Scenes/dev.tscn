@@ -1,7 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://6w2a63ckgmbl"]
+[gd_scene load_steps=12 format=3 uid="uid://6w2a63ckgmbl"]
 
 [ext_resource type="Script" path="res://Scripts/SceneManager.cs" id="1_2hqnp"]
-[ext_resource type="PackedScene" uid="uid://dqv43xmf8m3y4" path="res://Scenes/player.tscn" id="2_bva4n"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kvbhn"]
 sky_top_color = Color(0.631373, 0.341176, 0.454902, 1)
@@ -46,7 +45,6 @@ data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0
 [node name="Node3D" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00307703, 0.0140603, -0.000946999)
 script = ExtResource("1_2hqnp")
-PlayerScene = ExtResource("2_bva4n")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.353553, -0.612372, 0, -0.866025, 0.5, -0.707107, -0.353553, -0.612372, 0, 0, 0)
