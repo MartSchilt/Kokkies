@@ -3,16 +3,17 @@ using Godot.Collections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Kokkies;
+
+namespace Kokkies;
 
 public partial class VoiceInstance : Node3D
 {
     [Export]
     public NodePath customAudio;
-    
-    public bool listen = true;
-    public bool recording = false;
-    public float inputThreshold = 0.005f;
+
+    public bool Listen = true;
+    public bool Recording = false;
+    public float InputThreshold = 0.005f;
 
     private const int MAX_SAMPLES = 10;
 
@@ -91,7 +92,7 @@ public partial class VoiceInstance : Node3D
 
     private void ProcessMic()
     {
-        if (recording)
+        if (Recording)
         {
             if (effectCapture == null)
                 CreateMic();
@@ -112,7 +113,7 @@ public partial class VoiceInstance : Node3D
                     data[i] = value;
                 }
 
-                if (maxValue < inputThreshold)
+                if (maxValue < InputThreshold)
                     return;
 
                 if (listen)
