@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=3 uid="uid://6w2a63ckgmbl"]
 
-[ext_resource type="Script" path="res://Scripts/SceneManager.cs" id="1_2hqnp"]
+[ext_resource type="Script" path="res://Scripts/Managers/SceneManager.cs" id="1_2hqnp"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kvbhn"]
 sky_top_color = Color(0.631373, 0.341176, 0.454902, 1)

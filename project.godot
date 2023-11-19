@@ -21,7 +21,7 @@ driver/enable_input=true
 
 [autoload]
 
-GameManager="*res://Scripts/GameManager.cs"
+GameManager="*res://Scripts/Managers/GameManager.cs"
 
 [dotnet]
 

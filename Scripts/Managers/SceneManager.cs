@@ -34,8 +34,4 @@ public partial class SceneManager : Node3D
 			index++;
 		}
 	}
-
-	public override void _Process(double delta)
-	{
-	}
 }
