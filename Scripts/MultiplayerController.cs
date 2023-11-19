@@ -163,9 +163,9 @@ public partial class MultiplayerController : Control
 	{
 		if (HostGame() == Error.Ok)
 		{
-            SendPlayerInfo(Multiplayer.GetUniqueId(), playerName, RandomColor());
-            voiceOrchestrator.Recording = true; // Make sure it records the microphone
-        }
+			SendPlayerInfo(Multiplayer.GetUniqueId(), playerName, RandomColor());
+			voiceOrchestrator.Recording = true; // Make sure it records the microphone
+		}
 	}
 
 	private void _on_join_button_down()
@@ -182,8 +182,8 @@ public partial class MultiplayerController : Control
 		peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
 		Multiplayer.MultiplayerPeer = peer;
 		statusLabel.Text = STATUS + "Connected!";
-        voiceOrchestrator.Recording = true; // Make sure it records the microphone
-    }
+		voiceOrchestrator.Recording = true; // Make sure it records the microphone
+	}
 	private void _on_multiplayer_test_button_down()
 	{
 		Rpc(nameof(StartGame));
@@ -223,10 +223,10 @@ public partial class MultiplayerController : Control
 	{
 		voiceOrchestrator.InputThreshold = value;
 		spinBoxInputThreshold.Value = value;
-    }
+	}
 
-    private void _on_listen_toggled(bool button_pressed)
-    {
+	private void _on_listen_toggled(bool button_pressed)
+	{
 		voiceOrchestrator.Listen = button_pressed;
-    }
+	}
 }
