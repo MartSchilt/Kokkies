@@ -94,14 +94,6 @@ public partial class MultiplayerManager : Node
         return error;
     }
 
-    private Color RandomColor()
-    {
-        Random rnd = new Random();
-        byte[] b = new byte[3];
-        rnd.NextBytes(b);
-        return Color.Color8(b[0], b[1], b[2]);
-    }
-
     #region Peer-to-peer methods
     private void PlayerConnected(long id)
     {
@@ -118,7 +110,7 @@ public partial class MultiplayerManager : Node
     {
         GD.Print("Connected To Server");
         var id = Multiplayer.GetUniqueId();
-        Rpc(nameof(SendPlayerInfo), id, playerName, RandomColor());
+        Rpc(nameof(SendPlayerInfo), id, playerName, Helper.RandomColor());
     }
 
     private void DisconnectedFromServer()
