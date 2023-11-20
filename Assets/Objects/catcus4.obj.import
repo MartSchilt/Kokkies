@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bf7oq00vo0kw7"
+path="res://.godot/imported/catcus4.obj-c20ccd5fbfa98c096194e1b71e1c1c84.mesh"
+
+[deps]
+
+files=["res://.godot/imported/catcus4.obj-c20ccd5fbfa98c096194e1b71e1c1c84.mesh"]
+
+source_file="res://Assets/Objects/catcus4.obj"
+dest_files=["res://.godot/imported/catcus4.obj-c20ccd5fbfa98c096194e1b71e1c1c84.mesh", "res://.godot/imported/catcus4.obj-c20ccd5fbfa98c096194e1b71e1c1c84.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

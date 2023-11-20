@@ -109,8 +109,8 @@ public partial class  PlayerCharacter : CharacterBody3D
 		if (Input.MouseMode == Input.MouseModeEnum.Captured && @event is InputEventMouseMotion mouseMotion)
 		{
 			this.RotateY(-mouseMotion.Relative.X * CameraSpeed);
-			Camera.RotateX(-mouseMotion.Relative.Y * CameraSpeed);
-			Camera.Rotation = new Vector3(Camera.Rotation.X, Math.Clamp(- mouseMotion.Relative.Y * CameraSpeed, -1, 1), 0);
+            CameraNeck.RotateX(-mouseMotion.Relative.Y * CameraSpeed);
+            CameraNeck.Rotation = new Vector3(CameraNeck.Rotation.X, Math.Clamp(- mouseMotion.Relative.Y * CameraSpeed, -1, 1), 0);
 		}
 	}
 
