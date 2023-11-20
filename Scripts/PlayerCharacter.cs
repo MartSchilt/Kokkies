@@ -109,10 +109,12 @@ public partial class PlayerCharacter : CharacterBody3D
 					if (!AimCast.IsColliding())
 						return;
 
-					var target = AimCast.GetCollider() as PlayerCharacter;
-					GD.Print($"{target.Player.Id} took damage from {Player.Id}");
-					var targetCharacter = GetParent().GetChildren().ToList().Find(p => p.Name == target.Player.Id.ToString());
-					targetCharacter.Rpc(nameof(Damage), target.Player.Id, 20);
+					if (AimCast.GetCollider() is PlayerCharacter target)
+					{
+						GD.Print($"{target.Player.Id} took damage from {Player.Id}");
+						var targetCharacter = GetParent().GetChildren().ToList().Find(p => p.Name == target.Player.Id.ToString());
+						targetCharacter.Rpc(nameof(Damage), target.Player.Id, 20);
+					}
 					break;
 			}
 		}
