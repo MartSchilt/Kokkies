@@ -23,17 +23,17 @@ public partial class PlayerCharacter : CharacterBody3D
 	[Export]
 	public Label3D NameLabel;
 	[Export]
+	public Timer RespawnTimer;
+	[Export]
 	public float Speed = 10f;
 	[Export]
 	public float JumpVelocity = 10f;
 	[Export]
 	public float CameraSpeed = 0.005f;
 	[Export]
-	public double RespawnTime = 10.0;
-	[Export]
 	public int MaxHealth = 100;
 
-	public bool Alive = true;
+	public bool Alive;
 	public bool Respawning;
 	public Player Player;
 
@@ -99,11 +99,8 @@ public partial class PlayerCharacter : CharacterBody3D
 
 			switch (keyEvent.Keycode)
 			{
-				// Respawn should go to the spawn points which are loaded in the SceneManager.
-				// Perhaps do the respawning in there?
 				case Key.R:
-					GlobalPosition = new Vector3(0, 2, 2);
-					GlobalRotation = new Vector3(0, 0, 0);
+					Respawn();
 					break;
 			}
 		}
@@ -114,7 +111,10 @@ public partial class PlayerCharacter : CharacterBody3D
 	public override void _UnhandledInput(InputEvent @event)
 	{
 		// We don't want to handle any input if this player is not controlled by the current client
-		if (!IsControlled() && !Alive)
+		if (!IsControlled())
+			return;
+
+		if (!Alive)
 			return;
 
 		if (@event is InputEventMouseButton mouseButtonEvent && mouseButtonEvent.Pressed)
@@ -140,7 +140,10 @@ public partial class PlayerCharacter : CharacterBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (!IsControlled() && !Alive)
+		if (!IsControlled())
+			return;
+
+		if (!Alive)
 			return;
 
 		Vector3 velocity = Velocity;
@@ -219,13 +222,20 @@ public partial class PlayerCharacter : CharacterBody3D
 
 	private void Respawn()
 	{
-		Rpc(nameof(PlaySound), (int)SoundType.Death);
-		Alive = false;
+		if (Alive)
+		{
+			Alive = false;
+			Rpc(nameof(PlaySound), (int)SoundType.Death);
+			RotateX(Mathf.DegToRad(-90));
 
-		var sceneManager = GetParent() as SceneManager;
-		sceneManager.Respawn(this);
-		Alive = true;
-		NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
+			RespawnTimer.Start();
+			RespawnTimer.Timeout += () =>
+			{
+				var sceneManager = GetParent() as SceneManager;
+				sceneManager.Respawn(this);
+				NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
+			};
+		}
 	}
 
 	private bool IsControlled()

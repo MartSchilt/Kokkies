@@ -45,6 +45,8 @@ public partial class SceneManager : Node3D
 					playerCharacter.GlobalPosition = spawn.GlobalPosition;
 
 			playerCharacter.Player.Health = playerCharacter.MaxHealth;
+			playerCharacter.Alive = true;
+			playerCharacter.Rotation = new(0, 0, 0);
 		}
 	}
 }
