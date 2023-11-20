@@ -70,7 +70,7 @@ mesh = SubResource("CapsuleMesh_bivn6")
 shape = SubResource("ConvexPolygonShape3D_sccvb")
 
 [node name="CameraNeck" type="Node3D" parent="PlayerCharacter"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 
 [node name="Camera3D" type="Camera3D" parent="PlayerCharacter/CameraNeck"]
 
@@ -88,8 +88,8 @@ surface_material_override/4 = SubResource("StandardMaterial3D_088fi")
 transform = Transform3D(1.00408, 0, 0, 0, 1.00408, 0, 0, 0, 1.00408, 0, 0, 0)
 target_position = Vector3(0, 0, -1000)
 
-[node name="Cowboyhat" type="MeshInstance3D" parent="PlayerCharacter"]
-transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.8, 0)
+[node name="Cowboyhat" type="MeshInstance3D" parent="PlayerCharacter/CameraNeck"]
+transform = Transform3D(0.75, 0, 0, 0, 0.724444, -0.194114, 0, 0.194114, 0.724444, 0, 0.3, 0.05)
 mesh = ExtResource("3_ajq64")
-skeleton = NodePath("../..")
+skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_bwo83")

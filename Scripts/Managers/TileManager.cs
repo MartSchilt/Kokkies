@@ -13,6 +13,10 @@ public partial class TileManager : Node3D
 
     public override void _Ready()
 	{
+        // Remove children, just in case someone decided to manually add a floor
+        foreach(var child in GetChildren())
+            RemoveChild(child);
+
         FloorTile = GD.Load<PackedScene>("res://Scenes/floorTile.tscn");
 		for(float x = 0; x < Width * TILE_SIZE; x += TILE_SIZE)
 		{
@@ -21,18 +25,8 @@ public partial class TileManager : Node3D
                 MeshInstance3D tile = (MeshInstance3D)FloorTile.Instantiate();
                 tile.Position = new Vector3(x, 0, y);
                 tile.Name = "Floor" + x + "_" + y;
-				AddChild(tile); 
-                //     Node childNode = GetChild(0);
-                //     if (childNode.GetParent() != null)
-                //     {
-                //         childNode.GetParent().RemoveChild(childNode);
-                //     }
-                //     AddChild(childNode);
+				AddChild(tile);
             }
         }
-	}
-
-	public override void _Process(double delta)
-	{
 	}
 }
