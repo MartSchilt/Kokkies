@@ -11,6 +11,7 @@ public partial class MultiplayerScene : Control
 	public Node Main;
 	public MultiplayerManager MPManager;
 
+	public RichTextLabel Logger;
 	public SpinBox spinBoxInputThreshold;
 	public HSlider sliderInputThreshold;
 	public Button startMPButton;
@@ -26,10 +27,12 @@ public partial class MultiplayerScene : Control
 
 		// Instantiate the Multiplayer Client
 		MPManager = new();
+		MPManager.Name = nameof(MultiplayerManager);
 		Main.AddChild(MPManager);
 
 		// UI Elements
 		// I really hate how we need to declare the nodepath like this...
+		Logger = GetNode<RichTextLabel>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/Log");
 		spinBoxInputThreshold = GetNode<SpinBox>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer5/Value");
 		sliderInputThreshold = GetNode<HSlider>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/InputThreshold");
 		startMPButton = GetNode<Button>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/MultiplayerTest");
@@ -49,7 +52,8 @@ public partial class MultiplayerScene : Control
 			GD.Print("Started as client");
 			spinBoxInputThreshold.Value = STANDARD_INPUT_THRESHOLD;
 			sliderInputThreshold.Value = STANDARD_INPUT_THRESHOLD;
-			statusLabel.Text = STATUS + "Ready to host or join";
+
+			Log("Ready to host or join");
 		}
 	}
 
@@ -70,34 +74,34 @@ public partial class MultiplayerScene : Control
 		}
 	}
 
+	private void Log(string text)
+	{
+		statusLabel.Text = STATUS + text;
+		Logger.AddText("\n" + text);
+	}
+
 	#region Button Presses
 	private void _on_host_button_down()
 	{
-		statusLabel.Text = STATUS + "Starting server...";
+		Log("Starting server...");
 
 		if (MPManager.HostGame() == Error.Ok)
 		{
-			statusLabel.Text = STATUS + "Hosting on " + GameManager.Port;
+			Log("Hosting on " + GameManager.Port);
 			startMPButton.Disabled = false;
 		}
 		else
-		{
-			statusLabel.Text = STATUS + "Failed to host!";
-		}
+			Log("Failed to host!");
 	}
 
 	private void _on_join_button_down()
 	{
-		statusLabel.Text = STATUS + "Connecting...";
+		Log("Connecting...");
 
 		if (MPManager.JoinGame() == Error.Ok)
-		{
-			statusLabel.Text = STATUS + "Connected!";
-		}
+			Log("Connected!");
 		else
-		{
-			statusLabel.Text = STATUS + "Failed to connect!";
-		}
+			Log("Failed to connect!");
 	}
 
 	private void _on_multiplayer_test_button_down()

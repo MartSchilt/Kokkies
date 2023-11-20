@@ -63,6 +63,7 @@ public partial class VoiceInstance : Node3D
         else
         {
             voice = new();
+            voice.Name = "VoiceStream";
             AddChild(voice);
         }
 
@@ -87,6 +88,7 @@ public partial class VoiceInstance : Node3D
     private void CreateMic()
     {
         Mic = new();
+        Mic.Name = nameof(VoiceMic);
         AddChild(Mic);
         var recordBusIndex = AudioServer.GetBusIndex(Mic.Bus);
         effectCapture = (AudioEffectCapture)AudioServer.GetBusEffect(recordBusIndex, 0);

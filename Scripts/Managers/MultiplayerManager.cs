@@ -6,6 +6,7 @@ public partial class MultiplayerManager : Node
 {
     public Node Main;
     public VoiceOrchestrator VOrchestrator;
+    public RichTextLabel Logger;
 
     private ENetMultiplayerPeer peer;
 
@@ -13,6 +14,8 @@ public partial class MultiplayerManager : Node
     {
         // Get the Main Node (if it is not there, just use self as Main Node)
         Main = GetParent() ?? this;
+
+        Logger = Main.GetNode<RichTextLabel>("MultiplayerMenu/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/Log");
 
         // Multiplayer stuff
         Multiplayer.PeerConnected += PlayerConnected;
@@ -24,7 +27,17 @@ public partial class MultiplayerManager : Node
 
         // VOIP
         VOrchestrator = new();
+        VOrchestrator.Name = nameof(VoiceOrchestrator);
         Main.AddChild(VOrchestrator);
+
+        VOrchestrator.sentVoiceData += (data) =>
+        {
+            LogVoice(true, data);
+        };
+        VOrchestrator.receivedVoiceData += (data, id) =>
+        {
+            LogVoice(false, data, id);
+        };
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
@@ -91,6 +104,14 @@ public partial class MultiplayerManager : Node
         Multiplayer.MultiplayerPeer = peer;
         VOrchestrator.Recording = true; // Make sure it records the microphone
         return error;
+    }
+
+    private void LogVoice(bool sent, float[] data, int id = -1)
+    {
+        if (sent)
+            Logger.AddText("\n Sent data of size " + data.Length);
+        else
+            Logger.AddText("\n Received data of size " + data.Length + " from " + id.ToString());
     }
 
     #region Peer-to-peer methods

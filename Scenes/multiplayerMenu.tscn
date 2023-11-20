@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/MultiplayerScene.cs" id="1_ihonf"]
 
-[node name="Control" type="Control"]
+[node name="MultiplayerMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -178,6 +178,15 @@ layout_mode = 2
 layout_mode = 2
 disabled = true
 text = "Start Multiplayer Test (dev.tscn)"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="Log" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "Log:"
+fit_content = true
 
 [connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/NameInput" to="." method="_on_name_input_text_changed"]
 [connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PortInput" to="." method="_on_port_input_text_changed"]

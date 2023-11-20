@@ -14,8 +14,8 @@ public partial class MainScene : Node
 	{
 		GD.Print("Starting game...");
 		MultiplayerMenu = GD.Load<PackedScene>("res://Scenes/multiplayerMenu.tscn");
-        
+		
 		// Load first scene
-        AddChild(MultiplayerMenu.Instantiate());
+		AddChild(MultiplayerMenu.Instantiate());
 	}
 }
