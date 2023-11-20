@@ -1,11 +1,11 @@
 [gd_scene load_steps=14 format=3 uid="uid://n4mig0prs8mq"]
 
-[ext_resource type="Script" path="res://Scripts/Managers/SceneManager.cs" id="1_tl7tr"]
-[ext_resource type="ArrayMesh" uid="uid://duj23mvnml21s" path="res://Assets/Objects/wagon.obj" id="3_fy67v"]
-[ext_resource type="Script" path="res://Scripts/Managers/CloudManager.cs" id="3_js5mk"]
-[ext_resource type="ArrayMesh" uid="uid://cvjevnsbu424y" path="res://Assets/Objects/rock3.obj" id="4_2n0y1"]
-[ext_resource type="Script" path="res://Scripts/Managers/TileManager.cs" id="4_wc3hp"]
-[ext_resource type="ArrayMesh" uid="uid://cwpfuwtdhxwnf" path="res://Assets/Objects/cactus3.obj" id="5_j4eab"]
+[ext_resource type="Script" path="res://Scripts/Managers/SceneManager.cs" id="1_03mdo"]
+[ext_resource type="Script" path="res://Scripts/Managers/TileManager.cs" id="2_wut2k"]
+[ext_resource type="Script" path="res://Scripts/Managers/CloudManager.cs" id="3_7kanx"]
+[ext_resource type="ArrayMesh" uid="uid://duj23mvnml21s" path="res://Assets/Objects/wagon.obj" id="4_1vvci"]
+[ext_resource type="ArrayMesh" uid="uid://cvjevnsbu424y" path="res://Assets/Objects/rock3.obj" id="5_x1k1m"]
+[ext_resource type="ArrayMesh" uid="uid://cwpfuwtdhxwnf" path="res://Assets/Objects/cactus3.obj" id="6_b5cak"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kakdl"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -32,8 +32,8 @@ data = PackedVector3Array(2.7994, 3.2289, -6.2078, 5.3263, 3.0755, -1.3652, 3.78
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8i3c5"]
 albedo_color = Color(0.109804, 0.266667, 0.145098, 1)
 
-[node name="newGamePlus" type="Node3D"]
-script = ExtResource("1_tl7tr")
+[node name="WesternShooter" type="Node3D"]
+script = ExtResource("1_03mdo")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_yc8p8")
@@ -45,7 +45,7 @@ light_energy = 2.0
 shadow_enabled = true
 
 [node name="Floor" type="Node3D" parent="."]
-script = ExtResource("4_wc3hp")
+script = ExtResource("2_wut2k")
 Width = 10.0
 Height = 10.0
 
@@ -54,14 +54,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 0, 45)
 mesh = SubResource("PlaneMesh_hayr3")
 
 [node name="Clouds" type="Node3D" parent="."]
-script = ExtResource("3_js5mk")
+script = ExtResource("3_7kanx")
 Size = 100
 NumberOfClouds = 10
 Scatter = 10
 
 [node name="Wagon" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.97369, 2.16, -12.2885)
-mesh = ExtResource("3_fy67v")
+mesh = ExtResource("4_1vvci")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Wagon"]
 
@@ -70,7 +70,7 @@ shape = SubResource("ConcavePolygonShape3D_m6wwq")
 
 [node name="Rock3" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.320041, 0, 0.384153, 0, 0.5, 0, -0.384153, 0, 0.320041, -0.585496, 1.40987, -11.3601)
-mesh = ExtResource("4_2n0y1")
+mesh = ExtResource("5_x1k1m")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Rock3"]
 
@@ -81,5 +81,5 @@ shape = SubResource("ConcavePolygonShape3D_o1gbn")
 
 [node name="Cactus3" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
-mesh = ExtResource("5_j4eab")
+mesh = ExtResource("6_b5cak")
 surface_material_override/0 = SubResource("StandardMaterial3D_8i3c5")
