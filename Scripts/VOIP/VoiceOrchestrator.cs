@@ -1,5 +1,4 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 
 namespace Kokkies;
@@ -70,6 +69,17 @@ public partial class VoiceOrchestrator : Node
     [Export]
     public TypeVoiceInstance TVI = TypeVoiceInstance.CSHARP;
 
+    public bool Start
+    {
+        get => _start;
+        set
+        {
+            _start = value;
+            Recording = value;
+        }
+    }
+
+    private bool _start;
     private bool _listen;
     private bool _recording;
     private float _inputThreshold;
@@ -93,10 +103,10 @@ public partial class VoiceOrchestrator : Node
 
     public override void _PhysicsProcess(double delta)
     {
-        if (Multiplayer.HasMultiplayerPeer() && Multiplayer.IsServer() && ID == null)
+        if (Start && Multiplayer.HasMultiplayerPeer() && Multiplayer.IsServer() && ID == null)
             CreateInstance(Multiplayer.GetUniqueId());
 
-        if ((!Multiplayer.HasMultiplayerPeer() || !Multiplayer.IsServer()) && ID == 1)
+        if (Start && (!Multiplayer.HasMultiplayerPeer() || !Multiplayer.IsServer()) && ID == 1)
             Reset();
     }
 
@@ -104,7 +114,10 @@ public partial class VoiceOrchestrator : Node
     {
         GD.Print("Creating instance: " + id + " <- " + Multiplayer.GetUniqueId());
         VoiceInstance instance = new();
-        // Used to be a check for different voice instance types?
+
+        // Used to be a check for different voice instance types
+        // NATIVE or GDSCRIPT
+        // But right now we are only using our own C# code
 
         if (id == Multiplayer.GetUniqueId())
         {
@@ -124,7 +137,7 @@ public partial class VoiceOrchestrator : Node
         AddChild(instance);
         EmitSignal(SignalName.createdInstance);
     }
-        
+
     public void RemoveInstance(long id)
     {
         var _instance = instances.Find(i => i.Name == id.ToString());

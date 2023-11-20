@@ -78,6 +78,7 @@ public partial class MultiplayerScene : Control
 	{
 		statusLabel.Text = STATUS + text;
 		Logger.AddText("\n" + text);
+		GD.Print(text);
 	}
 
 	#region Button Presses
@@ -146,5 +147,10 @@ public partial class MultiplayerScene : Control
 	private void _on_listen_toggled(bool button_pressed)
 	{
 		MPManager.VOrchestrator.Listen = button_pressed;
-	}
+    }
+
+    private void _on_log_voice_toggled(bool button_pressed)
+    {
+		MPManager.ShouldLogVoice = button_pressed;
+    }
 }

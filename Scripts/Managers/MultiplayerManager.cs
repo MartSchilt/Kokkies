@@ -7,6 +7,7 @@ public partial class MultiplayerManager : Node
     public Node Main;
     public VoiceOrchestrator VOrchestrator;
     public RichTextLabel Logger;
+    public bool ShouldLogVoice { get; set; }
 
     private ENetMultiplayerPeer peer;
 
@@ -26,6 +27,7 @@ public partial class MultiplayerManager : Node
         peer = new();
 
         // VOIP
+        ShouldLogVoice = false;
         VOrchestrator = new();
         VOrchestrator.Name = nameof(VoiceOrchestrator);
         Main.AddChild(VOrchestrator);
@@ -87,7 +89,7 @@ public partial class MultiplayerManager : Node
         Multiplayer.MultiplayerPeer = peer;
         GD.Print("Hosting started on " + GameManager.Port + "...");
         SendPlayerInfo(Multiplayer.GetUniqueId(), GameManager.PlayerName, Helper.RandomColor());
-        VOrchestrator.Recording = true; // Make sure it records the microphone
+        VOrchestrator.Start = true;
         return error;
     }
 
@@ -102,16 +104,19 @@ public partial class MultiplayerManager : Node
 
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
-        VOrchestrator.Recording = true; // Make sure it records the microphone
+        VOrchestrator.Start = true;
         return error;
     }
 
     private void LogVoice(bool sent, float[] data, int id = -1)
     {
-        if (sent)
-            Logger.AddText("\n Sent data of size " + data.Length);
-        else
-            Logger.AddText("\n Received data of size " + data.Length + " from " + id.ToString());
+        if (ShouldLogVoice)
+        {
+            if (sent)
+                Logger.AddText("\n Sent data of size " + data.Length);
+            else
+                Logger.AddText("\n Received data of size " + data.Length + " from " + id.ToString());
+        }
     }
 
     #region Peer-to-peer methods
