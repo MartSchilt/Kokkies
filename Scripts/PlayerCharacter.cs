@@ -62,6 +62,13 @@ public partial class PlayerCharacter : CharacterBody3D
 		StandardMaterial3D mat = new();
 		mat.AlbedoColor = Player.Color;
 		Mesh.MaterialOverlay = mat;
+
+		RespawnTimer.Timeout += () =>
+		{
+			var sceneManager = GetParent() as SceneManager;
+			sceneManager.Respawn(this);
+			NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
+		};
 	}
 
 	// This method gets called before _UnhandledInput
@@ -185,7 +192,7 @@ public partial class PlayerCharacter : CharacterBody3D
 
 		if (Player.Health <= 0)
 			Respawn();
-		
+
 		NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
 	}
 
@@ -229,12 +236,6 @@ public partial class PlayerCharacter : CharacterBody3D
 			RotateX(Mathf.DegToRad(-90));
 
 			RespawnTimer.Start();
-			RespawnTimer.Timeout += () =>
-			{
-				var sceneManager = GetParent() as SceneManager;
-				sceneManager.Respawn(this);
-				NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
-			};
 		}
 	}
 
