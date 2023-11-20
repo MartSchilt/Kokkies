@@ -1,6 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://fvlgvrdwxbox"]
+[gd_scene load_steps=12 format=3 uid="uid://fvlgvrdwxbox"]
 
 [ext_resource type="Script" path="res://Scripts/Managers/SceneManager.cs" id="1_tl7tr"]
+[ext_resource type="ArrayMesh" uid="uid://cqjdr03b7nqas" path="res://Assets/Objects/gun.obj" id="2_iabra"]
+[ext_resource type="ArrayMesh" uid="uid://duj23mvnml21s" path="res://Assets/Objects/wagon.obj" id="3_fy67v"]
+[ext_resource type="ArrayMesh" uid="uid://cvjevnsbu424y" path="res://Assets/Objects/rock3.obj" id="4_2n0y1"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kakdl"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -21,9 +24,10 @@ glow_enabled = true
 data = PackedVector3Array(-0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, 0.5, -0.5, 0.5, 0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5, -0.5, -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_r3keb"]
+size = Vector2(150, 150)
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_1wyic"]
-data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_y7nca"]
+data = PackedVector3Array(75, 0, 75, -75, 0, 75, 75, 0, -75, -75, 0, 75, -75, 0, -75, 75, 0, -75)
 
 [node name="newGamePlus" type="Node3D"]
 script = ExtResource("1_tl7tr")
@@ -32,8 +36,8 @@ script = ExtResource("1_tl7tr")
 environment = SubResource("Environment_yc8p8")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
-light_energy = 4.65
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, -0.122921, 0.0900612, 0.106784)
+light_energy = 2.0
 shadow_enabled = true
 
 [node name="big_cube" type="MeshInstance3D" parent="."]
@@ -46,13 +50,25 @@ mesh = SubResource("BoxMesh_ncn67")
 shape = SubResource("ConcavePolygonShape3D_6hsm8")
 
 [node name="floor" type="MeshInstance3D" parent="."]
-transform = Transform3D(14.4813, 0, 0, 0, 2.20973, 0, 0, 0, 12.6603, 0, 0, 0)
+transform = Transform3D(1.144, 0, 0, 0, 0.175, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("PlaneMesh_r3keb")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="floor"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="floor/StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_1wyic")
+shape = SubResource("ConcavePolygonShape3D_y7nca")
 
 [node name="0" type="Node3D" parent="." groups=["SpawnLocation"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2)
+
+[node name="Gun" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2001, 2.57035, 3.95357)
+mesh = ExtResource("2_iabra")
+
+[node name="Wagon" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.97369, 6.67572e-07, -12.2885)
+mesh = ExtResource("3_fy67v")
+
+[node name="Rock3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.38996, 0, -12.188)
+mesh = ExtResource("4_2n0y1")

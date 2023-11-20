@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://j111fmuscgem"
+path="res://.godot/imported/armature.obj-f3d0e727057e5308af19c7e71cc9a081.mesh"
+
+[deps]
+
+files=["res://.godot/imported/armature.obj-f3d0e727057e5308af19c7e71cc9a081.mesh"]
+
+source_file="res://Assets/Objects/armature.obj"
+dest_files=["res://.godot/imported/armature.obj-f3d0e727057e5308af19c7e71cc9a081.mesh", "res://.godot/imported/armature.obj-f3d0e727057e5308af19c7e71cc9a081.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
