@@ -1,7 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://fvlgvrdwxbox"]
+[gd_scene load_steps=11 format=3 uid="uid://fvlgvrdwxbox"]
 
 [ext_resource type="Script" path="res://Scripts/Managers/SceneManager.cs" id="1_tl7tr"]
-[ext_resource type="ArrayMesh" uid="uid://cqjdr03b7nqas" path="res://Assets/Objects/gun.obj" id="2_iabra"]
 [ext_resource type="ArrayMesh" uid="uid://duj23mvnml21s" path="res://Assets/Objects/wagon.obj" id="3_fy67v"]
 [ext_resource type="ArrayMesh" uid="uid://cvjevnsbu424y" path="res://Assets/Objects/rock3.obj" id="4_2n0y1"]
 
@@ -60,10 +59,6 @@ shape = SubResource("ConcavePolygonShape3D_y7nca")
 
 [node name="0" type="Node3D" parent="." groups=["SpawnLocation"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2)
-
-[node name="Gun" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2001, 2.57035, 3.95357)
-mesh = ExtResource("2_iabra")
 
 [node name="Wagon" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.97369, 6.67572e-07, -12.2885)
