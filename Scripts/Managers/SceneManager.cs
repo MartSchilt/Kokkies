@@ -29,7 +29,7 @@ public partial class SceneManager : Node3D
 			AddChild(currentPlayer);
 			if (GetTree().GetNodesInGroup("SpawnLocation").Count < 1)
 			{
-				currentPlayer.GlobalPosition = new Vector3(0, 10, 0); // Spawn players above
+				currentPlayer.GlobalPosition = new Vector3(10, 10, 10); // Spawn players above
 			}
 			else
 			{

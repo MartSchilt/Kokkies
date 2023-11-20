@@ -10,14 +10,17 @@ public partial class TileManager : Node3D
 
 	private const float TILE_SIZE = 10;
 	private PackedScene FloorTile;
+	private PackedScene MountainWall;
 
     public override void _Ready()
-	{
+    {
+        FloorTile = GD.Load<PackedScene>("res://Scenes/floorTile.tscn");
+        MountainWall = GD.Load<PackedScene>("res://Scenes/mountainWall.tscn");
+
         // Remove children, just in case someone decided to manually add a floor
-        foreach(var child in GetChildren())
+        foreach (var child in GetChildren())
             RemoveChild(child);
 
-        FloorTile = GD.Load<PackedScene>("res://Scenes/floorTile.tscn");
 		for(float x = 0; x < Width * TILE_SIZE; x += TILE_SIZE)
 		{
             for (float y = 0; y < Height * TILE_SIZE; y += TILE_SIZE)
@@ -28,5 +31,5 @@ public partial class TileManager : Node3D
 				AddChild(tile);
             }
         }
-	}
+    }
 }
