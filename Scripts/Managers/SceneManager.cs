@@ -1,5 +1,6 @@
 using Godot;
 using Kokkies;
+using System.Linq;
 
 public partial class SceneManager : Node3D
 {
@@ -16,7 +17,7 @@ public partial class SceneManager : Node3D
 				Id = 1,
 				Name = "Kokkie",
 				Color = new Color(),
-				Score = 100,
+				Score = 0
 			});
 		}
 
@@ -42,11 +43,26 @@ public partial class SceneManager : Node3D
 		{
 			foreach (Node3D spawn in GetTree().GetNodesInGroup("SpawnLocation"))
 				if (spawn.Name == playerCharacter.GetMeta("SpawnLocation").AsString())
+				{
 					playerCharacter.GlobalPosition = spawn.GlobalPosition;
+					break;
+				}
 
 			playerCharacter.Player.Health = playerCharacter.MaxHealth;
 			playerCharacter.Alive = true;
 			playerCharacter.Rotation = new(0, 0, 0);
 		}
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+	public void AddPoints(int playerId, int points)
+	{
+		foreach (var player in GameManager.Players)
+			if (player.Id == playerId)
+			{
+				player.Score += points;
+				GD.Print($"{player.Name} has earned {points}, totalling to {player.Score} points!");
+				break;
+			}
 	}
 }

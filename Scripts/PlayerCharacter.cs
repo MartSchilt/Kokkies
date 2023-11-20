@@ -40,6 +40,7 @@ public partial class PlayerCharacter : CharacterBody3D
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float Gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
+	private SceneManager sceneManager;
 	private Camera3D camera;
 	private AudioStreamPlayer3D gunSound;
 	private AudioStreamPlayer3D hitSound;
@@ -52,6 +53,7 @@ public partial class PlayerCharacter : CharacterBody3D
 		Player = GameManager.Players.ToList().Find(p => p.Id.ToString() == Name);
 
 		// Initialize
+		sceneManager = GetParent() as SceneManager;
 		camera = CameraNeck.GetNode<Camera3D>("Camera3D");
 		gunSound = GetNode<AudioStreamPlayer3D>("GunSound");
 		hitSound = GetNode<AudioStreamPlayer3D>("HitSound");
@@ -65,7 +67,6 @@ public partial class PlayerCharacter : CharacterBody3D
 
 		RespawnTimer.Timeout += () =>
 		{
-			var sceneManager = GetParent() as SceneManager;
 			sceneManager.Respawn(this);
 			NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
 		};
@@ -183,17 +184,25 @@ public partial class PlayerCharacter : CharacterBody3D
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]
-	public void Damage(int playerId, int dmg)
+	public void Damage(int playerId, int targetId, int dmg)
 	{
+		if (targetId != Player.Id)
+			return;
+
 		Rpc(nameof(PlaySound), (int)SoundType.Hit);
 
 		if (Alive)
+		{
 			Player.Health -= dmg;
 
-		if (Player.Health <= 0)
-			Respawn();
+			if (Player.Health <= 0)
+			{
+				sceneManager.Rpc(nameof(sceneManager.AddPoints), playerId, 10);
+				Respawn();
+			}
 
-		NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
+			NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
+		}
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
@@ -222,8 +231,13 @@ public partial class PlayerCharacter : CharacterBody3D
 
 		if (AimCast.GetCollider() is PlayerCharacter target)
 		{
-			var targetCharacter = GetParent().GetChildren().ToList().Find(p => p.Name == target.Player.Id.ToString());
-			targetCharacter.Rpc(nameof(Damage), target.Player.Id, 20);
+			foreach (var child in sceneManager.GetChildren()) {
+				if (child.Name == target.Player.Id.ToString())
+				{
+					child.Rpc(nameof(Damage), Player.Id, target.Player.Id, 20);
+					break;
+				}
+			}
 		}
 	}
 
