@@ -3,157 +3,197 @@ using Kokkies;
 using System;
 using System.Linq;
 
-public partial class  PlayerCharacter : CharacterBody3D
+public partial class PlayerCharacter : CharacterBody3D
 {
-	[Export]
-	public MultiplayerSynchronizer MpS;
-	[Export]
-	public MeshInstance3D Mesh;
-	[Export]
-	public RayCast3D AimCast;
-	[Export]
-	public Node3D CameraNeck;
-	[Export]
-	public Camera3D Camera;
-	[Export]
-	public Label3D NameLabel;
+    [Export]
+    public MultiplayerSynchronizer MpS;
+    [Export]
+    public MeshInstance3D Mesh;
+    [Export]
+    public RayCast3D AimCast;
+    [Export]
+    public Node3D CameraNeck;
+    [Export]
+    public Label3D NameLabel;
 
-	public const float Speed = 7.5f;
-	public const float JumpVelocity = 7.5f;
-	public const float CameraSpeed = 0.005f;
-	public int Health = 100;
-	public bool Alive = true;
-	public bool Respawning;
+    public const float SPEED = 7.5f;
+    public const float JUMP_VELOCITY = 7.5f;
+    public const float CAMERA_SPEED = 0.005f;
 
-	// Get the gravity from the project settings to be synced with RigidBody nodes.
-	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
+    public bool Alive = true;
+    public bool Respawning;
+    public Player Player;
 
-	private Player player;
+    // Get the gravity from the project settings to be synced with RigidBody nodes.
+    public float Gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
-	public override void _Ready()
-	{
-		var parent = GetParent();
-		MpS.SetMultiplayerAuthority(int.Parse(parent.Name));
-		player = GameManager.Players.ToList().Find(p => p.Id == parent.GetMeta("PlayerId").As<long>());
+    private Camera3D camera;
+    private Node parent;
 
-		Camera.Current = IsControlled();
-		NameLabel.Text = player.Name + "#" + player.Id + $"({Health}/100)";
-		StandardMaterial3D mat = new StandardMaterial3D();
-		mat.AlbedoColor = player.Color;
-		Mesh.MaterialOverlay = mat;
-	}
+    public override void _Ready()
+    {
+        // Find the dedicated player Node for this client
+        parent = GetParent();
+        MpS.SetMultiplayerAuthority(int.Parse(parent.Name));
+        Player = GameManager.Players.ToList().Find(p => p.Id == parent.GetMeta("PlayerId").As<long>());
 
-	public override void _Input(InputEvent @event)
-	{
-		if (@event is InputEventKey key && key.Keycode == Key.R)
-		{
-			switch (key.Keycode)
-			{
-				case Key.R:
-					GlobalPosition = new Vector3(0, 2, 2);
-					GlobalRotation = new Vector3(0, 0, 0);
-					break;
-			}
-			
-		}
-		
-		if (@event is not InputEventMouseButton eventMouseButton) return;
-		if (!AimCast.IsColliding()) return;
-		var target = AimCast.GetCollider() as PlayerCharacter;
-		target?.Damage(20);
-	}
+        // Initialize
+        camera = CameraNeck.GetNode<Camera3D>("Camera3D");
 
-	public override void _Process(double delta)
-	{
-		NameLabel.Text = player.Name + "#" + player.Id + $"({Health}/100)";
+        camera.Current = IsControlled();
+        NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
+        StandardMaterial3D mat = new StandardMaterial3D();
+        mat.AlbedoColor = Player.Color;
+        Mesh.MaterialOverlay = mat;
+        Player.Health = 100;
+    }
 
-		base._Process(delta);
-	}
+    // This method gets called before _UnhandledInput
+    // In here you should handle "important" events
+    // Probably want the GUI events to go in here
+    public override void _Input(InputEvent @event)
+    {
+        // We don't want to handle any input if this player is not controlled by the current client
+        if (!IsControlled())
+            return;
 
-	public void Respawn(double delta)
-	{
-		
-	}
+        if (@event is InputEventMouseButton mouseButtonEvent)
+        {
+            // Mouse Button Events
+            // If the player clicks on the screen, the game will capture all the mouse movements
+            Input.MouseMode = Input.MouseModeEnum.Captured;
+        }
+        else if (@event is InputEventMouseMotion mouseMotionEvent)
+        {
+            // Mouse Motion Events
+            if (Input.MouseMode == Input.MouseModeEnum.Captured)
+            {
+                RotateY(-mouseMotionEvent.Relative.X * CAMERA_SPEED);
+                CameraNeck.RotateX(-mouseMotionEvent.Relative.Y * CAMERA_SPEED);
+                CameraNeck.Rotation = new Vector3(CameraNeck.Rotation.X, Math.Clamp(-mouseMotionEvent.Relative.Y * CAMERA_SPEED, -1, 1), 0);
+            }
+        }
+        else if (@event is InputEventKey keyEvent)
+        {
+            // Keyboard Events
+            if (keyEvent.IsActionPressed("ui_cancel"))
+            {
+                Input.MouseMode = Input.MouseModeEnum.Visible;
+            }
 
-	public void Damage(int dmg)
-	{
-		if (Alive)
-			Health -= dmg;
+            switch (keyEvent.Keycode)
+            {
+                // Respawn should go to the spawn points which are loaded in the SceneManager.
+                // Perhaps do the respawning in there?
+                case Key.R:
+                    GlobalPosition = new Vector3(0, 2, 2);
+                    GlobalRotation = new Vector3(0, 0, 0);
+                    break;
+            }
+        }
+    }
 
-		if (Health <= 0)
-		{
-			Alive = false;
-			GlobalPosition = new Vector3(0, 2, 2);
-			GlobalRotation = new Vector3(0, 0, 0);
-			Health = 100;
-			Alive = true;
-		}
+    // Here all the input events go if they were not handled by _Input
+    // We want gameplay things to go in here
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        // We don't want to handle any input if this player is not controlled by the current client
+        if (!IsControlled())
+            return;
 
-		GD.Print($"{player.Id} took damage");
-	}
+        if (@event is InputEventMouseButton mouseButtonEvent)
+        {
+            // Mouse Button Events
+            switch (mouseButtonEvent.ButtonIndex)
+            {
+                // Hitscan shooting
+                case MouseButton.Left:
+                    if (!AimCast.IsColliding())
+                        return;
 
-	public override void _UnhandledInput(InputEvent @event)
-	{
-		if (!IsControlled())
-			return;
-		
-		if (@event is InputEventMouseButton)
-			Input.MouseMode = Input.MouseModeEnum.Captured;
-		else if (@event.IsActionPressed("ui_cancel"))
-			Input.MouseMode = Input.MouseModeEnum.Visible;
+                    var target = AimCast.GetCollider() as PlayerCharacter;
+                    GD.Print($"{target.Player.Id} took damage from {Player.Id}");
+                    var targetCharacter = parent.GetParent().GetChildren().ToList().Find(p => p.Name == target.Player.Id.ToString()).GetChild(1);
+                    targetCharacter.Rpc(nameof(Damage), target.Player.Id, 20);
+                    break;
+            }
+        }
+        else if (@event is InputEventMouseMotion mouseMotionEvent)
+        {
+            // Mouse Motion Events
+        }
+        else if (@event is InputEventKey keyEvent)
+        {
+            // Keyboard Events
+        }
+    }
 
-		if (Input.MouseMode == Input.MouseModeEnum.Captured && @event is InputEventMouseMotion mouseMotion)
-		{
-			this.RotateY(-mouseMotion.Relative.X * CameraSpeed);
-			CameraNeck.RotateX(-mouseMotion.Relative.Y * CameraSpeed);
-			CameraNeck.Rotation = new Vector3(CameraNeck.Rotation.X, Math.Clamp(- mouseMotion.Relative.Y * CameraSpeed, -1, 1), 0);
-		}
-	}
+    public override void _PhysicsProcess(double delta)
+    {
+        NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
 
+        if (!IsControlled())
+            return;
 
-	public override void _PhysicsProcess(double delta)
-	{
-		if (!IsControlled())
-			return;
+        Vector3 velocity = Velocity;
 
-		Vector3 velocity = Velocity;
+        // Add the gravity.
+        if (!IsOnFloor())
+            velocity.Y -= Gravity * (float)delta;
 
-		// Add the gravity.
-		if (!IsOnFloor())
-			velocity.Y -= gravity * (float)delta;
+        // Handle Jump.
+        if (Input.IsActionJustPressed("jump") && IsOnFloor())
+            velocity.Y = JUMP_VELOCITY;
 
-		// Handle Jump.
-		if (Input.IsActionJustPressed("jump") && IsOnFloor())
-			velocity.Y = JumpVelocity;
+        // Get the input direction and handle the movement/deceleration.
+        // As good practice, you should replace UI actions with custom gameplay actions.
+        Vector2 inputDir = Input.GetVector("left", "right", "forward", "back");
+        Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
+        if (direction != Vector3.Zero)
+        {
+            velocity.X = direction.X * SPEED;
+            velocity.Z = direction.Z * SPEED;
+        }
+        else
+        {
+            velocity.X = Mathf.MoveToward(Velocity.X, 0, SPEED);
+            velocity.Z = Mathf.MoveToward(Velocity.Z, 0, SPEED);
+        }
 
-		// Get the input direction and handle the movement/deceleration.
-		// As good practice, you should replace UI actions with custom gameplay actions.
-		Vector2 inputDir = Input.GetVector("left", "right", "forward", "back");
-		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
-		if (direction != Vector3.Zero)
-		{
-			velocity.X = direction.X * Speed;
-			velocity.Z = direction.Z * Speed;
-		}
-		else
-		{
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
-		}
+        Velocity = velocity;
+        MoveAndSlide();
+    }
 
-		Velocity = velocity;
-		MoveAndSlide();
-	}
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]
+    public void Damage(int playerId, int dmg)
+    {
+        GD.Print($"{playerId} took damage, and I'm {Player.Id}");
 
-	private bool IsControlled()
-	{
-		try
-		{
-			return MpS.GetMultiplayerAuthority() == Multiplayer.GetUniqueId();
-		}
-		catch (Exception)
-		{
-			return false;
-		}
-	}
+        if (Alive)
+            Player.Health -= dmg;
+
+        if (Player.Health <= 0)
+            Respawn();
+    }
+
+    private void Respawn()
+    {
+        Alive = false;
+        GlobalPosition = new Vector3(0, 2, 2);
+        GlobalRotation = new Vector3(0, 0, 0);
+        Player.Health = 100;
+        Alive = true;
+    }
+
+    private bool IsControlled()
+    {
+        try
+        {
+            return MpS.GetMultiplayerAuthority() == Multiplayer.GetUniqueId();
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
 }

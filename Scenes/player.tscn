@@ -46,21 +46,20 @@ albedo_color = Color(0.427451, 0.294118, 0.227451, 1)
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_qlk0q")
 
-[node name="PlayerCharacter" type="CharacterBody3D" parent="." node_paths=PackedStringArray("MpS", "Mesh", "AimCast", "CameraNeck", "Camera", "NameLabel")]
+[node name="PlayerCharacter" type="CharacterBody3D" parent="." node_paths=PackedStringArray("MpS", "Mesh", "AimCast", "CameraNeck", "NameLabel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_234yd")
 MpS = NodePath("../MultiplayerSynchronizer")
 Mesh = NodePath("MeshInstance3D")
 AimCast = NodePath("CameraNeck/AimCast")
 CameraNeck = NodePath("CameraNeck")
-Camera = NodePath("CameraNeck/Camera3D")
 NameLabel = NodePath("NameLabel")
 
 [node name="RespawnTimer" type="Timer" parent="PlayerCharacter"]
 one_shot = true
 
 [node name="NameLabel" type="Label3D" parent="PlayerCharacter"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.25834, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.5, 0)
 text = "kokkie"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerCharacter"]
