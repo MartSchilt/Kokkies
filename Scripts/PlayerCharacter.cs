@@ -53,10 +53,6 @@ public partial class  PlayerCharacter : CharacterBody3D
 					GlobalPosition = new Vector3(0, 2, 2);
 					GlobalRotation = new Vector3(0, 0, 0);
 					break;
-
-				case Key.J:
-					GlobalPosition += new Vector3(0, 5, 0);
-					break;
 			}
 			
 		}
@@ -71,29 +67,29 @@ public partial class  PlayerCharacter : CharacterBody3D
 	{
 		NameLabel.Text = player.Name + "#" + player.Id + $"({Health}/100)";
 
-		if (Health <= 0)
-		{
-			Alive = false;
-			if (!Respawning) Respawn(delta);
-		}
-
 		base._Process(delta);
 	}
 
 	public void Respawn(double delta)
 	{
-		Respawning = true;
-		GlobalPosition = new Vector3(0, 2, 2);
-		GlobalRotation = new Vector3(0, 0, 0);
-		Health = 100;
-		Respawning = false;
-		Alive = true;
+		
 	}
 
 	public void Damage(int dmg)
 	{
 		if (Alive)
 			Health -= dmg;
+
+		if (Health <= 0)
+		{
+			Alive = false;
+			GlobalPosition = new Vector3(0, 2, 2);
+			GlobalRotation = new Vector3(0, 0, 0);
+			Health = 100;
+			Alive = true;
+		}
+
+		GD.Print($"{player.Id} took damage");
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -109,8 +105,8 @@ public partial class  PlayerCharacter : CharacterBody3D
 		if (Input.MouseMode == Input.MouseModeEnum.Captured && @event is InputEventMouseMotion mouseMotion)
 		{
 			this.RotateY(-mouseMotion.Relative.X * CameraSpeed);
-            CameraNeck.RotateX(-mouseMotion.Relative.Y * CameraSpeed);
-            CameraNeck.Rotation = new Vector3(CameraNeck.Rotation.X, Math.Clamp(- mouseMotion.Relative.Y * CameraSpeed, -1, 1), 0);
+			CameraNeck.RotateX(-mouseMotion.Relative.Y * CameraSpeed);
+			CameraNeck.Rotation = new Vector3(CameraNeck.Rotation.X, Math.Clamp(- mouseMotion.Relative.Y * CameraSpeed, -1, 1), 0);
 		}
 	}
 

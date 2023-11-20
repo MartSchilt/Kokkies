@@ -8,11 +8,15 @@
 properties/0/path = NodePath("PlayerCharacter:rotation")
 properties/0/spawn = true
 properties/0/sync = true
-properties/0/watch = true
+properties/0/watch = false
 properties/1/path = NodePath("PlayerCharacter:position")
 properties/1/spawn = true
 properties/1/sync = true
-properties/1/watch = true
+properties/1/watch = false
+properties/2/path = NodePath("PlayerCharacter/CameraNeck:rotation")
+properties/2/spawn = true
+properties/2/sync = true
+properties/2/watch = false
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bivn6"]
 
@@ -47,7 +51,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_234yd")
 MpS = NodePath("../MultiplayerSynchronizer")
 Mesh = NodePath("MeshInstance3D")
-AimCast = NodePath("CameraNeck/Camera3D/AimCast")
+AimCast = NodePath("CameraNeck/AimCast")
 CameraNeck = NodePath("CameraNeck")
 Camera = NodePath("CameraNeck/Camera3D")
 NameLabel = NodePath("NameLabel")
