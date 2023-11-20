@@ -1,21 +1,22 @@
 using Godot;
 using Kokkies;
-using System;
+using System.Linq;
 
 public partial class MultiplayerManager : Node
 {
     public Node Main;
     public VoiceOrchestrator VOrchestrator;
+    public RichTextLabel Logger;
+    public bool ShouldLogVoice { get; set; }
 
     private ENetMultiplayerPeer peer;
-    private string playerName;
-    private string ipAddress;
-    private int Port;
 
     public override void _Ready()
     {
         // Get the Main Node (if it is not there, just use self as Main Node)
         Main = GetParent() ?? this;
+
+        Logger = Main.GetNode<RichTextLabel>("MultiplayerMenu/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/Log");
 
         // Multiplayer stuff
         Multiplayer.PeerConnected += PlayerConnected;
@@ -25,9 +26,20 @@ public partial class MultiplayerManager : Node
         Multiplayer.ServerDisconnected += DisconnectedFromServer;
         peer = new();
 
-        // Initializing
+        // VOIP
+        ShouldLogVoice = false;
         VOrchestrator = new();
-        AddChild(VOrchestrator);
+        VOrchestrator.Name = nameof(VoiceOrchestrator);
+        Main.AddChild(VOrchestrator);
+
+        VOrchestrator.sentVoiceData += (data) =>
+        {
+            LogVoice(true, data);
+        };
+        VOrchestrator.receivedVoiceData += (data, id) =>
+        {
+            LogVoice(false, data, id);
+        };
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
@@ -42,7 +54,7 @@ public partial class MultiplayerManager : Node
     public void SendPlayerInfo(long id, string name, Color color)
     {
         // Only add the player if it is not already added, otherwise ignore this
-        if (GameManager.Players.Find(p => p.Id == id) == null)
+        if (GameManager.Players.ToList().Find(p => p.Id == id) == null)
         {
             Player player = new()
             {
@@ -67,7 +79,7 @@ public partial class MultiplayerManager : Node
     // Is basically a void method, but returns an Error object, just in case something goes wrong
     public Error HostGame()
     {
-        var error = peer.CreateServer(Port, GameManager.MaxPlayers);
+        var error = peer.CreateServer(GameManager.Port, GameManager.MaxPlayers);
         if (error != Error.Ok)
         {
             GD.PrintErr("Failed to host: " + error);
@@ -76,13 +88,15 @@ public partial class MultiplayerManager : Node
 
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
-        GD.Print("Hosting started on " + Port + "...");
+        GD.Print("Hosting started on " + GameManager.Port + "...");
+        SendPlayerInfo(Multiplayer.GetUniqueId(), GameManager.PlayerName, Helper.RandomColor());
+        VOrchestrator.Recording = true;
         return error;
     }
 
-    public Error JoinGame(string ipAddress, int port)
+    public Error JoinGame()
     {
-        var error = peer.CreateClient(ipAddress, port);
+        var error = peer.CreateClient(GameManager.IpAddress, GameManager.Port);
         if (error != Error.Ok)
         {
             GD.PrintErr("Failed to create client: " + error);
@@ -91,16 +105,19 @@ public partial class MultiplayerManager : Node
 
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
-        VOrchestrator.Recording = true; // Make sure it records the microphone
+        VOrchestrator.Recording = true;
         return error;
     }
 
-    private Color RandomColor()
+    private void LogVoice(bool sent, float[] data, int id = -1)
     {
-        Random rnd = new Random();
-        byte[] b = new byte[3];
-        rnd.NextBytes(b);
-        return Color.Color8(b[0], b[1], b[2]);
+        if (ShouldLogVoice)
+        {
+            if (sent)
+                Logger.AddText("\n Sent data of size " + data.Length);
+            else
+                Logger.AddText("\n Received data of size " + data.Length + " from " + id.ToString());
+        }
     }
 
     #region Peer-to-peer methods
@@ -112,14 +129,14 @@ public partial class MultiplayerManager : Node
     private void PlayerDisconnected(long id)
     {
         GD.Print("Player Disconnected: " + id);
-        GameManager.Players.Remove(GameManager.Players.Find(p => p.Id == id));
+        GameManager.Players.Remove(GameManager.Players.ToList().Find(p => p.Id == id));
     }
 
     private void ConnectedToServer()
     {
         GD.Print("Connected To Server");
         var id = Multiplayer.GetUniqueId();
-        Rpc(nameof(SendPlayerInfo), id, playerName, RandomColor());
+        Rpc(nameof(SendPlayerInfo), id, GameManager.PlayerName, Helper.RandomColor());
     }
 
     private void DisconnectedFromServer()

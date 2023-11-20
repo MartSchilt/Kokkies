@@ -5,25 +5,20 @@ using System.Linq;
 
 public partial class MultiplayerScene : Control
 {
+	private const string STATUS = "Status: ";
+	private const float STANDARD_INPUT_THRESHOLD = 0.005f;
+	
 	public Node Main;
 	public MultiplayerManager MPManager;
 
+	public RichTextLabel Logger;
 	public SpinBox spinBoxInputThreshold;
 	public HSlider sliderInputThreshold;
 	public Button startMPButton;
 	public Label statusLabel;
 	public RichTextLabel playerList;
 
-	private const string STATUS = "Status: ";
-	private const string STANDARD_NAME = "Kokkie";
-	private const string STANDARD_IP = "127.0.0.1";
-	private const int STANDARD_PORT = 8910;
-	private const float STANDARD_INPUT_THRESHOLD = 0.005f;
-
 	private ENetMultiplayerPeer peer;
-	private string playerName = STANDARD_NAME;
-	private string ipAddress = STANDARD_IP;
-	private int port = STANDARD_PORT;
 
 	public override void _Ready()
 	{
@@ -32,15 +27,19 @@ public partial class MultiplayerScene : Control
 
 		// Instantiate the Multiplayer Client
 		MPManager = new();
+		MPManager.Name = nameof(MultiplayerManager);
 		Main.AddChild(MPManager);
 
 		// UI Elements
 		// I really hate how we need to declare the nodepath like this...
+		Logger = GetNode<RichTextLabel>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/Log");
 		spinBoxInputThreshold = GetNode<SpinBox>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer5/Value");
 		sliderInputThreshold = GetNode<HSlider>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/InputThreshold");
 		startMPButton = GetNode<Button>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/MultiplayerTest");
 		statusLabel = GetNode<Label>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Status");
 		playerList = GetNode<RichTextLabel>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Players");
+
+		GameManager.Players.CollectionChanged += (s, e) => UpdateUI();
 
 		// Change the way the game works when it is started as a server
 		if (OS.GetCmdlineArgs().Contains("--server"))
@@ -53,7 +52,8 @@ public partial class MultiplayerScene : Control
 			GD.Print("Started as client");
 			spinBoxInputThreshold.Value = STANDARD_INPUT_THRESHOLD;
 			sliderInputThreshold.Value = STANDARD_INPUT_THRESHOLD;
-			statusLabel.Text = STATUS + "Ready to host or join";
+
+			Log("Ready to host or join");
 		}
 	}
 
@@ -61,6 +61,7 @@ public partial class MultiplayerScene : Control
 	public void StartGame()
 	{
 		MPManager.StartMultiplayerScene("res://Scenes/dev.tscn");
+		Hide();
 	}
 
 	public void UpdateUI()
@@ -73,44 +74,37 @@ public partial class MultiplayerScene : Control
 		}
 	}
 
-	private Color RandomColor()
+	private void Log(string text)
 	{
-		Random rnd = new Random();
-		byte[] b = new byte[3];
-		rnd.NextBytes(b);
-		return Color.Color8(b[0], b[1], b[2]);
+		statusLabel.Text = STATUS + text;
+		Logger.AddText("\n" + text);
+		GD.Print(text);
 	}
 
 	#region Button Presses
 	private void _on_host_button_down()
 	{
-		statusLabel.Text = STATUS + "Starting server...";
+		Log("Starting server...");
 
 		if (MPManager.HostGame() == Error.Ok)
 		{
-			statusLabel.Text = STATUS + "Hosting on " + port;
-			MPManager.SendPlayerInfo(Multiplayer.GetUniqueId(), playerName, RandomColor());
-			MPManager.VOrchestrator.Recording = true; // Make sure it records the microphone
+			Log("Hosting on " + GameManager.Port);
+			startMPButton.Disabled = false;
 		}
 		else
-		{
-			statusLabel.Text = STATUS + "Failed to host!";
-		}
+			Log("Failed to host!");
 	}
 
 	private void _on_join_button_down()
 	{
-		statusLabel.Text = STATUS + "Connecting...";
+		Log("Connecting...");
 
-		if (MPManager.JoinGame(ipAddress, port) == Error.Ok)
-		{
-			statusLabel.Text = STATUS + "Connected!";
-		}
+		if (MPManager.JoinGame() == Error.Ok)
+			Log("Connected!");
 		else
-		{
-			statusLabel.Text = STATUS + "Failed to connect!";
-		}
+			Log("Failed to connect!");
 	}
+
 	private void _on_multiplayer_test_button_down()
 	{
 		Rpc(nameof(StartGame));
@@ -120,29 +114,27 @@ public partial class MultiplayerScene : Control
 	#region Text Inputs
 	private void _on_name_input_text_changed(string new_text)
 	{
-		if (new_text != "")
-			playerName = new_text;
-		else
-			playerName = STANDARD_NAME;
+		GameManager.SetPlayerName(new_text);
 	}
 
 	private void _on_ip_input_text_changed(string new_text)
 	{
-		if (new_text != "")
-			ipAddress = new_text;
-		else
-			ipAddress = STANDARD_IP;
+		GameManager.SetIpAddress(new_text);
 	}
 
 	private void _on_port_input_text_changed(string new_text)
 	{
+		int port;
 		if (new_text != "")
 		{
 			var parsed = int.TryParse(new_text, out port);
 			if (parsed)
+			{
+				GameManager.Port = port;
 				return;
+			}
 		}
-		port = STANDARD_PORT;
+		GameManager.Port = GameManager.STANDARD_PORT;
 	}
 	#endregion
 
@@ -155,5 +147,10 @@ public partial class MultiplayerScene : Control
 	private void _on_listen_toggled(bool button_pressed)
 	{
 		MPManager.VOrchestrator.Listen = button_pressed;
-	}
+    }
+
+    private void _on_log_voice_toggled(bool button_pressed)
+    {
+		MPManager.ShouldLogVoice = button_pressed;
+    }
 }

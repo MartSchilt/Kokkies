@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/MultiplayerScene.cs" id="1_ihonf"]
 
-[node name="Control" type="Control"]
+[node name="MultiplayerMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -158,6 +158,10 @@ step = 0.001
 layout_mode = 2
 text = "Voice feedback"
 
+[node name="LogVoice" type="CheckBox" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Log Voice Data"
+
 [node name="HSeparator6" type="HSeparator" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
@@ -179,6 +183,17 @@ layout_mode = 2
 disabled = true
 text = "Start Multiplayer Test (dev.tscn)"
 
+[node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="Log" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Log:"
+fit_content = true
+scroll_following = true
+
 [connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/NameInput" to="." method="_on_name_input_text_changed"]
 [connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PortInput" to="." method="_on_port_input_text_changed"]
 [connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Host" to="." method="_on_host_button_down"]
@@ -187,4 +202,5 @@ text = "Start Multiplayer Test (dev.tscn)"
 [connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Join" to="." method="_on_join_button_down"]
 [connection signal="value_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/InputThreshold" to="." method="_on_input_thresh_value_changed"]
 [connection signal="toggled" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Listen" to="." method="_on_listen_toggled"]
+[connection signal="toggled" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/LogVoice" to="." method="_on_log_voice_toggled"]
 [connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/MultiplayerTest" to="." method="_on_multiplayer_test_button_down"]

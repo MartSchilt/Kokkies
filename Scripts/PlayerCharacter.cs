@@ -1,6 +1,7 @@
 using Godot;
 using Kokkies;
 using System;
+using System.Linq;
 
 public partial class PlayerCharacter : CharacterBody3D
 {
@@ -30,7 +31,7 @@ public partial class PlayerCharacter : CharacterBody3D
     {
         var parent = GetParent();
         MpS.SetMultiplayerAuthority(int.Parse(parent.Name));
-        player = GameManager.Players.Find(p => p.Id == parent.GetMeta("PlayerId").As<long>());
+        player = GameManager.Players.ToList().Find(p => p.Id == parent.GetMeta("PlayerId").As<long>());
 
         Camera.Current = IsControlled();
 		NameLabel.Text = player.Name + "#" + player.Id;
@@ -130,12 +131,12 @@ public override void _PhysicsProcess(double delta)
 
 	private bool IsControlled()
 	{
-		try
+        try
         {
             return MpS.GetMultiplayerAuthority() == Multiplayer.GetUniqueId();
         }
-		catch (Exception ex)
-		{
+		catch (Exception)
+        {
 			return false;
 		}
 	}
