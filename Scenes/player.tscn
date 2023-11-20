@@ -5,15 +5,15 @@
 [ext_resource type="ArrayMesh" uid="uid://c1c5o30hdhe80" path="res://Assets/Objects/cowboyhat.obj" id="3_ajq64"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_qlk0q"]
-properties/0/path = NodePath("PlayerCharacter:position")
+properties/0/path = NodePath("PlayerCharacter:rotation")
 properties/0/spawn = true
 properties/0/sync = true
 properties/0/watch = false
-properties/1/path = NodePath("PlayerCharacter:rotation")
+properties/1/path = NodePath("PlayerCharacter:position")
 properties/1/spawn = true
 properties/1/sync = true
 properties/1/watch = false
-properties/2/path = NodePath("PlayerCharacter/CameraNeck/Gun:rotation")
+properties/2/path = NodePath("PlayerCharacter/CameraNeck:rotation")
 properties/2/spawn = true
 properties/2/sync = true
 properties/2/watch = false
@@ -55,6 +55,9 @@ AimCast = NodePath("CameraNeck/AimCast")
 CameraNeck = NodePath("CameraNeck")
 Camera = NodePath("CameraNeck/Camera3D")
 NameLabel = NodePath("NameLabel")
+
+[node name="RespawnTimer" type="Timer" parent="PlayerCharacter"]
+one_shot = true
 
 [node name="NameLabel" type="Label3D" parent="PlayerCharacter"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.25834, 0)
