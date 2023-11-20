@@ -49,13 +49,14 @@ albedo_color = Color(0.352941, 0.352941, 0.352941, 1)
 albedo_color = Color(0.427451, 0.294118, 0.227451, 1)
 
 [node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("MpS", "Mesh", "AimCast", "CameraNeck", "NameLabel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0)
 script = ExtResource("1_234yd")
 MpS = NodePath("MultiplayerSynchronizer")
 Mesh = NodePath("MeshInstance3D")
 AimCast = NodePath("CameraNeck/AimCast")
 CameraNeck = NodePath("CameraNeck")
 NameLabel = NodePath("NameLabel")
+JumpVelocity = 8.0
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_j8c6i")

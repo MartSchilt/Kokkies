@@ -22,10 +22,16 @@ public partial class PlayerCharacter : CharacterBody3D
 	public Node3D CameraNeck;
 	[Export]
 	public Label3D NameLabel;
-
-	public const float SPEED = 7.5f;
-	public const float JUMP_VELOCITY = 7.5f;
-	public const float CAMERA_SPEED = 0.005f;
+	[Export]
+	public float Speed = 10f;
+	[Export]
+	public float JumpVelocity = 10f;
+	[Export]
+	public float CameraSpeed = 0.005f;
+	[Export]
+	public double RespawnTime = 10.0;
+	[Export]
+	public int MaxHealth = 100;
 
 	public bool Alive = true;
 	public bool Respawning;
@@ -43,7 +49,7 @@ public partial class PlayerCharacter : CharacterBody3D
 	{
 		// Find the dedicated player Node for this client
 		MpS.SetMultiplayerAuthority(int.Parse(Name));
-		Player = GameManager.Players.ToList().Find(p => p.Id == GetMeta("PlayerId").As<long>());
+		Player = GameManager.Players.ToList().Find(p => p.Id.ToString() == Name);
 
 		// Initialize
 		camera = CameraNeck.GetNode<Camera3D>("Camera3D");
@@ -53,10 +59,9 @@ public partial class PlayerCharacter : CharacterBody3D
 
 		camera.Current = IsControlled();
 		NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
-		StandardMaterial3D mat = new StandardMaterial3D();
+		StandardMaterial3D mat = new();
 		mat.AlbedoColor = Player.Color;
 		Mesh.MaterialOverlay = mat;
-		Player.Health = 100;
 	}
 
 	// This method gets called before _UnhandledInput
@@ -79,9 +84,9 @@ public partial class PlayerCharacter : CharacterBody3D
 			// Mouse Motion Events
 			if (Input.MouseMode == Input.MouseModeEnum.Captured)
 			{
-				RotateY(-mouseMotionEvent.Relative.X * CAMERA_SPEED);
-				CameraNeck.RotateX(-mouseMotionEvent.Relative.Y * CAMERA_SPEED);
-				CameraNeck.Rotation = new Vector3(CameraNeck.Rotation.X, Math.Clamp(-mouseMotionEvent.Relative.Y * CAMERA_SPEED, -1, 1), 0);
+				RotateY(-mouseMotionEvent.Relative.X * CameraSpeed);
+				CameraNeck.RotateX(-mouseMotionEvent.Relative.Y * CameraSpeed);
+				CameraNeck.Rotation = new Vector3(CameraNeck.Rotation.X, Math.Clamp(-mouseMotionEvent.Relative.Y * CameraSpeed, -1, 1), 0);
 			}
 		}
 		else if (@event is InputEventKey keyEvent)
@@ -109,7 +114,7 @@ public partial class PlayerCharacter : CharacterBody3D
 	public override void _UnhandledInput(InputEvent @event)
 	{
 		// We don't want to handle any input if this player is not controlled by the current client
-		if (!IsControlled())
+		if (!IsControlled() && !Alive)
 			return;
 
 		if (@event is InputEventMouseButton mouseButtonEvent && mouseButtonEvent.Pressed)
@@ -135,7 +140,7 @@ public partial class PlayerCharacter : CharacterBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (!IsControlled())
+		if (!IsControlled() && !Alive)
 			return;
 
 		Vector3 velocity = Velocity;
@@ -146,7 +151,7 @@ public partial class PlayerCharacter : CharacterBody3D
 
 		// Handle Jump.
 		if (Input.IsActionJustPressed("jump") && IsOnFloor())
-			velocity.Y = JUMP_VELOCITY;
+			velocity.Y = JumpVelocity;
 
 		// Get the input direction and handle the movement/deceleration.
 		// As good practice, you should replace UI actions with custom gameplay actions.
@@ -154,13 +159,13 @@ public partial class PlayerCharacter : CharacterBody3D
 		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
 		if (direction != Vector3.Zero)
 		{
-			velocity.X = direction.X * SPEED;
-			velocity.Z = direction.Z * SPEED;
+			velocity.X = direction.X * Speed;
+			velocity.Z = direction.Z * Speed;
 		}
 		else
 		{
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, SPEED);
-			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, SPEED);
+			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
+			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
 		}
 
 		Velocity = velocity;
@@ -215,11 +220,10 @@ public partial class PlayerCharacter : CharacterBody3D
 	private void Respawn()
 	{
 		Rpc(nameof(PlaySound), (int)SoundType.Death);
-		
 		Alive = false;
-		GlobalPosition = new Vector3(0, 2, 2);
-		GlobalRotation = new Vector3(0, 0, 0);
-		Player.Health = 100;
+
+		var sceneManager = GetParent() as SceneManager;
+		sceneManager.Respawn(this);
 		Alive = true;
 		NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
 	}
