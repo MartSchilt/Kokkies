@@ -4,16 +4,16 @@
 [ext_resource type="ArrayMesh" uid="uid://cqjdr03b7nqas" path="res://Assets/Objects/gun.obj" id="2_1l1fb"]
 [ext_resource type="ArrayMesh" uid="uid://c1c5o30hdhe80" path="res://Assets/Objects/cowboyhat.obj" id="3_ajq64"]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_qlk0q"]
-properties/0/path = NodePath("PlayerCharacter:rotation")
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_j8c6i"]
+properties/0/path = NodePath(".:rotation")
 properties/0/spawn = true
 properties/0/sync = true
 properties/0/watch = false
-properties/1/path = NodePath("PlayerCharacter:position")
+properties/1/path = NodePath(".:position")
 properties/1/spawn = true
 properties/1/sync = true
 properties/1/watch = false
-properties/2/path = NodePath("PlayerCharacter/CameraNeck:rotation")
+properties/2/path = NodePath("CameraNeck:rotation")
 properties/2/spawn = true
 properties/2/sync = true
 properties/2/watch = false
@@ -41,39 +41,37 @@ albedo_color = Color(0.352941, 0.352941, 0.352941, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bwo83"]
 albedo_color = Color(0.427451, 0.294118, 0.227451, 1)
 
-[node name="Player" type="Node3D"]
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_qlk0q")
-
-[node name="PlayerCharacter" type="CharacterBody3D" parent="." node_paths=PackedStringArray("MpS", "Mesh", "AimCast", "CameraNeck", "NameLabel")]
+[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("MpS", "Mesh", "AimCast", "CameraNeck", "NameLabel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_234yd")
-MpS = NodePath("../MultiplayerSynchronizer")
+MpS = NodePath("MultiplayerSynchronizer")
 Mesh = NodePath("MeshInstance3D")
 AimCast = NodePath("CameraNeck/AimCast")
 CameraNeck = NodePath("CameraNeck")
 NameLabel = NodePath("NameLabel")
 
-[node name="RespawnTimer" type="Timer" parent="PlayerCharacter"]
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_j8c6i")
+
+[node name="RespawnTimer" type="Timer" parent="."]
 one_shot = true
 
-[node name="NameLabel" type="Label3D" parent="PlayerCharacter"]
+[node name="NameLabel" type="Label3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.5, 0)
 text = "kokkie"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerCharacter"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_bivn6")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerCharacter"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("ConvexPolygonShape3D_sccvb")
 
-[node name="CameraNeck" type="Node3D" parent="PlayerCharacter"]
+[node name="CameraNeck" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 
-[node name="Camera3D" type="Camera3D" parent="PlayerCharacter/CameraNeck"]
+[node name="Camera3D" type="Camera3D" parent="CameraNeck"]
 
-[node name="Gun" type="MeshInstance3D" parent="PlayerCharacter/CameraNeck"]
+[node name="Gun" type="MeshInstance3D" parent="CameraNeck"]
 transform = Transform3D(4.76995e-09, 0, -0.4, 0, 0.4, 0, 0.4, 0, 4.76995e-09, 0.5, -0.1, 0)
 mesh = ExtResource("2_1l1fb")
 skeleton = NodePath("../../..")
@@ -83,11 +81,11 @@ surface_material_override/2 = SubResource("StandardMaterial3D_j35qe")
 surface_material_override/3 = SubResource("StandardMaterial3D_kc6hu")
 surface_material_override/4 = SubResource("StandardMaterial3D_088fi")
 
-[node name="AimCast" type="RayCast3D" parent="PlayerCharacter/CameraNeck"]
+[node name="AimCast" type="RayCast3D" parent="CameraNeck"]
 transform = Transform3D(1.00408, 0, 0, 0, 1.00408, 0, 0, 0, 1.00408, 0, 0, 0)
 target_position = Vector3(0, 0, -1000)
 
-[node name="Cowboyhat" type="MeshInstance3D" parent="PlayerCharacter/CameraNeck"]
+[node name="Cowboyhat" type="MeshInstance3D" parent="CameraNeck"]
 transform = Transform3D(0.75, 0, 0, 0, 0.724444, -0.194114, 0, 0.194114, 0.724444, 0, 0.3, 0.05)
 mesh = ExtResource("3_ajq64")
 skeleton = NodePath("../../..")

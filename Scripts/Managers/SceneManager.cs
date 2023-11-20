@@ -23,7 +23,7 @@ public partial class SceneManager : Node3D
 		var index = 0;
 		foreach (var player in GameManager.Players)
 		{
-			var currentPlayer = PlayerScene.Instantiate() as Node3D;
+			var currentPlayer = PlayerScene.Instantiate() as PlayerCharacter;
 			currentPlayer.Name = player.Id.ToString();
 			currentPlayer.SetMeta("PlayerId", player.Id);
 			AddChild(currentPlayer);
