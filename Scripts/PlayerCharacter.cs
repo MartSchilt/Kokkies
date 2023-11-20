@@ -28,6 +28,7 @@ public partial class PlayerCharacter : CharacterBody3D
 	public float Gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
 	private Camera3D camera;
+	private AudioStreamPlayer3D audioStreamPlayer;
 
 	public override void _Ready()
 	{
@@ -37,6 +38,7 @@ public partial class PlayerCharacter : CharacterBody3D
 
 		// Initialize
 		camera = CameraNeck.GetNode<Camera3D>("Camera3D");
+		audioStreamPlayer = GetNode<AudioStreamPlayer3D>("GunSound");
 
 		camera.Current = IsControlled();
 		NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
@@ -99,22 +101,14 @@ public partial class PlayerCharacter : CharacterBody3D
 		if (!IsControlled())
 			return;
 
-		if (@event is InputEventMouseButton mouseButtonEvent)
+		if (@event is InputEventMouseButton mouseButtonEvent && mouseButtonEvent.Pressed)
 		{
-			// Mouse Button Events
+			// Mouse Button down Events
 			switch (mouseButtonEvent.ButtonIndex)
 			{
 				// Hitscan shooting
 				case MouseButton.Left:
-					if (!AimCast.IsColliding())
-						return;
-
-					if (AimCast.GetCollider() is PlayerCharacter target)
-					{
-						GD.Print($"{target.Player.Id} took damage from {Player.Id}");
-						var targetCharacter = GetParent().GetChildren().ToList().Find(p => p.Name == target.Player.Id.ToString());
-						targetCharacter.Rpc(nameof(Damage), target.Player.Id, 20);
-					}
+					Shoot();
 					break;
 			}
 		}
@@ -174,6 +168,27 @@ public partial class PlayerCharacter : CharacterBody3D
 
 		if (Player.Health <= 0)
 			Respawn();
+	}
+
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+	public void PlaySound()
+	{
+		audioStreamPlayer.Play();
+	}
+
+	private void Shoot()
+	{
+		Rpc(nameof(PlaySound));
+
+		if (!AimCast.IsColliding())
+			return;
+
+		if (AimCast.GetCollider() is PlayerCharacter target)
+		{
+			GD.Print($"{target.Player.Id} took damage from {Player.Id}");
+			var targetCharacter = GetParent().GetChildren().ToList().Find(p => p.Name == target.Player.Id.ToString());
+			targetCharacter.Rpc(nameof(Damage), target.Player.Id, 20);
+		}
 	}
 
 	private void Respawn()
