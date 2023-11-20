@@ -3,6 +3,13 @@ using Kokkies;
 using System;
 using System.Linq;
 
+public enum SoundType
+{
+	Gun,
+	Hit,
+	Death
+}
+
 public partial class PlayerCharacter : CharacterBody3D
 {
 	[Export]
@@ -28,7 +35,9 @@ public partial class PlayerCharacter : CharacterBody3D
 	public float Gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
 	private Camera3D camera;
-	private AudioStreamPlayer3D audioStreamPlayer;
+	private AudioStreamPlayer3D gunSound;
+	private AudioStreamPlayer3D hitSound;
+	private AudioStreamPlayer3D deathSound;
 
 	public override void _Ready()
 	{
@@ -38,7 +47,9 @@ public partial class PlayerCharacter : CharacterBody3D
 
 		// Initialize
 		camera = CameraNeck.GetNode<Camera3D>("Camera3D");
-		audioStreamPlayer = GetNode<AudioStreamPlayer3D>("GunSound");
+		gunSound = GetNode<AudioStreamPlayer3D>("GunSound");
+		hitSound = GetNode<AudioStreamPlayer3D>("HitSound");
+		deathSound = GetNode<AudioStreamPlayer3D>("DeathSound");
 
 		camera.Current = IsControlled();
 		NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
@@ -124,8 +135,6 @@ public partial class PlayerCharacter : CharacterBody3D
 
 	public override void _PhysicsProcess(double delta)
 	{
-		NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
-
 		if (!IsControlled())
 			return;
 
@@ -161,31 +170,43 @@ public partial class PlayerCharacter : CharacterBody3D
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]
 	public void Damage(int playerId, int dmg)
 	{
-		GD.Print($"{playerId} took damage, and I'm {Player.Id}");
+		Rpc(nameof(PlaySound), (int)SoundType.Hit);
 
 		if (Alive)
 			Player.Health -= dmg;
 
 		if (Player.Health <= 0)
 			Respawn();
+		
+		NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
-	public void PlaySound()
+	public void PlaySound(SoundType soundType)
 	{
-		audioStreamPlayer.Play();
+		switch (soundType)
+		{
+			case SoundType.Gun:
+				gunSound.Play();
+				break;
+			case SoundType.Hit:
+				hitSound.Play();
+				break;
+			case SoundType.Death:
+				deathSound.Play();
+				break;
+		}
 	}
 
 	private void Shoot()
 	{
-		Rpc(nameof(PlaySound));
+		Rpc(nameof(PlaySound), (int)SoundType.Gun);
 
 		if (!AimCast.IsColliding())
 			return;
 
 		if (AimCast.GetCollider() is PlayerCharacter target)
 		{
-			GD.Print($"{target.Player.Id} took damage from {Player.Id}");
 			var targetCharacter = GetParent().GetChildren().ToList().Find(p => p.Name == target.Player.Id.ToString());
 			targetCharacter.Rpc(nameof(Damage), target.Player.Id, 20);
 		}
@@ -193,11 +214,14 @@ public partial class PlayerCharacter : CharacterBody3D
 
 	private void Respawn()
 	{
+		Rpc(nameof(PlaySound), (int)SoundType.Death);
+		
 		Alive = false;
 		GlobalPosition = new Vector3(0, 2, 2);
 		GlobalRotation = new Vector3(0, 0, 0);
 		Player.Health = 100;
 		Alive = true;
+		NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
 	}
 
 	private bool IsControlled()

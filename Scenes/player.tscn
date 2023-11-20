@@ -1,9 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://dqv43xmf8m3y4"]
+[gd_scene load_steps=16 format=3 uid="uid://dqv43xmf8m3y4"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerCharacter.cs" id="1_234yd"]
 [ext_resource type="ArrayMesh" uid="uid://cqjdr03b7nqas" path="res://Assets/Objects/gun.obj" id="2_1l1fb"]
-[ext_resource type="AudioStream" uid="uid://byu23lm4ux1wj" path="res://Assets/rifle_fire.wav" id="2_tpmhy"]
+[ext_resource type="AudioStream" uid="uid://byu23lm4ux1wj" path="res://Assets/Sounds/rifle_fire.wav" id="2_b87bm"]
+[ext_resource type="AudioStream" uid="uid://ca73hayqn5e2g" path="res://Assets/Sounds/PunchMark.wav" id="3_41318"]
 [ext_resource type="ArrayMesh" uid="uid://c1c5o30hdhe80" path="res://Assets/Objects/cowboyhat.obj" id="3_ajq64"]
+[ext_resource type="AudioStream" uid="uid://o3ugvwgh2h8q" path="res://Assets/Sounds/NeckSnap.wav" id="4_2l8mj"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_j8c6i"]
 properties/0/path = NodePath(".:rotation")
@@ -18,6 +20,10 @@ properties/2/path = NodePath("CameraNeck:rotation")
 properties/2/spawn = true
 properties/2/sync = true
 properties/2/watch = false
+properties/3/path = NodePath("NameLabel:text")
+properties/3/spawn = true
+properties/3/sync = true
+properties/3/watch = false
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bivn6"]
 
@@ -55,7 +61,13 @@ NameLabel = NodePath("NameLabel")
 replication_config = SubResource("SceneReplicationConfig_j8c6i")
 
 [node name="GunSound" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("2_tpmhy")
+stream = ExtResource("2_b87bm")
+
+[node name="HitSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_41318")
+
+[node name="DeathSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_2l8mj")
 
 [node name="RespawnTimer" type="Timer" parent="."]
 one_shot = true

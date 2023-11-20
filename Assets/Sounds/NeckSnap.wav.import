@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://byu23lm4ux1wj"
-path="res://.godot/imported/rifle_fire.wav-aa9841739ba75710b324b8ae5578b8b5.sample"
+uid="uid://o3ugvwgh2h8q"
+path="res://.godot/imported/NeckSnap.wav-4f903801c786fff59fe2188c4016b0be.sample"
 
 [deps]
 
-source_file="res://Assets/rifle_fire.wav"
-dest_files=["res://.godot/imported/rifle_fire.wav-aa9841739ba75710b324b8ae5578b8b5.sample"]
+source_file="res://Assets/Sounds/NeckSnap.wav"
+dest_files=["res://.godot/imported/NeckSnap.wav-4f903801c786fff59fe2188c4016b0be.sample"]
 
 [params]
 
