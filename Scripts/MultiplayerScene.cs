@@ -110,14 +110,14 @@ public partial class MultiplayerScene : Control
 		Rpc(nameof(StartGame), "res://Scenes/dev.tscn");
 	}
 
-    private void _on_shooter_test_button_down()
-    {
-        Rpc(nameof(StartGame), "res://Scenes/newGamePlus.tscn");
-    }
-    #endregion
+	private void _on_shooter_test_button_down()
+	{
+		Rpc(nameof(StartGame), "res://Scenes/newGamePlus.tscn");
+	}
+	#endregion
 
-    #region Text Inputs
-    private void _on_name_input_text_changed(string new_text)
+	#region Text Inputs
+	private void _on_name_input_text_changed(string new_text)
 	{
 		GameManager.SetPlayerName(new_text);
 	}

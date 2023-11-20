@@ -3,14 +3,14 @@
 [ext_resource type="Script" path="res://Scripts/PlayerCharacter.cs" id="1_234yd"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_qlk0q"]
-properties/0/path = NodePath("PlayerCharacter:position")
+properties/0/path = NodePath("PlayerCharacter:rotation")
 properties/0/spawn = true
 properties/0/sync = true
-properties/0/watch = false
-properties/1/path = NodePath("PlayerCharacter:rotation")
+properties/0/watch = true
+properties/1/path = NodePath("PlayerCharacter:position")
 properties/1/spawn = true
 properties/1/sync = true
-properties/1/watch = false
+properties/1/watch = true
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bivn6"]
 
@@ -22,14 +22,18 @@ points = PackedVector3Array(-0.125207, -0.532801, -0.480507, 0.0227831, 0.47607,
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_qlk0q")
 
-[node name="PlayerCharacter" type="CharacterBody3D" parent="." node_paths=PackedStringArray("MpS", "Mesh", "CameraNeck", "Camera", "NameLabel")]
+[node name="PlayerCharacter" type="CharacterBody3D" parent="." node_paths=PackedStringArray("MpS", "Mesh", "AimCast", "CameraNeck", "Camera", "NameLabel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 script = ExtResource("1_234yd")
 MpS = NodePath("../MultiplayerSynchronizer")
 Mesh = NodePath("MeshInstance3D")
+AimCast = NodePath("CameraNeck/Camera3D/AimCast")
 CameraNeck = NodePath("CameraNeck")
 Camera = NodePath("CameraNeck/Camera3D")
 NameLabel = NodePath("NameLabel")
+
+[node name="RespawnTimer" type="Timer" parent="PlayerCharacter"]
+one_shot = true
 
 [node name="NameLabel" type="Label3D" parent="PlayerCharacter"]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.25834, 0)

@@ -3,84 +3,104 @@ using Kokkies;
 using System;
 using System.Linq;
 
-public partial class PlayerCharacter : CharacterBody3D
+public partial class  PlayerCharacter : CharacterBody3D
 {
 	[Export]
 	public MultiplayerSynchronizer MpS;
-    [Export]
-    public MeshInstance3D Mesh;
-    [Export]
-    public RayCast3D AimCast;
-    [Export]
-    public Node3D CameraNeck;
-    [Export]
-    public Camera3D Camera;
-    [Export]
-    public Label3D NameLabel;
+	[Export]
+	public MeshInstance3D Mesh;
+	[Export]
+	public RayCast3D AimCast;
+	[Export]
+	public Node3D CameraNeck;
+	[Export]
+	public Camera3D Camera;
+	[Export]
+	public Label3D NameLabel;
 
-    public const float Speed = 7.5f;
+	public const float Speed = 7.5f;
 	public const float JumpVelocity = 7.5f;
 	public const float CameraSpeed = 0.005f;
+	public int Health = 100;
+	public bool Alive = true;
+	public bool Respawning;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
-    private Player player;
+	private Player player;
 
-    public override void _Ready()
-    {
-        var parent = GetParent();
-        MpS.SetMultiplayerAuthority(int.Parse(parent.Name));
-        player = GameManager.Players.ToList().Find(p => p.Id == parent.GetMeta("PlayerId").As<long>());
+	public override void _Ready()
+	{
+		var parent = GetParent();
+		MpS.SetMultiplayerAuthority(int.Parse(parent.Name));
+		player = GameManager.Players.ToList().Find(p => p.Id == parent.GetMeta("PlayerId").As<long>());
 
-        Camera.Current = IsControlled();
-		NameLabel.Text = player.Name + "#" + player.Id;
+		Camera.Current = IsControlled();
+		NameLabel.Text = player.Name + "#" + player.Id + $"({Health}/100)";
 		StandardMaterial3D mat = new StandardMaterial3D();
-        mat.AlbedoColor = player.Color;
+		mat.AlbedoColor = player.Color;
 		Mesh.MaterialOverlay = mat;
-    }
+	}
 
-    public override void _Input(InputEvent @event)
-    {
-        if (@event is not InputEventMouseButton eventMouseButton) return;
-        if (!AimCast.IsColliding()) return;
-        var target = AimCast.GetCollider() as PlayerCharacter;
-        
+	public override void _Input(InputEvent @event)
+	{
+		if (@event is InputEventKey key && key.Keycode == Key.R)
+		{
+			switch (key.Keycode)
+			{
+				case Key.R:
+					GlobalPosition = new Vector3(0, 2, 2);
+					GlobalRotation = new Vector3(0, 0, 0);
+					break;
 
-        GD.Print($"Shot {target.player.Name} (HP: {target.player.Health}) at: {target.Position}");
-        target.player.Health -= 20;
+				case Key.J:
+					GlobalPosition += new Vector3(0, 5, 0);
+					break;
+			}
+			
+		}
+		
+		if (@event is not InputEventMouseButton eventMouseButton) return;
+		if (!AimCast.IsColliding()) return;
+		var target = AimCast.GetCollider() as PlayerCharacter;
+		target?.Damage(20);
+	}
 
-        if (target.player.Health <= 0)
-        {
-			GD.Print($"{player.Name} killed {target.player.Name}");
-            player.Score += 5;
-        }
-    }
+	public override void _Process(double delta)
+	{
+		NameLabel.Text = player.Name + "#" + player.Id + $"({Health}/100)";
 
-    public override void _Process(double delta)
-    {
-        if (player.Health <= 0)
-        {
-            var current = delta;
-			GD.Print($"{player.Name} died... ");
-            Position = new Vector3(-10000, -1000, 10000); // temporarily remove from playing field
-            Rotation += new Vector3(45, 0, 45);
-            
-            if (current == delta + 1000)
-            {
-                Position = new Vector3(0, 2, 2);
-                Rotation = new Vector3(0, 0, 0);
-            }
-        }
+		if (Health <= 0)
+		{
+			Alive = false;
+			if (!Respawning) Respawn(delta);
+		}
 
-        base._Process(delta);
-    }
+		base._Process(delta);
+	}
 
-    public override void _UnhandledInput(InputEvent @event)
-    {
-        if (!IsControlled())
-            return;
-        
+	public void Respawn(double delta)
+	{
+		Respawning = true;
+		GlobalPosition = new Vector3(0, 2, 2);
+		GlobalRotation = new Vector3(0, 0, 0);
+		Health = 100;
+		Respawning = false;
+		Alive = true;
+	}
+
+	public void Damage(int dmg)
+	{
+		if (Alive)
+			Health -= dmg;
+	}
+
+	public override void _UnhandledInput(InputEvent @event)
+	{
+		if (!IsControlled())
+			return;
+		
 		if (@event is InputEventMouseButton)
 			Input.MouseMode = Input.MouseModeEnum.Captured;
 		else if (@event.IsActionPressed("ui_cancel"))
@@ -95,7 +115,7 @@ public partial class PlayerCharacter : CharacterBody3D
 	}
 
 
-public override void _PhysicsProcess(double delta)
+	public override void _PhysicsProcess(double delta)
 	{
 		if (!IsControlled())
 			return;
@@ -131,12 +151,12 @@ public override void _PhysicsProcess(double delta)
 
 	private bool IsControlled()
 	{
-        try
-        {
-            return MpS.GetMultiplayerAuthority() == Multiplayer.GetUniqueId();
-        }
+		try
+		{
+			return MpS.GetMultiplayerAuthority() == Multiplayer.GetUniqueId();
+		}
 		catch (Exception)
-        {
+		{
 			return false;
 		}
 	}

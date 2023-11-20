@@ -17,7 +17,6 @@ public partial class SceneManager : Node3D
 				Name = "Kokkie",
 				Color = new Color(),
 				Score = 100,
-				Health = 100
 			});
 		}
 
