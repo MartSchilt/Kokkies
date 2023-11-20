@@ -36,6 +36,7 @@ public partial class PlayerCharacter : CharacterBody3D
 	public bool Alive;
 	public bool Respawning;
 	public Player Player;
+	public OverlayManager OverlayManager;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float Gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
@@ -53,6 +54,7 @@ public partial class PlayerCharacter : CharacterBody3D
 		Player = GameManager.Players.ToList().Find(p => p.Id.ToString() == Name);
 
 		// Initialize
+		OverlayManager = GetNode<OverlayManager>("PlayerOverlay");
 		sceneManager = GetParent() as SceneManager;
 		camera = CameraNeck.GetNode<Camera3D>("Camera3D");
 		gunSound = GetNode<AudioStreamPlayer3D>("GunSound");
@@ -194,10 +196,12 @@ public partial class PlayerCharacter : CharacterBody3D
 		if (Alive)
 		{
 			Player.Health -= dmg;
+			OverlayManager.HealthValue = Player.Health;
 
 			if (Player.Health <= 0)
 			{
-				sceneManager.Rpc(nameof(sceneManager.AddPoints), playerId, 10);
+				var score = 10;
+				sceneManager.Rpc(nameof(sceneManager.AddPoints), playerId, score);
 				Respawn();
 			}
 

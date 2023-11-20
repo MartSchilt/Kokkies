@@ -54,15 +54,20 @@ public partial class SceneManager : Node3D
 		}
 	}
 
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]
 	public void AddPoints(int playerId, int points)
 	{
-		foreach (var player in GameManager.Players)
-			if (player.Id == playerId)
-			{
-				player.Score += points;
-				GD.Print($"{player.Name} has earned {points}, totalling to {player.Score} points!");
-				break;
-			}
+		var playerCharacter = (PlayerCharacter)GetChildren().ToList()
+			.Find(x => x.Name.Equals(playerId.ToString()));
+
+		if (playerCharacter == null) return;
+
+		playerCharacter.Player.Score += points;
+		playerCharacter.OverlayManager.ScoreValue = playerCharacter.Player.Score;
+
+		GD.Print($"{playerCharacter.Name} has earned {points}, " +
+				 $"totaling to {playerCharacter.Player.Score} points!");
+
+
 	}
 }
