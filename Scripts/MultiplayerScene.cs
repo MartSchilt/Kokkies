@@ -5,6 +5,9 @@ using System.Linq;
 
 public partial class MultiplayerScene : Control
 {
+	[Export]
+	public string[] Scenes;
+
 	private const string STATUS = "Status: ";
 	private const float STANDARD_INPUT_THRESHOLD = 0.005f;
 	
@@ -107,12 +110,12 @@ public partial class MultiplayerScene : Control
 
 	private void _on_multiplayer_test_button_down()
 	{
-		Rpc(nameof(StartGame), "res://Scenes/dev.tscn");
+		Rpc(nameof(StartGame), Scenes[0]);
 	}
 
 	private void _on_shooter_test_button_down()
 	{
-		Rpc(nameof(StartGame), "res://Scenes/newGamePlus.tscn");
+		Rpc(nameof(StartGame), Scenes[1]);
 	}
 	#endregion
 

@@ -12,6 +12,7 @@ offset_bottom = 52.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ihonf")
+Scenes = PackedStringArray("res://Scenes/dev.tscn", "res://Scenes/westernShooter.tscn")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 0
@@ -185,7 +186,7 @@ text = "Start Multiplayer Test (dev.tscn)"
 
 [node name="ShooterTest" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
-text = "Start Shooter (newGamePlus.tscn)"
+text = "Start Shooter (westernShooter.tscn)"
 
 [node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(300, 0)
