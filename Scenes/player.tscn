@@ -45,3 +45,7 @@ shape = SubResource("ConvexPolygonShape3D_sccvb")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.595826, 0)
 
 [node name="Camera3D" type="Camera3D" parent="PlayerCharacter/CameraNeck"]
+
+[node name="AimCast" type="RayCast3D" parent="PlayerCharacter/CameraNeck/Camera3D"]
+transform = Transform3D(1.00408, 0, 0, 0, 1.00408, 0, 0, 0, 1.00408, 0, 0, 0)
+target_position = Vector3(0, 0, -1000)

@@ -1,7 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://fvlgvrdwxbox"]
+[gd_scene load_steps=9 format=3 uid="uid://fvlgvrdwxbox"]
 
 [ext_resource type="Script" path="res://Scripts/SceneManager.cs" id="1_tl7tr"]
-[ext_resource type="PackedScene" uid="uid://dqv43xmf8m3y4" path="res://Scenes/player.tscn" id="2_2nox6"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kakdl"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -28,7 +27,6 @@ data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0
 
 [node name="newGamePlus" type="Node3D"]
 script = ExtResource("1_tl7tr")
-PlayerScene = ExtResource("2_2nox6")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_yc8p8")
@@ -48,7 +46,7 @@ mesh = SubResource("BoxMesh_ncn67")
 shape = SubResource("ConcavePolygonShape3D_6hsm8")
 
 [node name="floor" type="MeshInstance3D" parent="."]
-transform = Transform3D(4.20714, 0, 0, 0, 1.01239, 0, 0, 0, 3.3391, 0, 0, 0)
+transform = Transform3D(14.4813, 0, 0, 0, 2.20973, 0, 0, 0, 12.6603, 0, 0, 0)
 mesh = SubResource("PlaneMesh_r3keb")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="floor"]
@@ -57,4 +55,4 @@ mesh = SubResource("PlaneMesh_r3keb")
 shape = SubResource("ConcavePolygonShape3D_1wyic")
 
 [node name="0" type="Node3D" parent="." groups=["SpawnLocation"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.521724, 1.73046)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2)

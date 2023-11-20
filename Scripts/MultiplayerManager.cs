@@ -49,7 +49,8 @@ public partial class MultiplayerManager : Node
                 Id = id,
                 Name = name,
                 Score = 0,
-                Color = color
+                Color = color,
+                Health = 100
             };
             GameManager.Players.Add(player);
             var fullName = name + "#" + id;

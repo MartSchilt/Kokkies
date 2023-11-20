@@ -9,6 +9,8 @@ public partial class PlayerCharacter : CharacterBody3D
     [Export]
     public MeshInstance3D Mesh;
     [Export]
+    public RayCast3D AimCast;
+    [Export]
     public Node3D CameraNeck;
     [Export]
     public Camera3D Camera;
@@ -37,6 +39,42 @@ public partial class PlayerCharacter : CharacterBody3D
 		Mesh.MaterialOverlay = mat;
     }
 
+    public override void _Input(InputEvent @event)
+    {
+        if (@event is not InputEventMouseButton eventMouseButton) return;
+        if (!AimCast.IsColliding()) return;
+        var target = AimCast.GetCollider() as PlayerCharacter;
+        
+
+        GD.Print($"Shot {target.player.Name} (HP: {target.player.Health}) at: {target.Position}");
+        target.player.Health -= 20;
+
+        if (target.player.Health <= 0)
+        {
+			GD.Print($"{player.Name} killed {target.player.Name}");
+            player.Score += 5;
+        }
+    }
+
+    public override void _Process(double delta)
+    {
+        if (player.Health <= 0)
+        {
+            var current = delta;
+			GD.Print($"{player.Name} died... ");
+            Position = new Vector3(-10000, -1000, 10000); // temporarily remove from playing field
+            Rotation += new Vector3(45, 0, 45);
+            
+            if (current == delta + 1000)
+            {
+                Position = new Vector3(0, 2, 2);
+                Rotation = new Vector3(0, 0, 0);
+            }
+        }
+
+        base._Process(delta);
+    }
+
     public override void _UnhandledInput(InputEvent @event)
     {
         if (!IsControlled())
@@ -55,7 +93,8 @@ public partial class PlayerCharacter : CharacterBody3D
 		}
 	}
 
-	public override void _PhysicsProcess(double delta)
+
+public override void _PhysicsProcess(double delta)
 	{
 		if (!IsControlled())
 			return;
