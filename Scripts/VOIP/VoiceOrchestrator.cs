@@ -69,17 +69,6 @@ public partial class VoiceOrchestrator : Node
     [Export]
     public TypeVoiceInstance TVI = TypeVoiceInstance.CSHARP;
 
-    public bool Start
-    {
-        get => _start;
-        set
-        {
-            _start = value;
-            Recording = value;
-        }
-    }
-
-    private bool _start;
     private bool _listen;
     private bool _recording;
     private float _inputThreshold;
@@ -103,10 +92,10 @@ public partial class VoiceOrchestrator : Node
 
     public override void _PhysicsProcess(double delta)
     {
-        if (Start && Multiplayer.HasMultiplayerPeer() && Multiplayer.IsServer() && ID == null)
+        if (Multiplayer.GetPeers().Length > 0 && Multiplayer.IsServer() && ID == null)
             CreateInstance(Multiplayer.GetUniqueId());
 
-        if (Start && (!Multiplayer.HasMultiplayerPeer() || !Multiplayer.IsServer()) && ID == 1)
+        if ((!(Multiplayer.GetPeers().Length > 0) || !Multiplayer.IsServer()) && ID == 1)
             Reset();
     }
 

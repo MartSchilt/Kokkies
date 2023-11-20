@@ -89,7 +89,7 @@ public partial class MultiplayerManager : Node
         Multiplayer.MultiplayerPeer = peer;
         GD.Print("Hosting started on " + GameManager.Port + "...");
         SendPlayerInfo(Multiplayer.GetUniqueId(), GameManager.PlayerName, Helper.RandomColor());
-        VOrchestrator.Start = true;
+        VOrchestrator.Recording = true;
         return error;
     }
 
@@ -104,7 +104,7 @@ public partial class MultiplayerManager : Node
 
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
-        VOrchestrator.Start = true;
+        VOrchestrator.Recording = true;
         return error;
     }
 
