@@ -1,0 +1,30 @@
+[gd_scene load_steps=8 format=3 uid="uid://bes63k174kigo"]
+
+[ext_resource type="Texture2D" uid="uid://c773b8hhi0x48" path="res://Assets/Textures/Rock029_1K-JPG_Color.jpg" id="1_pxslg"]
+[ext_resource type="Texture2D" uid="uid://klrfwn0dst06" path="res://Assets/Textures/Rock029_1K-JPG_AmbientOcclusion.jpg" id="2_7rsxu"]
+[ext_resource type="Texture2D" uid="uid://dqbkld2ji42s2" path="res://Assets/Textures/Rock029_1K-JPG_NormalDX.jpg" id="3_kg7ad"]
+[ext_resource type="Texture2D" uid="uid://cufriwb0gcshj" path="res://Assets/Textures/Rock029_1K-JPG_Roughness.jpg" id="4_5gp5v"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wpib2"]
+albedo_texture = ExtResource("1_pxslg")
+roughness_texture = ExtResource("4_5gp5v")
+normal_enabled = true
+normal_texture = ExtResource("3_kg7ad")
+ao_enabled = true
+ao_texture = ExtResource("2_7rsxu")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_r3keb"]
+size = Vector2(10, 10)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_6rh3l"]
+data = PackedVector3Array(5, 0, 5, -5, 0, 5, 5, 0, -5, -5, 0, 5, -5, 0, -5, 5, 0, -5)
+
+[node name="FloorTile" type="MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 5)
+material_override = SubResource("StandardMaterial3D_wpib2")
+mesh = SubResource("PlaneMesh_r3keb")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_6rh3l")

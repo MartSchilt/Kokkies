@@ -12,6 +12,7 @@ offset_bottom = 52.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ihonf")
+Scenes = PackedStringArray("res://Scenes/dev.tscn", "res://Scenes/westernShooter.tscn")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 0
@@ -183,6 +184,10 @@ layout_mode = 2
 disabled = true
 text = "Start Multiplayer Test (dev.tscn)"
 
+[node name="ShooterTest" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Start Shooter (westernShooter.tscn)"
+
 [node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
@@ -204,3 +209,4 @@ scroll_following = true
 [connection signal="toggled" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Listen" to="." method="_on_listen_toggled"]
 [connection signal="toggled" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/LogVoice" to="." method="_on_log_voice_toggled"]
 [connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/MultiplayerTest" to="." method="_on_multiplayer_test_button_down"]
+[connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/ShooterTest" to="." method="_on_shooter_test_button_down"]

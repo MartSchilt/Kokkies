@@ -1,47 +1,115 @@
-[gd_scene load_steps=5 format=3 uid="uid://dqv43xmf8m3y4"]
+[gd_scene load_steps=16 format=3 uid="uid://dqv43xmf8m3y4"]
 
 [ext_resource type="Script" path="res://Scripts/PlayerCharacter.cs" id="1_234yd"]
+[ext_resource type="ArrayMesh" uid="uid://cqjdr03b7nqas" path="res://Assets/Objects/gun.obj" id="2_1l1fb"]
+[ext_resource type="AudioStream" uid="uid://byu23lm4ux1wj" path="res://Assets/Sounds/rifle_fire.wav" id="2_b87bm"]
+[ext_resource type="AudioStream" uid="uid://ca73hayqn5e2g" path="res://Assets/Sounds/PunchMark.wav" id="3_41318"]
+[ext_resource type="ArrayMesh" uid="uid://c1c5o30hdhe80" path="res://Assets/Objects/cowboyhat.obj" id="3_ajq64"]
+[ext_resource type="AudioStream" uid="uid://o3ugvwgh2h8q" path="res://Assets/Sounds/NeckSnap.wav" id="4_2l8mj"]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_qlk0q"]
-properties/0/path = NodePath("PlayerCharacter:position")
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_j8c6i"]
+properties/0/path = NodePath(".:rotation")
 properties/0/spawn = true
 properties/0/sync = true
 properties/0/watch = false
-properties/1/path = NodePath("PlayerCharacter:rotation")
+properties/1/path = NodePath(".:position")
 properties/1/spawn = true
 properties/1/sync = true
 properties/1/watch = false
+properties/2/path = NodePath("CameraNeck:rotation")
+properties/2/spawn = true
+properties/2/sync = true
+properties/2/watch = false
+properties/3/path = NodePath("NameLabel:text")
+properties/3/spawn = true
+properties/3/sync = true
+properties/3/watch = false
+properties/4/path = NodePath(".:Alive")
+properties/4/spawn = true
+properties/4/sync = true
+properties/4/watch = false
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_bivn6"]
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_sccvb"]
 points = PackedVector3Array(-0.125207, -0.532801, -0.480507, 0.0227831, 0.47607, 0.498884, 0.169713, 0.559144, 0.464172, 0.231051, -0.803591, 0.320455, 0.40741, 0.651043, -0.243523, -0.482789, 0.594843, 0.0822132, -0.362868, -0.682312, 0.289697, 0.469044, -0.654529, -0.0662713, -0.127444, 0.842701, -0.338103, -0.393435, -0.683942, -0.244717, 0.438255, 0.623309, 0.200849, 0.0841477, 0.977454, 0.114795, -0.0682023, -0.976458, -0.12927, 0.20055, -0.563129, -0.451454, -0.185527, 0.595453, -0.453475, -0.273363, 0.592268, 0.407754, -0.00693649, -0.476823, 0.49966, 0.375821, -0.588614, 0.316955, 0.111579, 0.563059, -0.481177, -0.41725, 0.527866, -0.270497, -0.484546, -0.596972, -0.0665097, -0.279747, 0.908561, 0.0533361, -0.250197, -0.880712, 0.205319, 0.263647, -0.902771, -0.127394, 0.293368, 0.871526, -0.157196, 0.373412, -0.526319, -0.328246, 0.499663, 0.476641, -0.00688856, 0.0531056, 0.875001, 0.324703, -0.154543, -0.590854, 0.465879, -0.0972799, -0.782358, -0.398188, -0.387649, -0.498171, 0.31565, -0.30068, -0.587995, -0.388901)
 
-[node name="Player" type="Node3D"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_buebu"]
+albedo_color = Color(0.235294, 0.235294, 0.235294, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7nxmb"]
+albedo_color = Color(0.235294, 0.235294, 0.235294, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j35qe"]
+albedo_color = Color(0.352941, 0.352941, 0.352941, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kc6hu"]
+albedo_color = Color(0.341176, 0.235294, 0.188235, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_088fi"]
+albedo_color = Color(0.352941, 0.352941, 0.352941, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bwo83"]
+albedo_color = Color(0.427451, 0.294118, 0.227451, 1)
+
+[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("MpS", "Mesh", "AimCast", "CameraNeck", "NameLabel", "RespawnTimer")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0)
+script = ExtResource("1_234yd")
+MpS = NodePath("MultiplayerSynchronizer")
+Mesh = NodePath("MeshInstance3D")
+AimCast = NodePath("CameraNeck/AimCast")
+CameraNeck = NodePath("CameraNeck")
+NameLabel = NodePath("NameLabel")
+RespawnTimer = NodePath("RespawnTimer")
+JumpVelocity = 8.0
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_qlk0q")
+replication_config = SubResource("SceneReplicationConfig_j8c6i")
 
-[node name="PlayerCharacter" type="CharacterBody3D" parent="." node_paths=PackedStringArray("MpS", "Mesh", "CameraNeck", "Camera", "NameLabel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-script = ExtResource("1_234yd")
-MpS = NodePath("../MultiplayerSynchronizer")
-Mesh = NodePath("MeshInstance3D")
-CameraNeck = NodePath("CameraNeck")
-Camera = NodePath("CameraNeck/Camera3D")
-NameLabel = NodePath("NameLabel")
+[node name="GunSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_b87bm")
 
-[node name="NameLabel" type="Label3D" parent="PlayerCharacter"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.25834, 0)
+[node name="HitSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_41318")
+
+[node name="DeathSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_2l8mj")
+
+[node name="RespawnTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="NameLabel" type="Label3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 1.5, 0)
 text = "kokkie"
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlayerCharacter"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_bivn6")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerCharacter"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("ConvexPolygonShape3D_sccvb")
 
-[node name="CameraNeck" type="Node3D" parent="PlayerCharacter"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.595826, 0)
+[node name="CameraNeck" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 
-[node name="Camera3D" type="Camera3D" parent="PlayerCharacter/CameraNeck"]
+[node name="Camera3D" type="Camera3D" parent="CameraNeck"]
+
+[node name="Gun" type="MeshInstance3D" parent="CameraNeck"]
+transform = Transform3D(4.76995e-09, 0, -0.4, 0, 0.4, 0, 0.4, 0, 4.76995e-09, 0.5, -0.1, 0)
+mesh = ExtResource("2_1l1fb")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_buebu")
+surface_material_override/1 = SubResource("StandardMaterial3D_7nxmb")
+surface_material_override/2 = SubResource("StandardMaterial3D_j35qe")
+surface_material_override/3 = SubResource("StandardMaterial3D_kc6hu")
+surface_material_override/4 = SubResource("StandardMaterial3D_088fi")
+
+[node name="AimCast" type="RayCast3D" parent="CameraNeck"]
+transform = Transform3D(1.00408, 0, 0, 0, 1.00408, 0, 0, 0, 1.00408, 0, 0, 0)
+target_position = Vector3(0, 0, -1000)
+
+[node name="Cowboyhat" type="MeshInstance3D" parent="CameraNeck"]
+transform = Transform3D(0.75, 0, 0, 0, 0.724444, -0.194114, 0, 0.194114, 0.724444, 0, 0.3, 0.05)
+mesh = ExtResource("3_ajq64")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_bwo83")

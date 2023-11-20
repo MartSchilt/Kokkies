@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://cj58ivx3egd6l"
+path="res://.godot/imported/brownrock2.obj-0257b04ff7ccd93b4aa3adb51db68edb.mesh"
+
+[deps]
+
+files=["res://.godot/imported/brownrock2.obj-0257b04ff7ccd93b4aa3adb51db68edb.mesh"]
+
+source_file="res://Assets/Objects/brownrock2.obj"
+dest_files=["res://.godot/imported/brownrock2.obj-0257b04ff7ccd93b4aa3adb51db68edb.mesh", "res://.godot/imported/brownrock2.obj-0257b04ff7ccd93b4aa3adb51db68edb.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

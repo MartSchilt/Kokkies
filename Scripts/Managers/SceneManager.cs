@@ -23,23 +23,30 @@ public partial class SceneManager : Node3D
 		var index = 0;
 		foreach (var player in GameManager.Players)
 		{
-			var currentPlayer = PlayerScene.Instantiate() as Node3D;
+			var currentPlayer = PlayerScene.Instantiate() as PlayerCharacter;
 			currentPlayer.Name = player.Id.ToString();
-			currentPlayer.SetMeta("PlayerId", player.Id);
+			currentPlayer.SetMeta("SpawnLocation", index.ToString());
 			AddChild(currentPlayer);
-			if (GetTree().GetNodesInGroup("SpawnLocation").Count < 1)
-			{
-				currentPlayer.GlobalPosition = new Vector3(0, 10, 0); // Spawn players above
-			}
-			else
-			{
-				foreach (Node3D spawn in GetTree().GetNodesInGroup("SpawnLocation"))
-					if (spawn.Name == index.ToString())
-						currentPlayer.GlobalPosition = spawn.GlobalPosition;
-			}
-
+			Respawn(currentPlayer);
 			index++;
 		}
+	}
 
+	public void Respawn(PlayerCharacter playerCharacter)
+	{
+		if (GetTree().GetNodesInGroup("SpawnLocation").Count < 1)
+		{
+			playerCharacter.GlobalPosition = new Vector3(10, 10, 10); // Spawn players above
+		}
+		else
+		{
+			foreach (Node3D spawn in GetTree().GetNodesInGroup("SpawnLocation"))
+				if (spawn.Name == playerCharacter.GetMeta("SpawnLocation").AsString())
+					playerCharacter.GlobalPosition = spawn.GlobalPosition;
+
+			playerCharacter.Player.Health = playerCharacter.MaxHealth;
+			playerCharacter.Alive = true;
+			playerCharacter.Rotation = new(0, 0, 0);
+		}
 	}
 }
