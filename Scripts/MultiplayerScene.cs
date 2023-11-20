@@ -58,9 +58,9 @@ public partial class MultiplayerScene : Control
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
-	public void StartGame()
+	public void StartGame(string scenePath)
 	{
-		MPManager.StartMultiplayerScene("res://Scenes/dev.tscn");
+		MPManager.StartMultiplayerScene(scenePath);
 		Hide();
 	}
 
@@ -107,12 +107,17 @@ public partial class MultiplayerScene : Control
 
 	private void _on_multiplayer_test_button_down()
 	{
-		Rpc(nameof(StartGame));
+		Rpc(nameof(StartGame), "res://Scenes/dev.tscn");
 	}
-	#endregion
 
-	#region Text Inputs
-	private void _on_name_input_text_changed(string new_text)
+    private void _on_shooter_test_button_down()
+    {
+        Rpc(nameof(StartGame), "res://Scenes/newGamePlus.tscn");
+    }
+    #endregion
+
+    #region Text Inputs
+    private void _on_name_input_text_changed(string new_text)
 	{
 		GameManager.SetPlayerName(new_text);
 	}
@@ -147,10 +152,10 @@ public partial class MultiplayerScene : Control
 	private void _on_listen_toggled(bool button_pressed)
 	{
 		MPManager.VOrchestrator.Listen = button_pressed;
-    }
+	}
 
-    private void _on_log_voice_toggled(bool button_pressed)
-    {
+	private void _on_log_voice_toggled(bool button_pressed)
+	{
 		MPManager.ShouldLogVoice = button_pressed;
-    }
+	}
 }
