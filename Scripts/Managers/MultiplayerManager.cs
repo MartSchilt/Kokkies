@@ -6,7 +6,6 @@ public partial class MultiplayerManager : Node
 {
     public Node Main;
     public VoiceOrchestrator VOrchestrator;
-    public RichTextLabel Logger;
     public bool ShouldLogVoice { get; set; }
 
     private ENetMultiplayerPeer peer;
@@ -15,8 +14,6 @@ public partial class MultiplayerManager : Node
     {
         // Get the Main Node (if it is not there, just use self as Main Node)
         Main = GetParent() ?? this;
-
-        Logger = Main.GetNode<RichTextLabel>("MultiplayerMenu/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/Log");
 
         // Multiplayer stuff
         Multiplayer.PeerConnected += PlayerConnected;
@@ -89,7 +86,6 @@ public partial class MultiplayerManager : Node
         Multiplayer.MultiplayerPeer = peer;
         GD.Print("Hosting started on " + GameManager.Port + "...");
         SendPlayerInfo(Multiplayer.GetUniqueId(), GameManager.PlayerName, Helper.RandomColor());
-        VOrchestrator.Recording = true;
         return error;
     }
 
@@ -104,7 +100,6 @@ public partial class MultiplayerManager : Node
 
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
-        VOrchestrator.Recording = true;
         return error;
     }
 
@@ -113,9 +108,9 @@ public partial class MultiplayerManager : Node
         if (ShouldLogVoice)
         {
             if (sent)
-                Logger.AddText("\n Sent data of size " + data.Length);
+                GD.Print("Sent data of size " + data.Length);
             else
-                Logger.AddText("\n Received data of size " + data.Length + " from " + id.ToString());
+                GD.Print("Received data of size " + data.Length + " from " + id.ToString());
         }
     }
 

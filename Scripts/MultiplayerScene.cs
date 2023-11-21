@@ -14,12 +14,14 @@ public partial class MultiplayerScene : Control
 	public Node Main;
 	public MultiplayerManager MPManager;
 
-	public RichTextLabel Logger;
-	public SpinBox spinBoxInputThreshold;
-	public HSlider sliderInputThreshold;
+	// Multiplayer UI
 	public Button startMPButton;
 	public Label statusLabel;
 	public RichTextLabel playerList;
+
+	// VOIP Settings
+	public SpinBox spinBoxInputThreshold;
+	public HSlider sliderInputThreshold;
 
 	private ENetMultiplayerPeer peer;
 
@@ -34,15 +36,14 @@ public partial class MultiplayerScene : Control
 		Main.AddChild(MPManager);
 
 		// UI Elements
-		// I really hate how we need to declare the nodepath like this...
-		Logger = GetNode<RichTextLabel>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/Log");
-		spinBoxInputThreshold = GetNode<SpinBox>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer5/Value");
-		sliderInputThreshold = GetNode<HSlider>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/InputThreshold");
 		startMPButton = GetNode<Button>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/MultiplayerTest");
 		statusLabel = GetNode<Label>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Status");
 		playerList = GetNode<RichTextLabel>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Players");
+        // VOIP UI
+        spinBoxInputThreshold = GetNode<SpinBox>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer5/Value");
+        sliderInputThreshold = GetNode<HSlider>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/InputThreshold");
 
-		GameManager.Players.CollectionChanged += (s, e) => UpdateUI();
+        GameManager.Players.CollectionChanged += (s, e) => UpdateUI();
 
 		// Change the way the game works when it is started as a server
 		if (OS.GetCmdlineArgs().Contains("--server"))
@@ -80,7 +81,6 @@ public partial class MultiplayerScene : Control
 	private void Log(string text)
 	{
 		statusLabel.Text = STATUS + text;
-		Logger.AddText("\n" + text);
 		GD.Print(text);
 	}
 
@@ -144,9 +144,10 @@ public partial class MultiplayerScene : Control
 		}
 		GameManager.Port = GameManager.STANDARD_PORT;
 	}
-	#endregion
+    #endregion
 
-	private void _on_input_thresh_value_changed(float value)
+    #region VOIP Settings
+    private void _on_input_thresh_value_changed(float value)
 	{
 		MPManager.VOrchestrator.InputThreshold = value;
 		spinBoxInputThreshold.Value = value;
@@ -160,5 +161,10 @@ public partial class MultiplayerScene : Control
 	private void _on_log_voice_toggled(bool button_pressed)
 	{
 		MPManager.ShouldLogVoice = button_pressed;
-	}
+    }
+    private void _on_record_toggled(bool button_pressed)
+    {
+        MPManager.VOrchestrator.Recording = button_pressed;
+    }
+    #endregion
 }
