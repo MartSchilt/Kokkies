@@ -1,8 +1,6 @@
 using Godot;
-using System;
-using Kokkies;
 
-public partial class OverlayManager : Control
+public partial class ShooterGUI : Control
 {
 	[Export]
     public Label HealthLabel;

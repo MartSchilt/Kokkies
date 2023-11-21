@@ -73,7 +73,7 @@ public partial class PlayerCharacter : CharacterBody3D
 	public bool Reloading;
 	public Player Player;
 	public GUIManager GUI;
-	public OverlayManager OverlayManager;
+	public ShooterGUI OverlayManager;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	public float Gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
@@ -104,7 +104,7 @@ public partial class PlayerCharacter : CharacterBody3D
 		if (IsControlled())
 		{
 			GUI = sceneManager.GetParent().GetNode<GUIManager>("GUI");
-			OverlayManager = GUI.GetNode<OverlayManager>("PlayerOverlay");
+			OverlayManager = GUI.ShooterGUI;
 			GUI.EnableShooterGUI();
 		}
 
@@ -152,6 +152,13 @@ public partial class PlayerCharacter : CharacterBody3D
 			if (keyEvent.IsActionPressed("ui_cancel"))
 			{
 				Input.MouseMode = Input.MouseModeEnum.Visible;
+			}
+			else if (keyEvent.IsAction("ui_show_scoreboard"))
+			{
+				if (keyEvent.IsPressed())
+					GUI.EnableScoreboard();
+				else if (keyEvent.IsReleased())
+					GUI.DisableScoreboard();
 			}
 		}
 	}

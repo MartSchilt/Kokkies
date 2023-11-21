@@ -1,6 +1,7 @@
 using Godot;
 using Kokkies;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 public partial class SceneManager : Node3D
@@ -8,10 +9,13 @@ public partial class SceneManager : Node3D
 	public GUIManager GUI;
 	public PackedScene PlayerScene;
 
+	private List<Node> _playerCharacters;
+
 	public override void _Ready()
 	{
 		GUI = GetParent().GetNode<GUIManager>("GUI");
 		PlayerScene = GD.Load<PackedScene>("res://Scenes/player.tscn");
+		_playerCharacters = new();
 
 		if (GameManager.Players.Count <= 0)
 		{
@@ -30,10 +34,13 @@ public partial class SceneManager : Node3D
 			var currentPlayer = PlayerScene.Instantiate() as PlayerCharacter;
 			currentPlayer.Name = player.Id.ToString();
 			currentPlayer.SetMeta("SpawnLocation", index.ToString());
+			_playerCharacters.Add(currentPlayer);
 			AddChild(currentPlayer);
 			Respawn(currentPlayer);
+			
 			index++;
 		}
+		GUI.Scoreboard.Update(_playerCharacters);
 	}
 
 	public void Respawn(PlayerCharacter playerCharacter)
@@ -63,7 +70,7 @@ public partial class SceneManager : Node3D
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
 	public void AddPoints(int playerId, int points)
 	{
-		var playerCharacter = (PlayerCharacter)GetChildren().ToList()
+		var playerCharacter = (PlayerCharacter)_playerCharacters
 			.Find(x => x.Name.Equals(playerId.ToString()));
 
 		if (playerCharacter == null) 
@@ -75,9 +82,11 @@ public partial class SceneManager : Node3D
 			// Win the game
 		}
 
-		// Update GUI if this is the client's player
+		GUI.Scoreboard.Update(_playerCharacters);
+		// Update ShooterGUI if this is the client's player
 		if (playerCharacter.Name == Multiplayer.GetUniqueId().ToString())
 			playerCharacter.OverlayManager.ScoreValue = playerCharacter.Player.Score;
+
 
 		GD.Print($"{playerCharacter.Name} has earned {points}, " +
 				 $"totaling to {playerCharacter.Player.Score} points!");
