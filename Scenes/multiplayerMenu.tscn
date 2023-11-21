@@ -166,7 +166,7 @@ text = "VOIP Settings"
 
 [node name="Record" type="CheckBox" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
 layout_mode = 2
-text = "Record voice"
+text = "Record Voice"
 
 [node name="HBoxContainer5" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
 layout_mode = 2
@@ -200,6 +200,15 @@ text = "Log Voice Data"
 [node name="HSeparator6" type="HSeparator" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
 layout_mode = 2
 
+[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "Music Settings"
+
+[node name="Music" type="CheckBox" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+button_pressed = true
+text = "Play Music"
+
 [connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/NameInput" to="." method="_on_name_input_text_changed"]
 [connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PortInput" to="." method="_on_port_input_text_changed"]
 [connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Host" to="." method="_on_host_button_down"]
@@ -212,3 +221,4 @@ layout_mode = 2
 [connection signal="value_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/InputThreshold" to="." method="_on_input_thresh_value_changed"]
 [connection signal="toggled" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/Listen" to="." method="_on_listen_toggled"]
 [connection signal="toggled" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/LogVoice" to="." method="_on_log_voice_toggled"]
+[connection signal="toggled" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/Music" to="." method="_on_music_toggled"]

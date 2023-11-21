@@ -4,7 +4,7 @@ using System.Linq;
 
 public partial class MultiplayerManager : Node
 {
-    public Node Main;
+    public MainScene Main;
     public VoiceOrchestrator VOrchestrator;
     public bool ShouldLogVoice { get; set; }
 
@@ -13,7 +13,7 @@ public partial class MultiplayerManager : Node
     public override void _Ready()
     {
         // Get the Main Node (if it is not there, just use self as Main Node)
-        Main = GetParent() ?? this;
+        Main = GetParent() as MainScene;
 
         // Multiplayer stuff
         Multiplayer.PeerConnected += PlayerConnected;
@@ -42,9 +42,7 @@ public partial class MultiplayerManager : Node
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
     public void StartMultiplayerScene(string scenePath)
     {
-        var scene = GD.Load<PackedScene>(scenePath);
-        var instance = scene.Instantiate();
-        Main.AddChild(instance);
+        Main.LoadScene(scenePath);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]

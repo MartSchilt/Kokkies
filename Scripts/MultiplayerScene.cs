@@ -167,4 +167,12 @@ public partial class MultiplayerScene : Control
 		MPManager.VOrchestrator.Recording = button_pressed;
 	}
 	#endregion
+
+	private void _on_music_toggled(bool button_pressed)
+	{
+		if (button_pressed)
+			GameManager.MusicVolume(-10f);
+		else
+			GameManager.MusicVolume(-80f);
+	}
 }

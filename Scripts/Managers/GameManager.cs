@@ -22,6 +22,8 @@ public partial class GameManager : Node
     public static string IpAddress { get; private set; }
     public static int Port { get; set; }
 
+    private static int _musicBusIndex;
+
     public override void _Ready()
 	{
 		Players = new ObservableCollection<Player>();
@@ -29,6 +31,8 @@ public partial class GameManager : Node
         PlayerName = STANDARD_NAME;
         IpAddress = STANDARD_IP;
         Port = STANDARD_PORT;
+
+        _musicBusIndex = AudioServer.GetBusIndex("Music");
     }
 
     public static void SetPlayerName(string value)
@@ -45,5 +49,10 @@ public partial class GameManager : Node
             IpAddress = value;
         else
             IpAddress = STANDARD_IP;
+    }
+
+    public static void MusicVolume(float value)
+    {
+        AudioServer.SetBusVolumeDb(_musicBusIndex, value);
     }
 }

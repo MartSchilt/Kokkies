@@ -8,14 +8,30 @@ using System;
 /// </summary>
 public partial class MainScene : Node
 {
+	[Export]
+	public MusicManager MusicManager;
+	[Export]
 	public PackedScene MultiplayerMenu;
 
 	public override void _Ready()
 	{
 		GD.Print("Starting game...");
-		MultiplayerMenu = GD.Load<PackedScene>("res://Scenes/multiplayerMenu.tscn");
-		
+
 		// Load first scene
-		AddChild(MultiplayerMenu.Instantiate());
+		LoadScene(MultiplayerMenu);
+	}
+
+	public void LoadScene(string scenePath)
+	{
+		var scene = GD.Load<PackedScene>(scenePath);
+		LoadScene(scene);
+	}
+
+	public void LoadScene(PackedScene scene)
+	{
+		var instance = scene.Instantiate();
+		AddChild(instance);
+
+		MusicManager.PlayMusic(instance.Name);
 	}
 }
