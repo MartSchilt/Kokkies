@@ -7,7 +7,8 @@ public enum SoundType
 {
 	Gun,
 	Hit,
-	Death
+	Death,
+	Reload
 }
 
 public partial class PlayerCharacter : CharacterBody3D
@@ -34,6 +35,8 @@ public partial class PlayerCharacter : CharacterBody3D
 	[Export]
 	public Label3D NameLabel;
 	[Export]
+	public Timer ReloadTimer;
+	[Export]
 	public Timer RespawnTimer;
 	#endregion
 
@@ -45,7 +48,7 @@ public partial class PlayerCharacter : CharacterBody3D
 		set
 		{
 			_health = value;
-			if (OverlayManager != null) 
+			if (OverlayManager != null)
 				OverlayManager.HealthValue = value;
 		}
 	}
@@ -65,7 +68,7 @@ public partial class PlayerCharacter : CharacterBody3D
 
 	#region Fields
 	public bool Alive;
-	public bool Respawning;
+	public bool Reloading;
 	public Player Player;
 	public GUIManager GUI;
 	public OverlayManager OverlayManager;
@@ -78,6 +81,7 @@ public partial class PlayerCharacter : CharacterBody3D
 	private AudioStreamPlayer3D gunSound;
 	private AudioStreamPlayer3D hitSound;
 	private AudioStreamPlayer3D deathSound;
+	private AudioStreamPlayer3D reloadSound;
 	#endregion
 
 	public override void _Ready()
@@ -92,6 +96,7 @@ public partial class PlayerCharacter : CharacterBody3D
 		gunSound = GetNode<AudioStreamPlayer3D>("Sounds/GunSound");
 		hitSound = GetNode<AudioStreamPlayer3D>("Sounds/HitSound");
 		deathSound = GetNode<AudioStreamPlayer3D>("Sounds/DeathSound");
+		reloadSound = GetNode<AudioStreamPlayer3D>("Sounds/ReloadSound");
 
 		// Only add UI if this is the client's player
 		if (IsControlled())
@@ -107,6 +112,11 @@ public partial class PlayerCharacter : CharacterBody3D
 		Mesh.MaterialOverlay = mat;
 
 		RespawnTimer.Timeout += () => sceneManager.Respawn(this);
+		ReloadTimer.Timeout += () =>
+		{
+			Ammo = MaxAmmo;
+			Reloading = false;
+		};
 	}
 
 	// This method gets called before _UnhandledInput
@@ -141,13 +151,6 @@ public partial class PlayerCharacter : CharacterBody3D
 			{
 				Input.MouseMode = Input.MouseModeEnum.Visible;
 			}
-
-			switch (keyEvent.Keycode)
-			{
-				case Key.R:
-					Respawn();
-					break;
-			}
 		}
 	}
 
@@ -179,7 +182,17 @@ public partial class PlayerCharacter : CharacterBody3D
 		}
 		else if (@event is InputEventKey keyEvent)
 		{
-			// Keyboard Events
+			// Keyboard down Events
+			if (keyEvent.IsPressed())
+				switch (keyEvent.Keycode)
+				{
+					case Key.R:
+						Reload();
+						break;
+					case Key.T:
+						Respawn();
+						break;
+				}
 		}
 	}
 
@@ -256,38 +269,53 @@ public partial class PlayerCharacter : CharacterBody3D
 			case SoundType.Death:
 				deathSound.Play();
 				break;
+			case SoundType.Reload:
+				reloadSound.Play();
+				break;
 		}
 	}
 
 	private void Shoot()
 	{
-		// Only shoot if you have Ammo
-		if (Ammo > 0)
+		// Only handle things if you are not reloading
+		if (!Reloading)
 		{
-			Rpc(nameof(PlaySound), (int)SoundType.Gun);
-			Ammo -= 1;
-
-			if (!AimCast.IsColliding())
-				return;
-
-			if (AimCast.GetCollider() is PlayerCharacter target)
+			// Only shoot if you have Ammo
+			if (Ammo > 0)
 			{
-				foreach (var child in sceneManager.GetChildren())
-					if (child.Name == target.Player.Id.ToString())
-					{
-						child.Rpc(nameof(Damage), Player.Id, target.Player.Id, 20);
-						break;
-					}
+				Rpc(nameof(PlaySound), (int)SoundType.Gun);
+				Ammo -= 1;
+
+				if (!AimCast.IsColliding())
+					return;
+
+				if (AimCast.GetCollider() is PlayerCharacter target)
+				{
+					foreach (var child in sceneManager.GetChildren())
+						if (child.Name == target.Player.Id.ToString())
+						{
+							child.Rpc(nameof(Damage), Player.Id, target.Player.Id, 20);
+							break;
+						}
+				}
 			}
+			// Auto reload for ease of use
+			else
+				Reload();
 		}
-		// Auto reload for ease of use
-		else
-			Reload();
 	}
 
 	private void Reload()
 	{
-		Ammo = MaxAmmo;
+		if (!Reloading)
+		{
+			Reloading = true;
+			PlaySound(SoundType.Reload);
+			// Play animation
+
+			if (ReloadTimer.TimeLeft == 0)
+				ReloadTimer.Start();
+		}
 	}
 
 	private void Respawn()
@@ -298,7 +326,8 @@ public partial class PlayerCharacter : CharacterBody3D
 			Rpc(nameof(PlaySound), (int)SoundType.Death);
 			RotateX(Mathf.DegToRad(-90));
 
-			RespawnTimer.Start();
+			if (RespawnTimer.TimeLeft == 0)
+				RespawnTimer.Start();
 		}
 	}
 

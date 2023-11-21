@@ -66,9 +66,15 @@ public partial class SceneManager : Node3D
 		var playerCharacter = (PlayerCharacter)GetChildren().ToList()
 			.Find(x => x.Name.Equals(playerId.ToString()));
 
-		if (playerCharacter == null) return;
+		if (playerCharacter == null) 
+			return;
 
 		playerCharacter.Player.Score += points;
+		if (playerCharacter.Player.Score >= 100)
+		{
+			// Win the game
+		}
+
 		// Update GUI if this is the client's player
 		if (playerCharacter.Name == Multiplayer.GetUniqueId().ToString())
 			playerCharacter.OverlayManager.ScoreValue = playerCharacter.Player.Score;
