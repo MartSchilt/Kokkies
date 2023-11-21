@@ -35,6 +35,8 @@ public partial class PlayerCharacter : CharacterBody3D
 	[Export]
 	public Label3D NameLabel;
 	[Export]
+	public AnimationPlayer AnimationPlayer;
+	[Export]
 	public Timer ReloadTimer;
 	[Export]
 	public Timer RespawnTimer;
@@ -311,7 +313,7 @@ public partial class PlayerCharacter : CharacterBody3D
 		{
 			Reloading = true;
 			PlaySound(SoundType.Reload);
-			// Play animation
+			AnimationPlayer.Play("Reload");
 
 			if (ReloadTimer.TimeLeft == 0)
 				ReloadTimer.Start();

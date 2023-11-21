@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bq7ldhh7lys2g"
+path="res://.godot/imported/gunCylinder.obj-a67a3dec68bc81e22d79d654ecb17d9e.mesh"
+
+[deps]
+
+files=["res://.godot/imported/gunCylinder.obj-a67a3dec68bc81e22d79d654ecb17d9e.mesh"]
+
+source_file="res://Assets/Objects/gunCylinder.obj"
+dest_files=["res://.godot/imported/gunCylinder.obj-a67a3dec68bc81e22d79d654ecb17d9e.mesh", "res://.godot/imported/gunCylinder.obj-a67a3dec68bc81e22d79d654ecb17d9e.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

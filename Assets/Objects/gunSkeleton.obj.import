@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://oep71pqvxq4i"
+path="res://.godot/imported/gunSkeleton.obj-38a9b686762de51adafac99e9517034f.mesh"
+
+[deps]
+
+files=["res://.godot/imported/gunSkeleton.obj-38a9b686762de51adafac99e9517034f.mesh"]
+
+source_file="res://Assets/Objects/gunSkeleton.obj"
+dest_files=["res://.godot/imported/gunSkeleton.obj-38a9b686762de51adafac99e9517034f.mesh", "res://.godot/imported/gunSkeleton.obj-38a9b686762de51adafac99e9517034f.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
