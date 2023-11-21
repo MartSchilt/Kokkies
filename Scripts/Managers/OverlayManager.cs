@@ -4,43 +4,56 @@ using Kokkies;
 
 public partial class OverlayManager : Control
 {
-	private int _health;
-	private int _score;
-
+	[Export]
+    public Label HealthLabel;
+    [Export]
+    public Label ScoreLabel;
+    [Export]
+    public Label AmmoLabel;
+    
 	public int HealthValue
 	{
-		get => _health;
+		get => _healthValue;
 		set
 		{
-			_health = value;
-			_healthLabel.Text = $"Health: {_health}";
+			_healthValue = value;
+			HealthLabel.Text = $"Health: {_healthValue}";
 		}
 	}
 
 	public int ScoreValue
 	{
-		get => _score;
+		get => _scoreValue;
 		set
 		{
-			_score = value;
-			_scoreLabel.Text = $"Score: {_score}";
+			_scoreValue = value;
+			ScoreLabel.Text = $"Score: {_scoreValue}";
 		}
 	}
 
-	public int AmmoValue { get; set; }
+	public int AmmoValue
+	{
+		get => _ammoValue;
+		set
+		{
+			_ammoValue = value;
+			AmmoLabel.Text = $"Ammo: {_ammoValue}";
+		}
+	}
 
-	private Label _healthLabel;
-	private Label _scoreLabel;
-	private Label _ammoLabel;
+	public CanvasLayer GUI;
+    
+	private int _healthValue;
+	private int _scoreValue;
+	private int _ammoValue;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_health = 0;
-		_score = 0;
+		GUI = GetParent() as CanvasLayer;
+		
+		HealthValue = 0;
+		ScoreValue = 0;
 		AmmoValue = 0;
-		_healthLabel = GetNode<Label>("HealthLabel");
-		_scoreLabel = GetNode<Label>("ScoreLabel");
-		_ammoLabel = GetNode<Label>("AmmoLabel");
 	}
 }

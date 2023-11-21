@@ -1,13 +1,16 @@
 using Godot;
 using Kokkies;
+using System;
 using System.Linq;
 
 public partial class SceneManager : Node3D
 {
+	public GUIManager GUI;
 	public PackedScene PlayerScene;
 
 	public override void _Ready()
 	{
+		GUI = GetParent().GetNode<GUIManager>("GUI");
 		PlayerScene = GD.Load<PackedScene>("res://Scenes/player.tscn");
 
 		if (GameManager.Players.Count <= 0)
@@ -55,7 +58,8 @@ public partial class SceneManager : Node3D
 		}
 	}
 
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]
+	// Don't know for sure if we need to call this locally or not...
+	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
 	public void AddPoints(int playerId, int points)
 	{
 		var playerCharacter = (PlayerCharacter)GetChildren().ToList()
@@ -64,11 +68,11 @@ public partial class SceneManager : Node3D
 		if (playerCharacter == null) return;
 
 		playerCharacter.Player.Score += points;
-		playerCharacter.OverlayManager.ScoreValue = playerCharacter.Player.Score;
+		// Update GUI if this is the client's player
+		if (playerCharacter.Name == Multiplayer.GetUniqueId().ToString())
+			playerCharacter.OverlayManager.ScoreValue = playerCharacter.Player.Score;
 
 		GD.Print($"{playerCharacter.Name} has earned {points}, " +
 				 $"totaling to {playerCharacter.Player.Score} points!");
-
-
 	}
 }

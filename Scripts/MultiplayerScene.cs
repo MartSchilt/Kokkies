@@ -39,11 +39,11 @@ public partial class MultiplayerScene : Control
 		startMPButton = GetNode<Button>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/MultiplayerTest");
 		statusLabel = GetNode<Label>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Status");
 		playerList = GetNode<RichTextLabel>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Players");
-        // VOIP UI
-        spinBoxInputThreshold = GetNode<SpinBox>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer5/Value");
-        sliderInputThreshold = GetNode<HSlider>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/InputThreshold");
+		// VOIP UI
+		spinBoxInputThreshold = GetNode<SpinBox>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer5/Value");
+		sliderInputThreshold = GetNode<HSlider>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/InputThreshold");
 
-        GameManager.Players.CollectionChanged += (s, e) => UpdateUI();
+		GameManager.Players.CollectionChanged += (s, e) => UpdateUI();
 
 		// Change the way the game works when it is started as a server
 		if (OS.GetCmdlineArgs().Contains("--server"))
@@ -144,10 +144,10 @@ public partial class MultiplayerScene : Control
 		}
 		GameManager.Port = GameManager.STANDARD_PORT;
 	}
-    #endregion
+	#endregion
 
-    #region VOIP Settings
-    private void _on_input_thresh_value_changed(float value)
+	#region VOIP Settings
+	private void _on_input_thresh_value_changed(float value)
 	{
 		MPManager.VOrchestrator.InputThreshold = value;
 		spinBoxInputThreshold.Value = value;
@@ -161,10 +161,10 @@ public partial class MultiplayerScene : Control
 	private void _on_log_voice_toggled(bool button_pressed)
 	{
 		MPManager.ShouldLogVoice = button_pressed;
-    }
-    private void _on_record_toggled(bool button_pressed)
-    {
-        MPManager.VOrchestrator.Recording = button_pressed;
-    }
-    #endregion
+	}
+	private void _on_record_toggled(bool button_pressed)
+	{
+		MPManager.VOrchestrator.Recording = button_pressed;
+	}
+	#endregion
 }

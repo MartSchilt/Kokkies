@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://b6grihu8ora6h"]
+[gd_scene load_steps=3 format=3 uid="uid://b6grihu8ora6h"]
 
 [ext_resource type="Script" path="res://Scripts/MainScene.cs" id="1_qcti3"]
+[ext_resource type="PackedScene" uid="uid://cr31j1lpi3ub" path="res://Scenes/playerOverlay.tscn" id="2_4hedu"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_qcti3")
+
+[node name="GUI" parent="." instance=ExtResource("2_4hedu")]
