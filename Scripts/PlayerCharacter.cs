@@ -5,269 +5,310 @@ using System.Linq;
 
 public enum SoundType
 {
-	Gun,
-	Hit,
-	Death
+    Gun,
+    Hit,
+    Death
 }
 
 public partial class PlayerCharacter : CharacterBody3D
 {
-	[Export]
-	public float Speed = 10f;
-	[Export]
-	public float JumpVelocity = 10f;
-	[Export]
-	public float CameraSpeed = 0.005f;
-	[Export]
-	public int MaxHealth = 100;
-	[Export]
-	public MultiplayerSynchronizer MpS;
-	[Export]
-	public MeshInstance3D Mesh;
-	[Export]
-	public RayCast3D AimCast;
-	[Export]
-	public Node3D CameraNeck;
-	[Export]
-	public Label3D NameLabel;
-	[Export]
-	public Timer RespawnTimer;
+    #region Exports
+    [Export]
+    public float Speed = 10f;
+    [Export]
+    public float JumpVelocity = 10f;
+    [Export]
+    public float CameraSpeed = 0.005f;
+    [Export]
+    public int MaxHealth = 100;
+    [Export]
+    public MultiplayerSynchronizer MpS;
+    [Export]
+    public MeshInstance3D Mesh;
+    [Export]
+    public RayCast3D AimCast;
+    [Export]
+    public Node3D CameraNeck;
+    [Export]
+    public Label3D NameLabel;
+    [Export]
+    public Timer RespawnTimer;
+    #endregion
 
-	public bool Alive;
-	public bool Respawning;
-	public Player Player;
-	public GUIManager GUI;
-	public OverlayManager OverlayManager;
+    #region Properties
+    private int _health;
+    public int Health
+    {
+        get => _health;
+        set
+        {
+            _health = value;
+            if (OverlayManager != null) 
+                OverlayManager.HealthValue = value;
+        }
+    }
 
-	// Get the gravity from the project settings to be synced with RigidBody nodes.
-	public float Gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
+    private int _ammo;
+    public int Ammo
+    {
+        get => _ammo;
+        set
+        {
+            _ammo = value;
+            if (OverlayManager != null)
+                OverlayManager.AmmoValue = value;
+        }
+    }
+    #endregion
 
-	private SceneManager sceneManager;
-	private Camera3D camera;
-	private AudioStreamPlayer3D gunSound;
-	private AudioStreamPlayer3D hitSound;
-	private AudioStreamPlayer3D deathSound;
+    #region Fields
+    public bool Alive;
+    public bool Respawning;
+    public Player Player;
+    public GUIManager GUI;
+    public OverlayManager OverlayManager;
 
-	public override void _Ready()
-	{
-		// Find the dedicated player Node for this client
-		MpS.SetMultiplayerAuthority(int.Parse(Name));
-		Player = GameManager.Players.ToList().Find(p => p.Id.ToString() == Name);
+    // Get the gravity from the project settings to be synced with RigidBody nodes.
+    public float Gravity = ProjectSettings.GetSetting("physics/3d/default_gravity").AsSingle();
 
-		// Initialize
-		sceneManager = GetParent() as SceneManager;
-		camera = CameraNeck.GetNode<Camera3D>("Camera3D");
-		gunSound = GetNode<AudioStreamPlayer3D>("Sounds/GunSound");
-		hitSound = GetNode<AudioStreamPlayer3D>("Sounds/HitSound");
-		deathSound = GetNode<AudioStreamPlayer3D>("Sounds/DeathSound");
+    private SceneManager sceneManager;
+    private Camera3D camera;
+    private AudioStreamPlayer3D gunSound;
+    private AudioStreamPlayer3D hitSound;
+    private AudioStreamPlayer3D deathSound;
+    #endregion
 
-		// Only add UI if this is the client's player
-		if (IsControlled())
-		{
-			GUI = sceneManager.GetParent().GetNode<GUIManager>("GUI");
-			OverlayManager = GUI.GetNode<OverlayManager>("PlayerOverlay");
-			GUI.EnableShooterGUI();
-		}
+    public override void _Ready()
+    {
+        // Find the dedicated player Node for this client
+        MpS.SetMultiplayerAuthority(int.Parse(Name));
+        Player = GameManager.Players.ToList().Find(p => p.Id.ToString() == Name);
 
-		camera.Current = IsControlled();
-		StandardMaterial3D mat = new();
-		mat.AlbedoColor = Player.Color;
-		Mesh.MaterialOverlay = mat;
+        // Initialize
+        sceneManager = GetParent() as SceneManager;
+        camera = CameraNeck.GetNode<Camera3D>("Camera3D");
+        gunSound = GetNode<AudioStreamPlayer3D>("Sounds/GunSound");
+        hitSound = GetNode<AudioStreamPlayer3D>("Sounds/HitSound");
+        deathSound = GetNode<AudioStreamPlayer3D>("Sounds/DeathSound");
 
-		RespawnTimer.Timeout += () => sceneManager.Respawn(this);
-	}
+        // Only add UI if this is the client's player
+        if (IsControlled())
+        {
+            GUI = sceneManager.GetParent().GetNode<GUIManager>("GUI");
+            OverlayManager = GUI.GetNode<OverlayManager>("PlayerOverlay");
+            GUI.EnableShooterGUI();
+        }
 
-	// This method gets called before _UnhandledInput
-	// In here you should handle "important" events
-	// Probably want the GUI events to go in here
-	public override void _Input(InputEvent @event)
-	{
-		// We don't want to handle any input if this player is not controlled by the current client
-		if (!IsControlled())
-			return;
+        camera.Current = IsControlled();
+        StandardMaterial3D mat = new();
+        mat.AlbedoColor = Player.Color;
+        Mesh.MaterialOverlay = mat;
 
-		if (@event is InputEventMouseButton mouseButtonEvent)
-		{
-			// Mouse Button Events
-			// If the player clicks on the screen, the game will capture all the mouse movements
-			Input.MouseMode = Input.MouseModeEnum.Captured;
-		}
-		else if (@event is InputEventMouseMotion mouseMotionEvent)
-		{
-			// Mouse Motion Events
-			if (Input.MouseMode == Input.MouseModeEnum.Captured)
-			{
-				RotateY(-mouseMotionEvent.Relative.X * CameraSpeed);
-				CameraNeck.RotateX(-mouseMotionEvent.Relative.Y * CameraSpeed);
-				CameraNeck.Rotation = new Vector3(CameraNeck.Rotation.X, Math.Clamp(-mouseMotionEvent.Relative.Y * CameraSpeed, -1, 1), 0);
-			}
-		}
-		else if (@event is InputEventKey keyEvent)
-		{
-			// Keyboard Events
-			if (keyEvent.IsActionPressed("ui_cancel"))
-			{
-				Input.MouseMode = Input.MouseModeEnum.Visible;
-			}
+        RespawnTimer.Timeout += () => sceneManager.Respawn(this);
+    }
 
-			switch (keyEvent.Keycode)
-			{
-				case Key.R:
-					Respawn();
-					break;
-			}
-		}
-	}
+    // This method gets called before _UnhandledInput
+    // In here you should handle "important" events
+    // Probably want the GUI events to go in here
+    public override void _Input(InputEvent @event)
+    {
+        // We don't want to handle any input if this player is not controlled by the current client
+        if (!IsControlled())
+            return;
 
-	// Here all the input events go if they were not handled by _Input
-	// We want gameplay things to go in here
-	public override void _UnhandledInput(InputEvent @event)
-	{
-		// We don't want to handle any input if this player is not controlled by the current client
-		if (!IsControlled())
-			return;
+        if (@event is InputEventMouseButton mouseButtonEvent)
+        {
+            // Mouse Button Events
+            // If the player clicks on the screen, the game will capture all the mouse movements
+            Input.MouseMode = Input.MouseModeEnum.Captured;
+        }
+        else if (@event is InputEventMouseMotion mouseMotionEvent)
+        {
+            // Mouse Motion Events
+            if (Input.MouseMode == Input.MouseModeEnum.Captured)
+            {
+                RotateY(-mouseMotionEvent.Relative.X * CameraSpeed);
+                CameraNeck.RotateX(-mouseMotionEvent.Relative.Y * CameraSpeed);
+                CameraNeck.Rotation = new Vector3(CameraNeck.Rotation.X, Math.Clamp(-mouseMotionEvent.Relative.Y * CameraSpeed, -1, 1), 0);
+            }
+        }
+        else if (@event is InputEventKey keyEvent)
+        {
+            // Keyboard Events
+            if (keyEvent.IsActionPressed("ui_cancel"))
+            {
+                Input.MouseMode = Input.MouseModeEnum.Visible;
+            }
 
-		if (!Alive)
-			return;
+            switch (keyEvent.Keycode)
+            {
+                case Key.R:
+                    Respawn();
+                    break;
+            }
+        }
+    }
 
-		if (@event is InputEventMouseButton mouseButtonEvent && mouseButtonEvent.Pressed)
-		{
-			// Mouse Button down Events
-			switch (mouseButtonEvent.ButtonIndex)
-			{
-				// Hitscan shooting
-				case MouseButton.Left:
-					Shoot();
-					break;
-			}
-		}
-		else if (@event is InputEventMouseMotion mouseMotionEvent)
-		{
-			// Mouse Motion Events
-		}
-		else if (@event is InputEventKey keyEvent)
-		{
-			// Keyboard Events
-		}
-	}
+    // Here all the input events go if they were not handled by _Input
+    // We want gameplay things to go in here
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        // We don't want to handle any input if this player is not controlled by the current client
+        if (!IsControlled())
+            return;
 
-	public override void _PhysicsProcess(double delta)
-	{
-		if (!IsControlled())
-			return;
+        if (!Alive)
+            return;
 
-		if (!Alive)
-			return;
+        if (@event is InputEventMouseButton mouseButtonEvent && mouseButtonEvent.Pressed)
+        {
+            // Mouse Button down Events
+            switch (mouseButtonEvent.ButtonIndex)
+            {
+                // Hitscan shooting
+                case MouseButton.Left:
+                    Shoot();
+                    break;
+            }
+        }
+        else if (@event is InputEventMouseMotion mouseMotionEvent)
+        {
+            // Mouse Motion Events
+        }
+        else if (@event is InputEventKey keyEvent)
+        {
+            // Keyboard Events
+        }
+    }
 
-		Vector3 velocity = Velocity;
+    public override void _PhysicsProcess(double delta)
+    {
+        if (!IsControlled())
+            return;
 
-		// Add the gravity.
-		if (!IsOnFloor())
-			velocity.Y -= Gravity * (float)delta;
+        if (!Alive)
+            return;
 
-		// Handle Jump.
-		if (Input.IsActionJustPressed("jump") && IsOnFloor())
-			velocity.Y = JumpVelocity;
+        Vector3 velocity = Velocity;
 
-		// Get the input direction and handle the movement/deceleration.
-		// As good practice, you should replace UI actions with custom gameplay actions.
-		Vector2 inputDir = Input.GetVector("left", "right", "forward", "back");
-		Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
-		if (direction != Vector3.Zero)
-		{
-			velocity.X = direction.X * Speed;
-			velocity.Z = direction.Z * Speed;
-		}
-		else
-		{
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
-			velocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
-		}
+        // Add the gravity.
+        if (!IsOnFloor())
+            velocity.Y -= Gravity * (float)delta;
 
-		Velocity = velocity;
-		MoveAndSlide();
-	}
+        // Handle Jump.
+        if (Input.IsActionJustPressed("jump") && IsOnFloor())
+            velocity.Y = JumpVelocity;
 
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]
-	public void Damage(int playerId, int targetId, int dmg)
-	{
-		if (targetId != Player.Id)
-			return;
+        // Get the input direction and handle the movement/deceleration.
+        // As good practice, you should replace UI actions with custom gameplay actions.
+        Vector2 inputDir = Input.GetVector("left", "right", "forward", "back");
+        Vector3 direction = (Transform.Basis * new Vector3(inputDir.X, 0, inputDir.Y)).Normalized();
+        if (direction != Vector3.Zero)
+        {
+            velocity.X = direction.X * Speed;
+            velocity.Z = direction.Z * Speed;
+        }
+        else
+        {
+            velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
+            velocity.Z = Mathf.MoveToward(Velocity.Z, 0, Speed);
+        }
 
-		Rpc(nameof(PlaySound), (int)SoundType.Hit);
+        Velocity = velocity;
+        MoveAndSlide();
+    }
 
-		if (Alive)
-		{
-			Player.Health -= dmg;
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]
+    public void Damage(int playerId, int targetId, int dmg)
+    {
+        if (targetId != Player.Id)
+            return;
 
-			if (Player.Health <= 0)
-			{
-				sceneManager.Rpc(nameof(sceneManager.AddPoints), playerId, 10);
-				Respawn();
-			}
+        Rpc(nameof(PlaySound), (int)SoundType.Hit);
 
-			NameLabel.Text = Player.Name + "#" + Player.Id + $"({Player.Health}/100)";
-		}
-	}
+        if (Alive)
+        {
+            Health -= dmg;
 
-	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
-	public void PlaySound(SoundType soundType)
-	{
-		switch (soundType)
-		{
-			case SoundType.Gun:
-				gunSound.Play();
-				break;
-			case SoundType.Hit:
-				hitSound.Play();
-				break;
-			case SoundType.Death:
-				deathSound.Play();
-				break;
-		}
-	}
+            if (Health <= 0)
+            {
+                sceneManager.Rpc(nameof(sceneManager.AddPoints), playerId, 10);
+                Respawn();
+            }
 
-	private void Shoot()
-	{
-		Rpc(nameof(PlaySound), (int)SoundType.Gun);
+            NameLabel.Text = Player.Name + "#" + Player.Id + $"({Health}/100)";
+        }
+    }
 
-		if (!AimCast.IsColliding())
-			return;
+    [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
+    public void PlaySound(SoundType soundType)
+    {
+        switch (soundType)
+        {
+            case SoundType.Gun:
+                gunSound.Play();
+                break;
+            case SoundType.Hit:
+                hitSound.Play();
+                break;
+            case SoundType.Death:
+                deathSound.Play();
+                break;
+        }
+    }
 
-		if (AimCast.GetCollider() is PlayerCharacter target)
-		{
-			foreach (var child in sceneManager.GetChildren())
-			{
-				if (child.Name == target.Player.Id.ToString())
-				{
-					child.Rpc(nameof(Damage), Player.Id, target.Player.Id, 20);
-					break;
-				}
-			}
-		}
-	}
+    private void Shoot()
+    {
+        // Only shoot if you have Ammo
+        if (Ammo > 0)
+        {
+            Rpc(nameof(PlaySound), (int)SoundType.Gun);
+            Ammo -= 1;
 
-	private void Respawn()
-	{
-		if (Alive)
-		{
-			Alive = false;
-			Rpc(nameof(PlaySound), (int)SoundType.Death);
-			RotateX(Mathf.DegToRad(-90));
+            if (!AimCast.IsColliding())
+                return;
 
-			RespawnTimer.Start();
-		}
-	}
+            if (AimCast.GetCollider() is PlayerCharacter target)
+            {
+                foreach (var child in sceneManager.GetChildren())
+                    if (child.Name == target.Player.Id.ToString())
+                    {
+                        child.Rpc(nameof(Damage), Player.Id, target.Player.Id, 20);
+                        break;
+                    }
+            }
+        }
+        // Auto reload for ease of use
+        else
+            Reload();
+    }
 
-	private bool IsControlled()
-	{
-		try
-		{
-			return MpS.GetMultiplayerAuthority() == Multiplayer.GetUniqueId();
-		}
-		catch (Exception)
-		{
-			return false;
-		}
-	}
+    private void Reload()
+    {
+        Ammo = 6;
+    }
+
+    private void Respawn()
+    {
+        if (Alive)
+        {
+            Alive = false;
+            Rpc(nameof(PlaySound), (int)SoundType.Death);
+            RotateX(Mathf.DegToRad(-90));
+
+            RespawnTimer.Start();
+        }
+    }
+
+    private bool IsControlled()
+    {
+        try
+        {
+            return MpS.GetMultiplayerAuthority() == Multiplayer.GetUniqueId();
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
 }
