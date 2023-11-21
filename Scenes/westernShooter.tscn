@@ -1,6 +1,7 @@
-[gd_scene load_steps=47 format=3 uid="uid://n4mig0prs8mq"]
+[gd_scene load_steps=48 format=3 uid="uid://n4mig0prs8mq"]
 
 [ext_resource type="Script" path="res://Scripts/Managers/SceneManager.cs" id="1_03mdo"]
+[ext_resource type="AudioStream" uid="uid://deiys66qyqdgg" path="res://Assets/Music/Everet Almond - The Gunfight.mp3" id="2_j4lpk"]
 [ext_resource type="Script" path="res://Scripts/Managers/TileManager.cs" id="2_wut2k"]
 [ext_resource type="Script" path="res://Scripts/Managers/CloudManager.cs" id="3_7kanx"]
 [ext_resource type="ArrayMesh" uid="uid://duj23mvnml21s" path="res://Assets/Objects/wagon.obj" id="4_1vvci"]
@@ -109,6 +110,11 @@ transform = Transform3D(0.707106, 0.241845, -0.664463, 0, 0.939693, 0.34202, 0.7
 light_color = Color(0.956863, 0.941176, 0.843137, 1)
 light_energy = 2.0
 shadow_enabled = true
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_j4lpk")
+volume_db = -20.0
+autoplay = true
 
 [node name="Floor" type="Node3D" parent="."]
 script = ExtResource("2_wut2k")
