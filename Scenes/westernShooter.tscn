@@ -311,7 +311,7 @@ surface_material_override/0 = ExtResource("13_bjkih")
 shape = SubResource("ConcavePolygonShape3D_7y65q")
 
 [node name="Dynamite" type="MeshInstance3D" parent="Obstacles"]
-transform = Transform3D(0.900083, -0.435718, 0, 0.435718, 0.900083, 0, 0, 0, 1, 69.6915, 0.746985, 93.2668)
+transform = Transform3D(0.900083, -0.435718, 0, 0.435718, 0.900083, 0, 0, 0, 1, 46.8938, 5.20291, 43.9576)
 mesh = ExtResource("17_mmghw")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_l5tu4")

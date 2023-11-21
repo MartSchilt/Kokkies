@@ -52,6 +52,7 @@ public partial class SceneManager : Node3D
 				}
 
 			playerCharacter.Health = playerCharacter.MaxHealth;
+			playerCharacter.Ammo = playerCharacter.MaxAmmo;
 			playerCharacter.Alive = true;
 			playerCharacter.Rotation = new(0, 0, 0);
 			playerCharacter.NameLabel.Text = playerCharacter.Player.Name + "#" + playerCharacter.Player.Id + $"({playerCharacter.Health}/100)";
