@@ -43,6 +43,14 @@ public partial class SceneManager : Node3D
 		GUI.Scoreboard.Update(_playerCharacters);
 	}
 
+	public void ResetScene()
+	{
+		foreach(var player in _playerCharacters)
+		{
+			Respawn((PlayerCharacter)player);
+		}
+	}
+
 	public void Respawn(PlayerCharacter playerCharacter)
 	{
 		if (GetTree().GetNodesInGroup("SpawnLocation").Count < 1)

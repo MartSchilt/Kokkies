@@ -28,10 +28,12 @@ public partial class ScoreboardGUI : MarginContainer
 
 		Label playerName = new();
 		playerName.Text = player.Name + "#" + player.Id;
+		playerName.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		row.AddChild(playerName);
 
 		Label playerScore = new();
 		playerScore.Text = player.Score.ToString();
+		playerScore.SizeFlagsHorizontal = SizeFlags.ExpandFill;
 		row.AddChild(playerScore);
 	}
 }
