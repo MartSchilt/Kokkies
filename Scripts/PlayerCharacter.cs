@@ -286,6 +286,7 @@ public partial class PlayerCharacter : CharacterBody3D
 			if (Ammo > 0)
 			{
 				Rpc(nameof(PlaySound), (int)SoundType.Gun);
+				AnimationPlayer.Play("Shoot");
 				Ammo -= 1;
 
 				if (!AimCast.IsColliding())
