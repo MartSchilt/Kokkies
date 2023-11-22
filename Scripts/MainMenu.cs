@@ -3,7 +3,7 @@ using Kokkies;
 using System;
 using System.Linq;
 
-public partial class MultiplayerScene : Control
+public partial class MainMenu : Control
 {
 	[Export]
 	public string[] Scenes;
@@ -27,7 +27,6 @@ public partial class MultiplayerScene : Control
 
 	public override void _Ready()
 	{
-		// Get the Main Node (if it is not there, just use self as Main Node)
 		Main = GetParent() ?? this;
 
 		// Instantiate the Multiplayer Client

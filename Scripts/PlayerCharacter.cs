@@ -133,8 +133,6 @@ public partial class PlayerCharacter : CharacterBody3D
 		if (@event is InputEventMouseButton mouseButtonEvent)
 		{
 			// Mouse Button Events
-			// If the player clicks on the screen, the game will capture all the mouse movements
-			Input.MouseMode = Input.MouseModeEnum.Captured;
 		}
 		else if (@event is InputEventMouseMotion mouseMotionEvent)
 		{
@@ -149,11 +147,7 @@ public partial class PlayerCharacter : CharacterBody3D
 		else if (@event is InputEventKey keyEvent)
 		{
 			// Keyboard Events
-			if (keyEvent.IsActionPressed("ui_cancel"))
-			{
-				Input.MouseMode = Input.MouseModeEnum.Visible;
-			}
-			else if (keyEvent.IsAction("ui_show_scoreboard"))
+			if (keyEvent.IsAction("ui_show_scoreboard"))
 			{
 				if (keyEvent.IsPressed())
 					GUI.EnableScoreboard();
