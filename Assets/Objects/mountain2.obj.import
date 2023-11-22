@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bc6os4hpaw0i5"
+path="res://.godot/imported/mountain2.obj-d7a2e9a4d304de8dbdf54b62aacb605f.mesh"
+
+[deps]
+
+files=["res://.godot/imported/mountain2.obj-d7a2e9a4d304de8dbdf54b62aacb605f.mesh"]
+
+source_file="res://Assets/Objects/mountain2.obj"
+dest_files=["res://.godot/imported/mountain2.obj-d7a2e9a4d304de8dbdf54b62aacb605f.mesh", "res://.godot/imported/mountain2.obj-d7a2e9a4d304de8dbdf54b62aacb605f.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

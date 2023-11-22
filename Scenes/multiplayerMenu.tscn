@@ -1,107 +1,212 @@
 [gd_scene load_steps=2 format=3 uid="uid://tkshkb6gijeg"]
 
-[ext_resource type="Script" path="res://Scripts/MultiplayerController.cs" id="1_42f6l"]
+[ext_resource type="Script" path="res://Scripts/MultiplayerScene.cs" id="1_ihonf"]
 
-[node name="Control" type="Control"]
+[node name="MultiplayerMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 48.0
+offset_bottom = 52.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_42f6l")
+script = ExtResource("1_ihonf")
+Scenes = PackedStringArray("res://Scenes/dev.tscn", "res://Scenes/westernShooter.tscn")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 0
-offset_left = -21.0
-offset_top = -11.0
-offset_right = 1179.0
-offset_bottom = 689.0
+offset_right = 1200.0
+offset_bottom = 700.0
 color = Color(1, 0.8, 0, 1)
 
-[node name="Title" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -56.0
-offset_top = -274.0
-offset_right = 104.0
-offset_bottom = -239.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 0
+offset_right = 1200.0
+offset_bottom = 700.0
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 30
 text = "Kokkies Multiplayer"
 horizontal_alignment = 1
 
-[node name="Host" type="Button" parent="."]
-layout_mode = 0
-offset_left = 550.0
-offset_top = 125.0
-offset_right = 650.0
-offset_bottom = 160.0
-text = "Host"
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
 
-[node name="Join" type="Button" parent="."]
-layout_mode = 0
-offset_left = 550.0
-offset_top = 500.0
-offset_right = 650.0
-offset_bottom = 535.0
-text = "Join"
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
 
-[node name="Start" type="Button" parent="."]
-layout_mode = 0
-offset_left = 550.0
-offset_top = 575.0
-offset_right = 650.0
-offset_bottom = 610.0
-text = "Start Game"
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
 
-[node name="Name" type="Label" parent="."]
-layout_mode = 0
-offset_left = 550.0
-offset_top = 200.0
-offset_right = 650.0
-offset_bottom = 235.0
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
 text = "Name"
 horizontal_alignment = 1
 
-[node name="NameInput" type="LineEdit" parent="."]
-layout_mode = 0
-offset_left = 400.0
-offset_top = 250.0
-offset_right = 800.0
-offset_bottom = 285.0
+[node name="NameInput" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="IP-Address" type="Label" parent="."]
-layout_mode = 0
-offset_left = 530.0
-offset_top = 325.0
-offset_right = 663.0
-offset_bottom = 360.0
-text = "IP-Address + Port"
+[node name="HSeparator5" type="HSeparator" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PortLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Port"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="IPInput" type="LineEdit" parent="."]
-layout_mode = 0
-offset_left = 400.0
-offset_top = 375.0
-offset_right = 800.0
-offset_bottom = 410.0
+[node name="PortInput" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "8910"
 
-[node name="PortInput" type="LineEdit" parent="."]
-layout_mode = 0
-offset_left = 400.0
-offset_top = 425.0
-offset_right = 800.0
-offset_bottom = 460.0
+[node name="Host" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Host"
 
-[connection signal="button_down" from="Host" to="." method="_on_host_button_down"]
-[connection signal="button_down" from="Join" to="." method="_on_join_button_down"]
-[connection signal="button_down" from="Start" to="." method="_on_start_button_down"]
-[connection signal="text_changed" from="NameInput" to="." method="_on_name_input_text_changed"]
-[connection signal="text_changed" from="IPInput" to="." method="_on_ip_input_text_changed"]
-[connection signal="text_changed" from="PortInput" to="." method="_on_port_input_text_changed"]
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="IPLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+text = "Host IP Address"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="IPInput" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PortLabel" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+text = "Host Port"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PortInput" type="LineEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "8910"
+
+[node name="Join" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Join"
+
+[node name="HSeparator4" type="HSeparator" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+text = "Input Threshold"
+
+[node name="Value" type="SpinBox" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 0.1
+step = 0.001
+editable = false
+
+[node name="InputThreshold" type="HSlider" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+max_value = 0.1
+step = 0.001
+
+[node name="Listen" type="CheckBox" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Voice feedback"
+
+[node name="LogVoice" type="CheckBox" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Log Voice Data"
+
+[node name="HSeparator6" type="HSeparator" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Status" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Status: "
+
+[node name="Players" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Players:"
+fit_content = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="MultiplayerTest" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+disabled = true
+text = "Start Multiplayer Test (dev.tscn)"
+
+[node name="ShooterTest" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Start Shooter (westernShooter.tscn)"
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="Log" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Log:"
+fit_content = true
+scroll_following = true
+
+[connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/NameInput" to="." method="_on_name_input_text_changed"]
+[connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer2/PortInput" to="." method="_on_port_input_text_changed"]
+[connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Host" to="." method="_on_host_button_down"]
+[connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer3/IPInput" to="." method="_on_ip_input_text_changed"]
+[connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer4/PortInput" to="." method="_on_port_input_text_changed"]
+[connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Join" to="." method="_on_join_button_down"]
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/InputThreshold" to="." method="_on_input_thresh_value_changed"]
+[connection signal="toggled" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Listen" to="." method="_on_listen_toggled"]
+[connection signal="toggled" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/LogVoice" to="." method="_on_log_voice_toggled"]
+[connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/MultiplayerTest" to="." method="_on_multiplayer_test_button_down"]
+[connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/ShooterTest" to="." method="_on_shooter_test_button_down"]

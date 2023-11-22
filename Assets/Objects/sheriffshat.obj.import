@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://g4w0aesioudt"
+path="res://.godot/imported/sheriffshat.obj-ab66a268790cb866f4b8031969c52e0c.mesh"
+
+[deps]
+
+files=["res://.godot/imported/sheriffshat.obj-ab66a268790cb866f4b8031969c52e0c.mesh"]
+
+source_file="res://Assets/Objects/sheriffshat.obj"
+dest_files=["res://.godot/imported/sheriffshat.obj-ab66a268790cb866f4b8031969c52e0c.mesh", "res://.godot/imported/sheriffshat.obj-ab66a268790cb866f4b8031969c52e0c.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
