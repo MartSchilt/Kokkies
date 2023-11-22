@@ -14,13 +14,7 @@ public partial class GUIManager : CanvasLayer
 
 	public override void _Ready()
 	{
-		// Disable the other GUI elements
-		DisablePauseMenu();
-		DisableScoreboard();
-		DisableShooterGUI();
-
-		// We start in the menu, so we show the mouse
-		Input.MouseMode = Input.MouseModeEnum.Visible;
+		GD.Print($"Starting {nameof(GUIManager)}");
 	}
 
 	public override void _Input(InputEvent @event)
@@ -33,6 +27,13 @@ public partial class GUIManager : CanvasLayer
 	}
 
 	#region GUI Elements
+	public void DisableAll()
+	{
+		DisablePauseMenu();
+		DisableScoreboard();
+		DisableShooterGUI();
+	}
+
 	public void EnablePauseMenu()
 	{
 		_isPaused = true;

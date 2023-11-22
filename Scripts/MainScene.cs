@@ -1,4 +1,5 @@
 using Godot;
+using Kokkies;
 using System;
 
 /// <summary>
@@ -11,14 +12,23 @@ public partial class MainScene : Node
 	[Export]
 	public MusicManager MusicManager;
 	[Export]
-	public PackedScene MultiplayerMenu;
+	public PackedScene MainMenu;
+	[Export]
+	public GUIManager GUI;
+	[Export]
+	public VoiceOrchestrator VoiceOrchestrator;
+	[Export]
+	public MultiplayerManager MultiplayerManager;
+
+	public Node Scenes;
 
 	public override void _Ready()
 	{
-		GD.Print("Starting game...");
+		GD.Print($"Starting {nameof(MainScene)}");
 
-		// Load first scene
-		LoadScene(MultiplayerMenu);
+		Scenes = GetNode("Scenes");
+
+		LoadMainMenu();
 	}
 
 	public void LoadScene(string scenePath)
@@ -30,8 +40,19 @@ public partial class MainScene : Node
 	public void LoadScene(PackedScene scene)
 	{
 		var instance = scene.Instantiate();
-		AddChild(instance);
+		Scenes.AddChild(instance);
 
 		MusicManager.PlayMusic(instance.Name);
+	}
+
+	public void LoadMainMenu()
+	{
+		GUI.DisableAll();
+
+		// Remove all the scenes
+		foreach (var scene in Scenes.GetChildren())
+			scene.QueueFree();
+
+		LoadScene(MainMenu);
 	}
 }

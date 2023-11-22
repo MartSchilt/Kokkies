@@ -70,7 +70,6 @@ public partial class PlayerCharacter : CharacterBody3D
 	public bool Alive;
 	public bool Reloading;
 	public Player Player;
-	public GUIManager GUI;
 	public ShooterGUI OverlayManager;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -101,11 +100,10 @@ public partial class PlayerCharacter : CharacterBody3D
 		reloadSound = GetNode<AudioStreamPlayer3D>("Sounds/ReloadSound");
 
 		// Only add UI if this is the client's player
-		if (IsControlled() && sceneManager.GetParent().HasNode("GUI"))
+		if (IsControlled())
 		{
-			GUI = sceneManager.GetParent().GetNode<GUIManager>("GUI");
-			OverlayManager = GUI.ShooterGUI;
-			GUI.EnableShooterGUI();
+			OverlayManager = GameManager.Main.GUI.ShooterGUI;
+			GameManager.Main.GUI.EnableShooterGUI();
 		}
 
 		camera.Current = IsControlled();
@@ -150,9 +148,9 @@ public partial class PlayerCharacter : CharacterBody3D
 			if (keyEvent.IsAction("ui_show_scoreboard"))
 			{
 				if (keyEvent.IsPressed())
-					GUI.EnableScoreboard();
+					GameManager.Main.GUI.EnableScoreboard();
 				else if (keyEvent.IsReleased())
-					GUI.DisableScoreboard();
+					GameManager.Main.GUI.DisableScoreboard();
 			}
 		}
 	}

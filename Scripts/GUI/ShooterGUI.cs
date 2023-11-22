@@ -38,8 +38,6 @@ public partial class ShooterGUI : Control
 			AmmoLabel.Text = $"Ammo: {_ammoValue}";
 		}
 	}
-
-	public CanvasLayer GUI;
     
 	private int _healthValue;
 	private int _scoreValue;
@@ -47,9 +45,7 @@ public partial class ShooterGUI : Control
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
-	{
-		GUI = GetParent() as CanvasLayer;
-		
+	{		
 		HealthValue = 0;
 		ScoreValue = 0;
 		AmmoValue = 0;

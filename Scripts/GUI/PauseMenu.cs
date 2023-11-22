@@ -1,23 +1,27 @@
 using Godot;
+using Kokkies;
 using System;
 
 public partial class PauseMenu : MarginContainer
 {
-	private GUIManager GUI;
-
 	public override void _Ready()
-	{
-		GUI = GetParent<GUIManager>();
-	}
-
-	public override void _Process(double delta)
 	{
 	}
 
 	#region Buttons
 	private void _on_resume_button_down()
 	{
-		GUI.DisablePauseMenu();
+		GameManager.Main.GUI.DisablePauseMenu();
+	}
+	
+	private void _on_back_button_down()
+	{
+		GameManager.Main.LoadMainMenu();
+	}
+
+	private void _on_quit_button_down()
+	{
+		GetTree().Quit();
 	}
 	#endregion
 }

@@ -10,23 +10,34 @@ namespace Kokkies;
 /// </summary>
 public partial class GameManager : Node
 {
+    #region Constants
     public const int STANDARD_PORT = 8910;
 
     private const string STANDARD_NAME = "Kokkie";
     private const string STANDARD_IP = "127.0.0.1";
+    #endregion
 
-    public static int MaxPlayers = 10;
-    public static ObservableCollection<Player> Players;
-	public static string Address;
+    #region Properties
+    public static string Address { get; set; }
     public static string PlayerName { get; private set; }
     public static string IpAddress { get; private set; }
     public static int Port { get; set; }
+    public static MainScene Main { get; set; }
+    #endregion
+
+    #region Fields
+    public static int MaxPlayers = 10;
+    public static ObservableCollection<Player> Players;
 
     private static int _musicBusIndex;
+    #endregion
 
     public override void _Ready()
-	{
-		Players = new ObservableCollection<Player>();
+    {
+        GD.Print($"Starting {nameof(GameManager)}");
+
+        Main = GetParent().GetNode<MainScene>("Main");
+        Players = new ObservableCollection<Player>();
 
         PlayerName = STANDARD_NAME;
         IpAddress = STANDARD_IP;

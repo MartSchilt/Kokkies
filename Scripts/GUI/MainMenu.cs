@@ -10,12 +10,8 @@ public partial class MainMenu : Control
 
 	private const string STATUS = "Status: ";
 	private const float STANDARD_INPUT_THRESHOLD = 0.005f;
-	
-	public Node Main;
-	public MultiplayerManager MPManager;
 
-	// Multiplayer UI
-	public Button startMPButton;
+	// Menu UI
 	public Label statusLabel;
 	public RichTextLabel playerList;
 
@@ -23,19 +19,13 @@ public partial class MainMenu : Control
 	public SpinBox spinBoxInputThreshold;
 	public HSlider sliderInputThreshold;
 
-	private ENetMultiplayerPeer peer;
+	private MultiplayerManager _mpManager;
 
 	public override void _Ready()
 	{
-		Main = GetParent() ?? this;
-
-		// Instantiate the Multiplayer Client
-		MPManager = new();
-		MPManager.Name = nameof(MultiplayerManager);
-		Main.AddChild(MPManager);
+		_mpManager = GameManager.Main.MultiplayerManager;
 
 		// UI Elements
-		startMPButton = GetNode<Button>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/MultiplayerTest");
 		statusLabel = GetNode<Label>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/Status");
 		playerList = GetNode<RichTextLabel>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/Players");
 		// VOIP UI
@@ -48,7 +38,7 @@ public partial class MainMenu : Control
 		if (OS.GetCmdlineArgs().Contains("--server"))
 		{
 			GD.Print("Started as server");
-			MPManager.HostGame();
+			_mpManager.HostGame();
 		}
 		else
 		{
@@ -58,12 +48,15 @@ public partial class MainMenu : Control
 
 			Log("Ready to host or join");
 		}
+
+		// Show the mouse
+		Input.MouseMode = Input.MouseModeEnum.Visible;
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
 	public void StartGame(string scenePath)
 	{
-		MPManager.StartMultiplayerScene(scenePath);
+		_mpManager.StartMultiplayerScene(scenePath);
 		Hide();
 		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
@@ -89,11 +82,8 @@ public partial class MainMenu : Control
 	{
 		Log("Starting server...");
 
-		if (MPManager.HostGame() == Error.Ok)
-		{
+		if (_mpManager.HostGame() == Error.Ok)
 			Log("Hosting on " + GameManager.Port);
-			startMPButton.Disabled = false;
-		}
 		else
 			Log("Failed to host!");
 	}
@@ -102,7 +92,7 @@ public partial class MainMenu : Control
 	{
 		Log("Connecting...");
 
-		if (MPManager.JoinGame() == Error.Ok)
+		if (_mpManager.JoinGame() == Error.Ok)
 			Log("Connected!");
 		else
 			Log("Failed to connect!");
@@ -154,22 +144,22 @@ public partial class MainMenu : Control
 	#region VOIP Settings
 	private void _on_input_thresh_value_changed(float value)
 	{
-		MPManager.VOrchestrator.InputThreshold = value;
+		_mpManager.VOrchestrator.InputThreshold = value;
 		spinBoxInputThreshold.Value = value;
 	}
 
 	private void _on_listen_toggled(bool button_pressed)
 	{
-		MPManager.VOrchestrator.Listen = button_pressed;
+		_mpManager.VOrchestrator.Listen = button_pressed;
 	}
 
 	private void _on_log_voice_toggled(bool button_pressed)
 	{
-		MPManager.ShouldLogVoice = button_pressed;
+		_mpManager.ShouldLogVoice = button_pressed;
 	}
 	private void _on_record_toggled(bool button_pressed)
 	{
-		MPManager.VOrchestrator.Recording = button_pressed;
+		_mpManager.VOrchestrator.Recording = button_pressed;
 	}
 	#endregion
 

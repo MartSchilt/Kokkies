@@ -1,4 +1,5 @@
 using Godot;
+using Kokkies;
 using System;
 
 public partial class TileManager : Node3D
@@ -18,7 +19,9 @@ public partial class TileManager : Node3D
 	public PackedScene FloorTile;
 
 	public override void _Ready()
-	{
+    {
+        GD.Print($"Starting {nameof(TileManager)}");
+        
 		FloorTile = GD.Load<PackedScene>("res://Scenes/floorTile.tscn");
 
 		// Remove children, just in case someone decided to manually added floor or walls

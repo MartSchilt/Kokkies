@@ -1,4 +1,5 @@
 using Godot;
+using Kokkies;
 using System;
 
 public partial class CloudManager : Node3D
@@ -18,6 +19,8 @@ public partial class CloudManager : Node3D
 
 	public override void _Ready()
     {
+        GD.Print($"Starting {nameof(CloudManager)}");
+
         Random rnd = new Random();
 
         // Remove children, just in case someone decided to manually add clouds

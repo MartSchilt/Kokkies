@@ -146,7 +146,6 @@ layout_mode = 2
 
 [node name="MultiplayerTest" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
-disabled = true
 text = "Start Multiplayer Test (dev.tscn)"
 
 [node name="ShooterTest" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]

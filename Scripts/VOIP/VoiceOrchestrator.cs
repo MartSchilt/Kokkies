@@ -77,6 +77,7 @@ public partial class VoiceOrchestrator : Node
 
     public override void _Ready()
     {
+        GD.Print($"Starting {nameof(VoiceOrchestrator)}");
         instances = new List<VoiceInstance>();
 
         Multiplayer.ConnectedToServer += ConnectedOK;

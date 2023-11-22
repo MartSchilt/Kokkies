@@ -7,13 +7,13 @@ public partial class SceneManager : Node3D
 {
 	[Export]
 	public PackedScene PlayerScene;
-	
-	public GUIManager GUI;
 
 	private List<Node> _playerCharacters;
 
 	public override void _Ready()
 	{
+		GD.Print($"Starting {nameof(SceneManager)}");
+		
 		_playerCharacters = new();
 
 		if (GameManager.Players.Count <= 0)
@@ -42,8 +42,7 @@ public partial class SceneManager : Node3D
 
 		try
 		{
-			GUI = GetParent().GetNode<GUIManager>("GUI");
-			GUI.Scoreboard.Update(_playerCharacters);
+			GameManager.Main.GUI.Scoreboard.Update(_playerCharacters);
 		}
 		catch (Exception e)
 		{
@@ -98,7 +97,7 @@ public partial class SceneManager : Node3D
 			// Win the game
 		}
 
-		GUI.Scoreboard.Update(_playerCharacters);
+		GameManager.Main.GUI.Scoreboard.Update(_playerCharacters);
 		// Update ShooterGUI if this is the client's player
 		if (playerCharacter.Name == Multiplayer.GetUniqueId().ToString())
 			playerCharacter.OverlayManager.ScoreValue = playerCharacter.Player.Score;
