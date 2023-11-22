@@ -65,6 +65,7 @@ public partial class MainMenu : Control
 	{
 		MPManager.StartMultiplayerScene(scenePath);
 		Hide();
+		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
 
 	public void UpdateUI()

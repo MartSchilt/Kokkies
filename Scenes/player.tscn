@@ -40,7 +40,7 @@ properties/5/watch = false
 
 [sub_resource type="Animation" id="Animation_xtd71"]
 resource_name = "Reload"
-length = 4.0
+length = 3.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -160,7 +160,7 @@ wait_time = 3.0
 one_shot = true
 
 [node name="ReloadTimer" type="Timer" parent="Timers"]
-wait_time = 4.0
+wait_time = 3.5
 one_shot = true
 
 [node name="Sounds" type="Node3D" parent="."]
@@ -208,10 +208,10 @@ skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_bwo83")
 
 [node name="Gun" type="Node3D" parent="CameraNeck"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0.5, -0.1, 0)
+transform = Transform3D(-3.61999e-06, 0, -1, 0, 1, 0, 1, 0, -3.61999e-06, 0.5, -0.1, 0)
 
 [node name="GunCylinder" type="MeshInstance3D" parent="CameraNeck/Gun"]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 6.99382e-08, 0, -6.99382e-08, 0.4, 0, 0, 0)
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 mesh = ExtResource("8_cyivf")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("8_u8gax")
