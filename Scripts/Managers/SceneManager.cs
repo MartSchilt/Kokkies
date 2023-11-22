@@ -2,18 +2,18 @@ using Godot;
 using Kokkies;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 public partial class SceneManager : Node3D
 {
-	public GUIManager GUI;
+	[Export]
 	public PackedScene PlayerScene;
+	
+	public GUIManager GUI;
 
 	private List<Node> _playerCharacters;
 
 	public override void _Ready()
 	{
-		PlayerScene = GD.Load<PackedScene>("res://Scenes/player.tscn");
 		_playerCharacters = new();
 
 		if (GameManager.Players.Count <= 0)

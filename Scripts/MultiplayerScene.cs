@@ -116,16 +116,16 @@ public partial class MultiplayerScene : Control
 	private void _on_shooter_test_button_down()
 	{
 		Rpc(nameof(StartGame), Scenes[1]);
-    }
-    
+	}
+	
 	private void _on_toilet_game_button_down()
-    {
-        Rpc(nameof(StartGame), Scenes[2]);
-    }
-    #endregion
+	{
+		Rpc(nameof(StartGame), Scenes[2]);
+	}
+	#endregion
 
-    #region Text Inputs
-    private void _on_name_input_text_changed(string new_text)
+	#region Text Inputs
+	private void _on_name_input_text_changed(string new_text)
 	{
 		GameManager.SetPlayerName(new_text);
 	}

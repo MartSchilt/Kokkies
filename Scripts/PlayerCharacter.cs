@@ -29,8 +29,6 @@ public partial class PlayerCharacter : CharacterBody3D
 	[Export]
 	public MeshInstance3D Mesh;
 	[Export]
-	public RayCast3D AimCast;
-	[Export]
 	public Node3D CameraNeck;
 	[Export]
 	public Label3D NameLabel;
@@ -80,6 +78,7 @@ public partial class PlayerCharacter : CharacterBody3D
 
 	private SceneManager sceneManager;
 	private Camera3D camera;
+	private RayCast3D _aimCast;
 	private AudioStreamPlayer3D gunSound;
 	private AudioStreamPlayer3D hitSound;
 	private AudioStreamPlayer3D deathSound;
@@ -95,6 +94,7 @@ public partial class PlayerCharacter : CharacterBody3D
 		// Initialize
 		sceneManager = GetParent() as SceneManager;
 		camera = CameraNeck.GetNode<Camera3D>("Camera3D");
+		_aimCast = CameraNeck.GetNode<RayCast3D>("AimCast");
 		gunSound = GetNode<AudioStreamPlayer3D>("Sounds/GunSound");
 		hitSound = GetNode<AudioStreamPlayer3D>("Sounds/HitSound");
 		deathSound = GetNode<AudioStreamPlayer3D>("Sounds/DeathSound");
@@ -296,10 +296,10 @@ public partial class PlayerCharacter : CharacterBody3D
 				AnimationPlayer.Play("Shoot");
 				Ammo -= 1;
 
-				if (!AimCast.IsColliding())
+				if (!_aimCast.IsColliding())
 					return;
 
-				if (AimCast.GetCollider() is PlayerCharacter target)
+				if (_aimCast.GetCollider() is PlayerCharacter target)
 				{
 					foreach (var child in sceneManager.GetChildren())
 						if (child.Name == target.Player.Id.ToString())
