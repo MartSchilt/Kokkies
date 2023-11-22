@@ -10,7 +10,7 @@ Designer: [Sybro](https://github.com/Sybro)
 
 A shooter minigame in which each player has a revolver and can shoot the other players. You get 10 points for killing an opponent and the first person to make it to 100 points wins.
 
-### Toilet Simulator
+### Slamp Dump!
 Designer: [MartSchilt](https://github.com/MartSchilt)
 
 A goofy minigame in which each player needs to take as many dumps on the toilet as possible. The players get points by finishing a dump, they poop faster by pressing certain button prompts and screaming into the microphone. The player race each other in a timed event, and at the end of the time the player with highest score wins.
