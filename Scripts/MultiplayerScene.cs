@@ -36,12 +36,12 @@ public partial class MultiplayerScene : Control
 		Main.AddChild(MPManager);
 
 		// UI Elements
-		startMPButton = GetNode<Button>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/MultiplayerTest");
-		statusLabel = GetNode<Label>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Status");
-		playerList = GetNode<RichTextLabel>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Players");
+		startMPButton = GetNode<Button>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer2/MultiplayerTest");
+		statusLabel = GetNode<Label>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/Status");
+		playerList = GetNode<RichTextLabel>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/Players");
 		// VOIP UI
-		spinBoxInputThreshold = GetNode<SpinBox>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer5/Value");
-		sliderInputThreshold = GetNode<HSlider>("MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/InputThreshold");
+		spinBoxInputThreshold = GetNode<SpinBox>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer5/Value");
+		sliderInputThreshold = GetNode<HSlider>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer3/InputThreshold");
 
 		GameManager.Players.CollectionChanged += (s, e) => UpdateUI();
 
