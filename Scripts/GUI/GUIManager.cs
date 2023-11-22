@@ -14,42 +14,36 @@ public partial class GUIManager : CanvasLayer
 
 	public override void _Ready()
 	{
-		Input.MouseMode = Input.MouseModeEnum.Visible;
-
 		// Disable the other GUI elements
 		DisablePauseMenu();
 		DisableScoreboard();
 		DisableShooterGUI();
+
+		// We start in the menu, so we show the mouse
+		Input.MouseMode = Input.MouseModeEnum.Visible;
 	}
 
 	public override void _Input(InputEvent @event)
 	{
 		if (@event.IsActionPressed("ui_pause"))
-		{
 			if (_isPaused)
-			{
-				GD.Print("Unpause the game");
-				_isPaused = false;
 				DisablePauseMenu();
-				Input.MouseMode = Input.MouseModeEnum.Captured;
-			}
 			else
-			{
-				GD.Print("Pause the game");
-				_isPaused = true;
 				EnablePauseMenu();
-				Input.MouseMode = Input.MouseModeEnum.Visible; // Show the mouse
-			}
-		}
 	}
 
+	#region GUI Elements
 	public void EnablePauseMenu()
 	{
+		_isPaused = true;
 		PauseMenu.Show();
+		Input.MouseMode = Input.MouseModeEnum.Visible; // Show the mouse
 	}
 	public void DisablePauseMenu()
 	{
+		_isPaused = false;
 		PauseMenu.Hide();
+		Input.MouseMode = Input.MouseModeEnum.Captured; // Hide the mouse
 	}
 
 	public void EnableScoreboard()
@@ -69,4 +63,5 @@ public partial class GUIManager : CanvasLayer
 	{
 		ShooterGUI.Hide();
 	}
+	#endregion
 }

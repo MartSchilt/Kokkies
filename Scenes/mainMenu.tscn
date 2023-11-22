@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://tkshkb6gijeg"]
 
-[ext_resource type="Script" path="res://Scripts/MainMenu.cs" id="1_1qtdw"]
+[ext_resource type="Script" path="res://Scripts/GUI/MainMenu.cs" id="1_m3frk"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -9,7 +9,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_1qtdw")
+script = ExtResource("1_m3frk")
 Scenes = PackedStringArray("res://Scenes/dev.tscn", "res://Scenes/westernShooter.tscn", "res://Scenes/toiletGame.tscn")
 
 [node name="Background" type="ColorRect" parent="."]
