@@ -12,7 +12,7 @@ offset_bottom = 52.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ihonf")
-Scenes = PackedStringArray("res://Scenes/dev.tscn", "res://Scenes/westernShooter.tscn")
+Scenes = PackedStringArray("res://Scenes/dev.tscn", "res://Scenes/westernShooter.tscn", "res://Scenes/toiletGame.tscn")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 0
@@ -156,6 +156,10 @@ text = "Start Multiplayer Test (dev.tscn)"
 layout_mode = 2
 text = "Start Shooter (westernShooter.tscn)"
 
+[node name="ToiletGame" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Start Shitting (toiletGame.tscn)"
+
 [node name="VBoxContainer3" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
@@ -217,6 +221,7 @@ text = "Play Music"
 [connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Join" to="." method="_on_join_button_down"]
 [connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/MultiplayerTest" to="." method="_on_multiplayer_test_button_down"]
 [connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/ShooterTest" to="." method="_on_shooter_test_button_down"]
+[connection signal="button_down" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer2/ToiletGame" to="." method="_on_toilet_game_button_down"]
 [connection signal="toggled" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/Record" to="." method="_on_record_toggled"]
 [connection signal="value_changed" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/InputThreshold" to="." method="_on_input_thresh_value_changed"]
 [connection signal="toggled" from="MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/Listen" to="." method="_on_listen_toggled"]

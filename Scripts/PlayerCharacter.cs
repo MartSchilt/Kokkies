@@ -101,7 +101,7 @@ public partial class PlayerCharacter : CharacterBody3D
 		reloadSound = GetNode<AudioStreamPlayer3D>("Sounds/ReloadSound");
 
 		// Only add UI if this is the client's player
-		if (IsControlled())
+		if (IsControlled() && sceneManager.GetParent().HasNode("GUI"))
 		{
 			GUI = sceneManager.GetParent().GetNode<GUIManager>("GUI");
 			OverlayManager = GUI.ShooterGUI;

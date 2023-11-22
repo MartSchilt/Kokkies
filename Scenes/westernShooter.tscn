@@ -1,8 +1,10 @@
-[gd_scene load_steps=47 format=3 uid="uid://n4mig0prs8mq"]
+[gd_scene load_steps=49 format=3 uid="uid://n4mig0prs8mq"]
 
 [ext_resource type="Script" path="res://Scripts/Managers/SceneManager.cs" id="1_03mdo"]
 [ext_resource type="Script" path="res://Scripts/Managers/TileManager.cs" id="2_wut2k"]
 [ext_resource type="Script" path="res://Scripts/Managers/CloudManager.cs" id="3_7kanx"]
+[ext_resource type="Material" uid="uid://d16ryxo4ullr0" path="res://Assets/Materials/westernFloor.tres" id="3_a80lc"]
+[ext_resource type="PackedScene" uid="uid://boseqh4evar8o" path="res://Scenes/fenceWallTile.tscn" id="4_0l48n"]
 [ext_resource type="ArrayMesh" uid="uid://duj23mvnml21s" path="res://Assets/Objects/wagon.obj" id="4_1vvci"]
 [ext_resource type="ArrayMesh" uid="uid://cvjevnsbu424y" path="res://Assets/Objects/rock3.obj" id="5_x1k1m"]
 [ext_resource type="ArrayMesh" uid="uid://cwpfuwtdhxwnf" path="res://Assets/Objects/cactus3.obj" id="6_b5cak"]
@@ -112,6 +114,8 @@ shadow_enabled = true
 
 [node name="Floor" type="Node3D" parent="."]
 script = ExtResource("2_wut2k")
+FloorMaterial = ExtResource("3_a80lc")
+WallTile = ExtResource("4_0l48n")
 Width = 10.0
 Height = 10.0
 

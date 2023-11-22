@@ -13,7 +13,6 @@ public partial class SceneManager : Node3D
 
 	public override void _Ready()
 	{
-		GUI = GetParent().GetNode<GUIManager>("GUI");
 		PlayerScene = GD.Load<PackedScene>("res://Scenes/player.tscn");
 		_playerCharacters = new();
 
@@ -40,7 +39,16 @@ public partial class SceneManager : Node3D
 			
 			index++;
 		}
-		GUI.Scoreboard.Update(_playerCharacters);
+
+		try
+		{
+			GUI = GetParent().GetNode<GUIManager>("GUI");
+			GUI.Scoreboard.Update(_playerCharacters);
+		}
+		catch (Exception e)
+		{
+			GD.PrintErr($"GUI not loaded, are you loading the level from the menu? If not, ignore this message: {e.Message}");
+		}
 	}
 
 	public void ResetScene()
