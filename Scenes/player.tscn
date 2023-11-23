@@ -133,7 +133,7 @@ points = PackedVector3Array(-0.125207, -0.532801, -0.480507, 0.0227831, 0.47607,
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bwo83"]
 albedo_color = Color(0.427451, 0.294118, 0.227451, 1)
 
-[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("MpS", "Mesh", "CameraNeck", "NameLabel", "AnimationPlayer", "ReloadTimer", "RespawnTimer")]
+[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("MpS", "Mesh", "CameraNeck", "NameLabel", "AnimationPlayer", "ReloadTimer", "RespawnTimer") groups=["Player"]]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0)
 script = ExtResource("1_234yd")
 JumpVelocity = 8.0

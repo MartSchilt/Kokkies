@@ -19,7 +19,6 @@ public partial class MultiplayerManager : Node
         Multiplayer.ConnectedToServer += ConnectedToServer;
         Multiplayer.ConnectionFailed += ConnectionFailed;
         Multiplayer.ServerDisconnected += DisconnectedFromServer;
-        peer = new();
 
         // VOIP
         ShouldLogVoice = false;
@@ -56,7 +55,7 @@ public partial class MultiplayerManager : Node
             };
             GameManager.Players.Add(player);
             var fullName = name + "#" + id;
-            GD.Print("Player Connected: " + fullName);
+            GD.Print($"Player Connected: {fullName}");
         }
 
         // Send every player info to all the clients
@@ -69,32 +68,61 @@ public partial class MultiplayerManager : Node
     // Is basically a void method, but returns an Error object, just in case something goes wrong
     public Error HostGame()
     {
+        peer = new();
         var error = peer.CreateServer(GameManager.Port, GameManager.MaxPlayers);
         if (error != Error.Ok)
         {
-            GD.PrintErr("Failed to host: " + error);
+            GD.PrintErr($"Failed to host: {error}");
+            GD.Print(error);
             return error;
         }
 
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
-        GD.Print("Hosting started on " + GameManager.Port + "...");
+        GD.Print($"Hosting started on {GameManager.Port}...");
         SendPlayerInfo(Multiplayer.GetUniqueId(), GameManager.PlayerName, Helper.RandomColor());
         return error;
     }
 
     public Error JoinGame()
     {
+        peer = new();
         var error = peer.CreateClient(GameManager.IpAddress, GameManager.Port);
         if (error != Error.Ok)
         {
-            GD.PrintErr("Failed to create client: " + error);
+            GD.PrintErr($"Failed to create client: {error}");
             return error;
         }
 
         peer.Host.Compress(ENetConnection.CompressionMode.RangeCoder);
         Multiplayer.MultiplayerPeer = peer;
         return error;
+    }
+
+    public void LeaveGame()
+    {
+        GD.Print("Leaving multiplayer room...");
+
+        // Stop hosting
+        if (Multiplayer.GetUniqueId() == 1)
+        {
+            // Disconnect all other peers first and send them a disconnect message
+            // Would be better to migrate the host to a different client, but this is probably a lot of work
+            foreach (var peerIndex in Multiplayer.GetPeers())
+                if (peerIndex != 1)
+                    peer.DisconnectPeer(peerIndex);
+
+            // Destroy the connection
+            peer.Host.Destroy();
+
+            // Remove your own hosting
+            Multiplayer.MultiplayerPeer = null;
+        }
+        // Or disconnect from the host
+        else
+            peer.DisconnectPeer(1);
+
+        GameManager.Players.Clear();
     }
 
     private void LogVoice(bool sent, float[] data, int id = -1)
@@ -102,9 +130,9 @@ public partial class MultiplayerManager : Node
         if (ShouldLogVoice)
         {
             if (sent)
-                GD.Print("Sent data of size " + data.Length);
+                GD.Print($"Sent data of size {data.Length}");
             else
-                GD.Print("Received data of size " + data.Length + " from " + id.ToString());
+                GD.Print($"Received data of size {data.Length} from {id}");
         }
     }
 
@@ -116,8 +144,17 @@ public partial class MultiplayerManager : Node
 
     private void PlayerDisconnected(long id)
     {
-        GD.Print("Player Disconnected: " + id);
-        GameManager.Players.Remove(GameManager.Players.ToList().Find(p => p.Id == id));
+        GD.Print($"Player Disconnected: {id}");
+        // Remove the player from the GameManager
+        GameManager.Players.Remove(GameManager.Players.Where(p => p.Id == id).First<Player>());
+        // Remove the PlayerCharacter from the scene
+        var players = GetTree().GetNodesInGroup("Player");
+        foreach (var player in players)
+            if (player.Name == id.ToString())
+                player.QueueFree();
+
+        // Update the scoreboard so it doesn't include the player that just left
+        //GameManager.Main.GUI.Scoreboard.Update();
     }
 
     private void ConnectedToServer()
@@ -130,12 +167,17 @@ public partial class MultiplayerManager : Node
     private void DisconnectedFromServer()
     {
         GD.Print("Disconnected From Server");
+        Multiplayer.MultiplayerPeer = null;
         GameManager.Players.Clear();
+        // Go back to the main menu for now
+        // Would be better to migrate the host to a different client, but this is probably a lot of work
+        GameManager.Main.LoadMainMenu();
     }
 
     private void ConnectionFailed()
     {
         GD.PrintErr("Connection Failed!");
+        Multiplayer.MultiplayerPeer = null;
     }
     #endregion
 }

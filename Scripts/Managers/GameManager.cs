@@ -27,7 +27,7 @@ public partial class GameManager : Node
 
     #region Fields
     public static int MaxPlayers = 10;
-    public static ObservableCollection<Player> Players;
+    public static ObservableCollection<Player> Players { get; set; }
 
     private static int _musicBusIndex;
     #endregion

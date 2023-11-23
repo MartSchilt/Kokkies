@@ -89,6 +89,7 @@ public partial class PlayerCharacter : CharacterBody3D
 		// Find the dedicated player Node for this client
 		MpS.SetMultiplayerAuthority(int.Parse(Name));
 		Player = GameManager.Players.ToList().Find(p => p.Id.ToString() == Name);
+		AddToGroup("Player");
 
 		// Initialize
 		sceneManager = GetParent() as SceneManager;

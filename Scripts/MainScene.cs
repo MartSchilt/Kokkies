@@ -22,11 +22,17 @@ public partial class MainScene : Node
 
 	public Node Scenes;
 
+	private MainMenu _mainMenu;
+
 	public override void _Ready()
 	{
 		GD.Print($"Starting {nameof(MainScene)}");
 
 		Scenes = GetNode("Scenes");
+
+		_mainMenu = MainMenu.Instantiate() as MainMenu;
+		AddChild(_mainMenu);
+		MusicManager.PlayMusic(_mainMenu.Name);
 
 		LoadMainMenu();
 	}
@@ -39,6 +45,8 @@ public partial class MainScene : Node
 
 	public void LoadScene(PackedScene scene)
 	{
+		_mainMenu.Hide();
+
 		var instance = scene.Instantiate();
 		Scenes.AddChild(instance);
 
@@ -53,6 +61,9 @@ public partial class MainScene : Node
 		foreach (var scene in Scenes.GetChildren())
 			scene.QueueFree();
 
-		LoadScene(MainMenu);
+		_mainMenu.Show();
+
+		// Show the mouse
+		Input.MouseMode = Input.MouseModeEnum.Visible;
 	}
 }

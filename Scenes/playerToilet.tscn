@@ -11,7 +11,7 @@ points = PackedVector3Array(-0.125207, -0.532801, -0.480507, 0.0227831, 0.47607,
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dc74p"]
 albedo_color = Color(0.427451, 0.294118, 0.227451, 1)
 
-[node name="CharacterBody3D" type="CharacterBody3D" node_paths=PackedStringArray("MpS", "Mesh", "CameraNeck", "NameLabel")]
+[node name="CharacterBody3D" type="CharacterBody3D" node_paths=PackedStringArray("MpS", "Mesh", "CameraNeck", "NameLabel") groups=["Player"]]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0)
 script = ExtResource("1_7u5bv")
 MpS = NodePath("MultiplayerSynchronizer")

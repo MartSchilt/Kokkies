@@ -93,10 +93,10 @@ public partial class VoiceOrchestrator : Node
 
     public override void _PhysicsProcess(double delta)
     {
-        if (Multiplayer.GetPeers().Length > 0 && Multiplayer.IsServer() && ID == null)
+        if (Multiplayer.HasMultiplayerPeer() && Multiplayer.GetPeers().Length > 0 && Multiplayer.IsServer() && ID == null)
             CreateInstance(Multiplayer.GetUniqueId());
 
-        if ((!(Multiplayer.GetPeers().Length > 0) || !Multiplayer.IsServer()) && ID == 1)
+        if (!Multiplayer.HasMultiplayerPeer() && ID == 1)
             Reset();
     }
 

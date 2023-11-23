@@ -16,6 +16,7 @@ public partial class PauseMenu : MarginContainer
 	
 	private void _on_back_button_down()
 	{
+		GameManager.Main.MultiplayerManager.LeaveGame();
 		GameManager.Main.LoadMainMenu();
 	}
 

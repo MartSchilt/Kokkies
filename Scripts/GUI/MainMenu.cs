@@ -26,8 +26,20 @@ public partial class MainMenu : Control
 		_mpManager = GameManager.Main.MultiplayerManager;
 
 		// UI Elements
-		statusLabel = GetNode<Label>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/Status");
-		playerList = GetNode<RichTextLabel>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/Players");
+		statusLabel = new()
+		{
+			Name = "Status",
+			Text = "Status: ",
+		};
+		GetNode<VBoxContainer>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer").AddChild(statusLabel);
+		playerList = new()
+		{
+			Name = "Players",
+			Text = "Players: ",
+			FitContent = true
+		};
+		GetNode<VBoxContainer>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer").AddChild(playerList);
+
 		// VOIP UI
 		spinBoxInputThreshold = GetNode<SpinBox>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer5/Value");
 		sliderInputThreshold = GetNode<HSlider>("MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer3/InputThreshold");
@@ -48,9 +60,6 @@ public partial class MainMenu : Control
 
 			Log("Ready to host or join");
 		}
-
-		// Show the mouse
-		Input.MouseMode = Input.MouseModeEnum.Visible;
 	}
 
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
@@ -62,10 +71,11 @@ public partial class MainMenu : Control
 	}
 
 	public void UpdateUI()
-	{
+	{		
 		playerList.Text = "Players: ";
 		foreach (var player in GameManager.Players)
 		{
+			GD.Print(player.Id);
 			var playerName = player.Name + "#" + player.Id;
 			playerList.Text += "\n - " + playerName;
 		}
@@ -107,7 +117,7 @@ public partial class MainMenu : Control
 	{
 		Rpc(nameof(StartGame), Scenes[1]);
 	}
-	
+
 	private void _on_toilet_game_button_down()
 	{
 		Rpc(nameof(StartGame), Scenes[2]);
