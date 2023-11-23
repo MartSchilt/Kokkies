@@ -22,7 +22,8 @@ public partial class GameManager : Node
     public static string PlayerName { get; private set; }
     public static string IpAddress { get; private set; }
     public static int Port { get; set; }
-    public static MainScene Main { get; set; }
+    public static GameManager Instance { get; private set; }
+    public static MainScene Main { get; private set; }
     #endregion
 
     #region Fields
@@ -35,6 +36,7 @@ public partial class GameManager : Node
     public override void _Ready()
     {
         GD.Print($"Starting {nameof(GameManager)}");
+        Instance = this;
 
         Main = GetParent().GetNode<MainScene>("Main");
         Players = new ObservableCollection<Player>();

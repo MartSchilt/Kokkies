@@ -29,9 +29,9 @@ script = ExtResource("7_5bxdu")
 
 [node name="MusicPlayer" type="Node" parent="." node_paths=PackedStringArray("musicStreams")]
 script = ExtResource("3_mljgv")
-musicStreams = [NodePath("MultiplayerMenu"), NodePath("WesternShooter")]
+musicStreams = [NodePath("MainMenu"), NodePath("WesternShooter")]
 
-[node name="MultiplayerMenu" type="AudioStreamPlayer" parent="MusicPlayer"]
+[node name="MainMenu" type="AudioStreamPlayer" parent="MusicPlayer"]
 stream = ExtResource("3_r2jps")
 volume_db = -10.0
 bus = &"Music"
