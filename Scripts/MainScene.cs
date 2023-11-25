@@ -75,8 +75,8 @@ public partial class MainScene : Node
 	public SceneManager GetCurrentScene()
 	{
 		if (IsInMenu())
-			return Scenes.GetChildren().First() as SceneManager;
-		else
 			return null;
+		else
+			return Scenes.GetChildren().First() as SceneManager;
 	}
 }
