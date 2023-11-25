@@ -25,7 +25,7 @@ public partial class VoiceInstance : Node3D
     private bool prevFrameRecording = false;
     private Queue<float> receiveBuffer = new Queue<float>();
     private AudioStreamWav audioWav;
-    private AudioStreamPlayer voice;
+    private Node voice;
     private AudioEffectCapture effectCapture;
     private AudioStreamGeneratorPlayback playback;
     private VoiceMic Mic;
@@ -54,25 +54,55 @@ public partial class VoiceInstance : Node3D
     {
         if (customAudio != null && !customAudio.IsEmpty)
         {
-            var audioStreamPlayer = GetNode(customAudio);
-            if (audioStreamPlayer is AudioStreamPlayer || audioStreamPlayer is AudioStreamPlayer2D || audioStreamPlayer is AudioStreamPlayer3D)
-                voice = audioStreamPlayer as AudioStreamPlayer;
-            else
-                GD.PrintErr("Custom Audio Player is not an AudioStreamPlayer!");
+            var audioStreamPlayer = GetParent().GetNode(customAudio);
+            switch(audioStreamPlayer)
+            {
+                case AudioStreamPlayer:
+                    voice = audioStreamPlayer as AudioStreamPlayer;
+                    break;
+                case AudioStreamPlayer2D:
+                    voice = audioStreamPlayer as AudioStreamPlayer2D;
+                    break;
+                case AudioStreamPlayer3D:
+                    voice = audioStreamPlayer as AudioStreamPlayer3D;
+                    break;
+                default:
+                    GD.PrintErr("Custom Audio Player is not an AudioStreamPlayer!");
+                    break;
+            }
         }
         else
         {
-            voice = new();
+            voice = new AudioStreamPlayer();
             voice.Name = "VoiceStream";
             AddChild(voice);
         }
 
         AudioStreamGenerator generator = new();
         generator.BufferLength = 0.1f;
-        voice.Stream = generator;
-        voice.Play();
 
-        playback = voice.GetStreamPlayback() as AudioStreamGeneratorPlayback;
+        // Sadly the AudioStreams do not have a generic interface...
+        switch (voice)
+        {
+            case AudioStreamPlayer2D:
+                var voice2D = voice as AudioStreamPlayer2D;
+                voice2D.Stream = generator;
+                voice2D.Play();
+                playback = voice2D.GetStreamPlayback() as AudioStreamGeneratorPlayback;
+                break;
+            case AudioStreamPlayer3D:
+                var voice3D = voice as AudioStreamPlayer3D;
+                voice3D.Stream = generator;
+                voice3D.Play();
+                playback = voice3D.GetStreamPlayback() as AudioStreamGeneratorPlayback;
+                break;
+            default:
+                var voice1D = voice as AudioStreamPlayer;
+                voice1D.Stream = generator;
+                voice1D.Play();
+                playback = voice1D.GetStreamPlayback() as AudioStreamGeneratorPlayback;
+                break;
+        }
     }
 
     private void ProcessVoice()

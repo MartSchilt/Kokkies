@@ -68,6 +68,8 @@ public partial class VoiceOrchestrator : Node
     }
     [Export]
     public TypeVoiceInstance TVI = TypeVoiceInstance.CSHARP;
+    [Export]
+    public NodePath VoiceStreamPath;
 
     private bool _listen;
     private bool _recording;
@@ -87,7 +89,7 @@ public partial class VoiceOrchestrator : Node
         Multiplayer.PeerDisconnected += PlayerDisconnected;
 
         Listen = false;
-        Recording = false;
+        Recording = true;
         InputThreshold = 0.005f;
     }
 
@@ -121,8 +123,9 @@ public partial class VoiceOrchestrator : Node
         }
 
         instance.receivedVoiceData += ReceivedVoiceData;
-
         instance.Name = id.ToString();
+        instance.customAudio = VoiceStreamPath;
+
         instances.Add(instance);
         AddChild(instance);
         EmitSignal(SignalName.createdInstance);
