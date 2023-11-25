@@ -30,6 +30,7 @@ public partial class MultiplayerManager : Node
     public void StartMultiplayerScene(string scenePath)
     {
         GameManager.Main.LoadScene(scenePath);
+        VOrchestrator.StartInstances();
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]

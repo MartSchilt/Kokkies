@@ -147,6 +147,12 @@ public partial class VoiceOrchestrator : Node
             RemoveInstance(i);
     }
 
+    public void StartInstances()
+    {
+        foreach (var instance in instances)
+            instance.Start = true;
+    }
+
     private void ConnectedOK()
     {
         if ((Multiplayer.HasMultiplayerPeer() || Multiplayer.IsServer()) && ID == 1)

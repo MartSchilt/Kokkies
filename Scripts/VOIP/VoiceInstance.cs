@@ -15,6 +15,7 @@ public partial class VoiceInstance : Node3D
     [Export]
     public NodePath customAudio;
 
+    public bool Start = false;
     public bool Listen;
     public bool Recording;
     public float InputThreshold;
@@ -42,13 +43,16 @@ public partial class VoiceInstance : Node3D
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = false)]
     public void Speak(float[] sampleData, int id)
     {
-        if (playback == null)
-            CreateVoice(id);
+        if (Start)
+        {
+            if (playback == null)
+                CreateVoice(id);
 
-        EmitSignal(SignalName.receivedVoiceData, sampleData, id);
+            EmitSignal(SignalName.receivedVoiceData, sampleData, id);
 
-        foreach (var item in sampleData)
-            receiveBuffer.Enqueue(item);
+            foreach (var item in sampleData)
+                receiveBuffer.Enqueue(item);
+        }
     }
 
     private void CreateVoice(int playerId)
@@ -56,7 +60,7 @@ public partial class VoiceInstance : Node3D
         if (ProximityChat)
         {
             var audioStreamPlayer = GameManager.Main.GetCurrentScene().GetPlayerAudio(playerId);
-            switch(audioStreamPlayer)
+            switch (audioStreamPlayer)
             {
                 case AudioStreamPlayer:
                     voice = audioStreamPlayer as AudioStreamPlayer;
