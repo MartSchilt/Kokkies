@@ -1,6 +1,6 @@
 using Godot;
 using Kokkies;
-using System;
+using System.Linq;
 
 /// <summary>
 /// This is the script for the 'main' node of our game
@@ -37,6 +37,11 @@ public partial class MainScene : Node
 		LoadMainMenu();
 	}
 
+	public bool IsInMenu()
+	{
+		return _mainMenu.Visible;
+	}
+
 	public void LoadScene(string scenePath)
 	{
 		var scene = GD.Load<PackedScene>(scenePath);
@@ -65,5 +70,13 @@ public partial class MainScene : Node
 
 		// Show the mouse
 		Input.MouseMode = Input.MouseModeEnum.Visible;
+	}
+
+	public SceneManager GetCurrentScene()
+	{
+		if (IsInMenu())
+			return Scenes.GetChildren().First() as SceneManager;
+		else
+			return null;
 	}
 }

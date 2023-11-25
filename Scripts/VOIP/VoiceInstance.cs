@@ -18,6 +18,7 @@ public partial class VoiceInstance : Node3D
     public bool Listen;
     public bool Recording;
     public float InputThreshold;
+    public bool ProximityChat = true;
 
     private const int MAX_SAMPLES = 10;
 
@@ -42,7 +43,7 @@ public partial class VoiceInstance : Node3D
     public void Speak(float[] sampleData, int id)
     {
         if (playback == null)
-            CreateVoice();
+            CreateVoice(id);
 
         EmitSignal(SignalName.receivedVoiceData, sampleData, id);
 
@@ -50,11 +51,11 @@ public partial class VoiceInstance : Node3D
             receiveBuffer.Enqueue(item);
     }
 
-    private void CreateVoice()
+    private void CreateVoice(int playerId)
     {
-        if (customAudio != null && !customAudio.IsEmpty)
+        if (ProximityChat)
         {
-            var audioStreamPlayer = GetParent().GetNode(customAudio);
+            var audioStreamPlayer = GameManager.Main.GetCurrentScene().GetPlayerAudio(playerId);
             switch(audioStreamPlayer)
             {
                 case AudioStreamPlayer:
@@ -84,6 +85,12 @@ public partial class VoiceInstance : Node3D
         // Sadly the AudioStreams do not have a generic interface...
         switch (voice)
         {
+            case AudioStreamPlayer:
+                var voice1D = voice as AudioStreamPlayer;
+                voice1D.Stream = generator;
+                voice1D.Play();
+                playback = voice1D.GetStreamPlayback() as AudioStreamGeneratorPlayback;
+                break;
             case AudioStreamPlayer2D:
                 var voice2D = voice as AudioStreamPlayer2D;
                 voice2D.Stream = generator;
@@ -97,10 +104,7 @@ public partial class VoiceInstance : Node3D
                 playback = voice3D.GetStreamPlayback() as AudioStreamGeneratorPlayback;
                 break;
             default:
-                var voice1D = voice as AudioStreamPlayer;
-                voice1D.Stream = generator;
-                voice1D.Play();
-                playback = voice1D.GetStreamPlayback() as AudioStreamGeneratorPlayback;
+                GD.PrintErr("No Voice so no playback generated");
                 break;
         }
     }

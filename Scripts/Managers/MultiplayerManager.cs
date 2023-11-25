@@ -5,7 +5,7 @@ using System.Linq;
 public partial class MultiplayerManager : Node
 {
     public VoiceOrchestrator VOrchestrator;
-    public bool ShouldLogVoice { get; set; }
+    public bool ShouldLogVoice = false;
 
     private ENetMultiplayerPeer peer;
 
@@ -21,17 +21,9 @@ public partial class MultiplayerManager : Node
         Multiplayer.ServerDisconnected += DisconnectedFromServer;
 
         // VOIP
-        ShouldLogVoice = false;
         VOrchestrator = GameManager.Main.VoiceOrchestrator;
-
-        VOrchestrator.sentVoiceData += (data) =>
-        {
-            LogVoice(true, data);
-        };
-        VOrchestrator.receivedVoiceData += (data, id) =>
-        {
-            LogVoice(false, data, id);
-        };
+        VOrchestrator.sentVoiceData += (data) => LogVoice(true, data);
+        VOrchestrator.receivedVoiceData += (data, id) => LogVoice(false, data, id);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]

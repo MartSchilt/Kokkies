@@ -64,6 +64,8 @@ public partial class PlayerCharacter : CharacterBody3D
 				OverlayManager.AmmoValue = value;
 		}
 	}
+
+	public AudioStreamPlayer3D AudioPlayer { get; set; }
 	#endregion
 
 	#region Fields
@@ -99,6 +101,9 @@ public partial class PlayerCharacter : CharacterBody3D
 		hitSound = GetNode<AudioStreamPlayer3D>("Sounds/HitSound");
 		deathSound = GetNode<AudioStreamPlayer3D>("Sounds/DeathSound");
 		reloadSound = GetNode<AudioStreamPlayer3D>("Sounds/ReloadSound");
+
+        AudioPlayer = new();
+		AddChild(AudioPlayer);
 
 		// Only add UI if this is the client's player
 		if (IsControlled())

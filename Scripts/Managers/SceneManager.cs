@@ -106,4 +106,12 @@ public partial class SceneManager : Node3D
 		GD.Print($"{playerCharacter.Name} has earned {points}, " +
 				 $"totaling to {playerCharacter.Player.Score} points!");
 	}
+
+	public Node GetPlayerAudio(int playerId)
+	{
+		var playerCharacter = (PlayerCharacter)_playerCharacters
+			.Find(x => x.Name.Equals(playerId.ToString()));
+
+		return playerCharacter.AudioPlayer;
+	}
 }

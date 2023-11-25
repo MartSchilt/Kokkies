@@ -68,8 +68,6 @@ public partial class VoiceOrchestrator : Node
     }
     [Export]
     public TypeVoiceInstance TVI = TypeVoiceInstance.CSHARP;
-    [Export]
-    public NodePath VoiceStreamPath;
 
     private bool _listen;
     private bool _recording;
@@ -124,7 +122,6 @@ public partial class VoiceOrchestrator : Node
 
         instance.receivedVoiceData += ReceivedVoiceData;
         instance.Name = id.ToString();
-        instance.customAudio = VoiceStreamPath;
 
         instances.Add(instance);
         AddChild(instance);
