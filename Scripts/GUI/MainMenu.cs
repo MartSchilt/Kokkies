@@ -74,7 +74,6 @@ public partial class MainMenu : Control
 		playerList.Text = "Players: ";
 		foreach (var player in GameManager.Players)
 		{
-			GD.Print(player.Id);
 			var playerName = player.Name + "#" + player.Id;
 			playerList.Text += "\n - " + playerName;
 		}

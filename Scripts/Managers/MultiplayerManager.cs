@@ -65,7 +65,6 @@ public partial class MultiplayerManager : Node
         if (error != Error.Ok)
         {
             GD.PrintErr($"Failed to host: {error}");
-            GD.Print(error);
             return error;
         }
 

@@ -76,11 +76,7 @@ public partial class SceneManager : Node3D
 		playerCharacter.Health = playerCharacter.MaxHealth;
 		playerCharacter.Alive = true;
 		playerCharacter.Rotation = new(0, 0, 0);
-
-		GD.Print(playerCharacter.Player.Id);
-		GD.Print(playerCharacter.Player.Name);
 		playerCharacter.NameLabel.Text = playerCharacter.Player.Name + "#" + playerCharacter.Player.Id + $"({playerCharacter.Health}/100)";
-		GD.Print(playerCharacter.NameLabel.Text);
 	}
 
 	// Don't know for sure if we need to call this locally or not...

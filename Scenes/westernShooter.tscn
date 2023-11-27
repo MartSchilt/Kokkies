@@ -1,7 +1,7 @@
 [gd_scene load_steps=50 format=3 uid="uid://n4mig0prs8mq"]
 
 [ext_resource type="Script" path="res://Scripts/Managers/SceneManager.cs" id="1_03mdo"]
-[ext_resource type="PackedScene" uid="uid://dqv43xmf8m3y4" path="res://Scenes/player.tscn" id="2_1u3qn"]
+[ext_resource type="PackedScene" uid="uid://dqv43xmf8m3y4" path="res://Scenes/playerShooter.tscn" id="2_1u3qn"]
 [ext_resource type="Script" path="res://Scripts/Managers/TileManager.cs" id="2_wut2k"]
 [ext_resource type="Script" path="res://Scripts/Managers/CloudManager.cs" id="3_7kanx"]
 [ext_resource type="Material" uid="uid://d16ryxo4ullr0" path="res://Assets/Materials/westernFloor.tres" id="3_a80lc"]

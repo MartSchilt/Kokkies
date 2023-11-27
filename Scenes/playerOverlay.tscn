@@ -15,7 +15,7 @@ PauseMenu = NodePath("PauseMenu")
 Scoreboard = NodePath("Scoreboard")
 ShooterGUI = NodePath("Shooter")
 
-[node name="Shooter" type="MarginContainer" parent="." node_paths=PackedStringArray("HealthLabel", "ScoreLabel", "AmmoLabel")]
+[node name="Shooter" type="MarginContainer" parent="." node_paths=PackedStringArray("HealthLabel", "AmmoLabel")]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,8 +30,7 @@ theme_override_constants/margin_right = 50
 theme_override_constants/margin_bottom = 50
 script = ExtResource("2_lvdmv")
 HealthLabel = NodePath("HBoxContainer/VBoxContainer/HealthLabel")
-ScoreLabel = NodePath("HBoxContainer/VBoxContainer2/ScoreLabel")
-AmmoLabel = NodePath("HBoxContainer/VBoxContainer3/AmmoLabel")
+AmmoLabel = NodePath("HBoxContainer/VBoxContainer2/AmmoLabel")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Shooter"]
 layout_mode = 2
@@ -51,21 +50,9 @@ text = "HEALTH:"
 [node name="VBoxContainer2" type="VBoxContainer" parent="Shooter/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 0
-
-[node name="ScoreLabel" type="Label" parent="Shooter/HBoxContainer/VBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 4
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 10
-text = "SCORE:"
-
-[node name="VBoxContainer3" type="VBoxContainer" parent="Shooter/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 8
 
-[node name="AmmoLabel" type="Label" parent="Shooter/HBoxContainer/VBoxContainer3"]
+[node name="AmmoLabel" type="Label" parent="Shooter/HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme = SubResource("Theme_fgaro")
@@ -116,6 +103,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="PauseMenu" type="MarginContainer" parent="."]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
