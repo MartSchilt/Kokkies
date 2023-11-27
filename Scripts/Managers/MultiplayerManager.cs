@@ -139,7 +139,7 @@ public partial class MultiplayerManager : Node
         GD.Print($"Player Disconnected: {id}");
         // Remove the player from the GameManager
         GameManager.Players.Remove(GameManager.Players.Where(p => p.Id == id).First<Player>());
-        // Remove the PlayerCharacter from the scene
+        // Remove the BaseCharacter from the scene
         var players = GetTree().GetNodesInGroup("Player");
         foreach (var player in players)
             if (player.Name == id.ToString())

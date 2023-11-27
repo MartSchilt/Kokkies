@@ -16,10 +16,10 @@ public partial class ScoreboardGUI : MarginContainer
 			_vBox.RemoveChild(child);
 
 		foreach (var playerCharacter in playerCharacters)
-			AddPlayer((PlayerCharacter)playerCharacter);
+			AddPlayer((BaseCharacter)playerCharacter);
 	}
 
-	private void AddPlayer(PlayerCharacter playerCharacter)
+	private void AddPlayer(BaseCharacter playerCharacter)
 	{
 		HBoxContainer row = new();
 		_vBox.AddChild(row);

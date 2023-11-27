@@ -29,12 +29,12 @@ public partial class SceneManager : Node3D
 		var index = 0;
 		foreach (var player in GameManager.Players)
 		{
-			var currentPlayer = PlayerScene.Instantiate() as PlayerCharacter;
+			var currentPlayer = PlayerScene.Instantiate();
 			currentPlayer.Name = player.Id.ToString();
 			currentPlayer.SetMeta("SpawnLocation", index.ToString());
 			_playerCharacters.Add(currentPlayer);
 			AddChild(currentPlayer);
-			Respawn(currentPlayer);
+			Respawn((BaseCharacter)currentPlayer);
 			
 			index++;
 		}
@@ -53,11 +53,11 @@ public partial class SceneManager : Node3D
 	{
 		foreach(var player in _playerCharacters)
 		{
-			Respawn((PlayerCharacter)player);
+			Respawn((BaseCharacter)player);
 		}
 	}
 
-	public void Respawn(PlayerCharacter playerCharacter)
+	public void Respawn(BaseCharacter playerCharacter)
 	{
 		if (GetTree().GetNodesInGroup("SpawnLocation").Count < 1)
 		{
@@ -71,20 +71,23 @@ public partial class SceneManager : Node3D
 					playerCharacter.GlobalPosition = spawn.GlobalPosition;
 					break;
 				}
-
-			playerCharacter.Health = playerCharacter.MaxHealth;
-			playerCharacter.Ammo = playerCharacter.MaxAmmo;
-			playerCharacter.Alive = true;
-			playerCharacter.Rotation = new(0, 0, 0);
-			playerCharacter.NameLabel.Text = playerCharacter.Player.Name + "#" + playerCharacter.Player.Id + $"({playerCharacter.Health}/100)";
 		}
+
+		playerCharacter.Health = playerCharacter.MaxHealth;
+		playerCharacter.Alive = true;
+		playerCharacter.Rotation = new(0, 0, 0);
+
+		GD.Print(playerCharacter.Player.Id);
+		GD.Print(playerCharacter.Player.Name);
+		playerCharacter.NameLabel.Text = playerCharacter.Player.Name + "#" + playerCharacter.Player.Id + $"({playerCharacter.Health}/100)";
+		GD.Print(playerCharacter.NameLabel.Text);
 	}
 
 	// Don't know for sure if we need to call this locally or not...
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
 	public void AddPoints(int playerId, int points)
 	{
-		var playerCharacter = (PlayerCharacter)_playerCharacters
+		var playerCharacter = (BaseCharacter)_playerCharacters
 			.Find(x => x.Name.Equals(playerId.ToString()));
 
 		if (playerCharacter == null) 
@@ -97,10 +100,10 @@ public partial class SceneManager : Node3D
 		}
 
 		GameManager.Main.GUI.Scoreboard.Update(_playerCharacters);
+		
 		// Update ShooterGUI if this is the client's player
-		if (playerCharacter.Name == Multiplayer.GetUniqueId().ToString())
-			playerCharacter.OverlayManager.ScoreValue = playerCharacter.Player.Score;
-
+		//if (playerCharacter.Name == Multiplayer.GetUniqueId().ToString())
+		//		playerCharacter.OverlayManager.ScoreValue = playerCharacter.Player.Score;
 
 		GD.Print($"{playerCharacter.Name} has earned {points}, " +
 				 $"totaling to {playerCharacter.Player.Score} points!");
@@ -108,7 +111,7 @@ public partial class SceneManager : Node3D
 
 	public Node GetPlayerAudio(int playerId)
 	{
-		var playerCharacter = (PlayerCharacter)_playerCharacters
+		var playerCharacter = (BaseCharacter)_playerCharacters
 			.Find(x => x.Name.Equals(playerId.ToString()));
 
 		return playerCharacter.AudioPlayer;

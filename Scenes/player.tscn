@@ -1,6 +1,6 @@
 [gd_scene load_steps=19 format=3 uid="uid://dqv43xmf8m3y4"]
 
-[ext_resource type="Script" path="res://Scripts/PlayerCharacter.cs" id="1_234yd"]
+[ext_resource type="Script" path="res://Scripts/Entities/ShooterCharacter.cs" id="1_51xdb"]
 [ext_resource type="AudioStream" uid="uid://byu23lm4ux1wj" path="res://Assets/Sounds/rifle_fire.wav" id="2_b87bm"]
 [ext_resource type="AudioStream" uid="uid://ca73hayqn5e2g" path="res://Assets/Sounds/PunchMark.wav" id="3_41318"]
 [ext_resource type="ArrayMesh" uid="uid://c1c5o30hdhe80" path="res://Assets/Objects/cowboyhat.obj" id="3_ajq64"]
@@ -133,16 +133,15 @@ points = PackedVector3Array(-0.125207, -0.532801, -0.480507, 0.0227831, 0.47607,
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bwo83"]
 albedo_color = Color(0.427451, 0.294118, 0.227451, 1)
 
-[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("MpS", "Mesh", "CameraNeck", "NameLabel", "AnimationPlayer", "ReloadTimer", "RespawnTimer") groups=["Player"]]
+[node name="PlayerCharacter" type="CharacterBody3D" node_paths=PackedStringArray("ReloadTimer", "MpS", "Mesh", "CameraNeck", "NameLabel", "AnimationPlayer", "RespawnTimer") groups=["Player"]]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2, 0)
-script = ExtResource("1_234yd")
-JumpVelocity = 8.0
+script = ExtResource("1_51xdb")
+ReloadTimer = NodePath("Timers/ReloadTimer")
 MpS = NodePath("MultiplayerSynchronizer")
 Mesh = NodePath("MeshInstance3D")
 CameraNeck = NodePath("CameraNeck")
 NameLabel = NodePath("NameLabel")
 AnimationPlayer = NodePath("AnimationPlayer")
-ReloadTimer = NodePath("Timers/ReloadTimer")
 RespawnTimer = NodePath("Timers/RespawnTimer")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
@@ -165,18 +164,18 @@ one_shot = true
 
 [node name="Sounds" type="Node3D" parent="."]
 
-[node name="GunSound" type="AudioStreamPlayer3D" parent="Sounds"]
+[node name="DeathSound" type="AudioStreamPlayer3D" parent="Sounds"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-stream = ExtResource("2_b87bm")
-volume_db = -3.0
+stream = ExtResource("4_2l8mj")
 
 [node name="HitSound" type="AudioStreamPlayer3D" parent="Sounds"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 stream = ExtResource("3_41318")
 
-[node name="DeathSound" type="AudioStreamPlayer3D" parent="Sounds"]
+[node name="GunSound" type="AudioStreamPlayer3D" parent="Sounds"]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-stream = ExtResource("4_2l8mj")
+stream = ExtResource("2_b87bm")
+volume_db = -3.0
 
 [node name="ReloadSound" type="AudioStreamPlayer3D" parent="Sounds"]
 stream = ExtResource("5_hw4ma")
@@ -211,7 +210,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_bwo83")
 transform = Transform3D(-3.61999e-06, 0, -1, 0, 1, 0, 1, 0, -3.61999e-06, 0.5, -0.1, 0)
 
 [node name="GunCylinder" type="MeshInstance3D" parent="CameraNeck/Gun"]
-transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
+transform = Transform3D(0.4, 0, 0, 0, 0.2, 0.34641, 0, -0.34641, 0.2, 0, 0, 0)
 mesh = ExtResource("8_cyivf")
 skeleton = NodePath("../../..")
 surface_material_override/0 = ExtResource("8_u8gax")
