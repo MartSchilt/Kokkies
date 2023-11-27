@@ -1,8 +1,6 @@
 using Godot;
 using System.Collections.ObjectModel;
 
-namespace Kokkies;
-
 /// <summary>
 /// Manages the active "Game" that is started by the client
 /// Gets implemented in the Project Autoload.

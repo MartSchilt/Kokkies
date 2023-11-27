@@ -1,8 +1,6 @@
 using Godot;
 using System.Collections.Generic;
 
-namespace Kokkies;
-
 public enum TypeVoiceInstance
 {
     NATIVE,

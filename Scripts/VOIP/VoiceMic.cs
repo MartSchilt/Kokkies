@@ -1,7 +1,5 @@
 using Godot;
 
-namespace Kokkies;
-
 public partial class VoiceMic : AudioStreamPlayer
 {
     private string name = "VoiceMicRecorder";

@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Kokkies;
-
 public partial class VoiceInstance : Node3D
 {
     [Signal]

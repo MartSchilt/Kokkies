@@ -1,8 +1,6 @@
 using Godot;
 using System;
 
-namespace Kokkies;
-
 /// <summary>
 /// Static class that gives access to some nice to have methods
 /// </summary>

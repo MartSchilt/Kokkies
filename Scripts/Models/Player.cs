@@ -1,7 +1,5 @@
 using Godot;
 
-namespace Kokkies;
-
 public class Player
 {
     public long Id { get; set; }
