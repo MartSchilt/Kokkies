@@ -1,0 +1,42 @@
+[gd_scene load_steps=8 format=3 uid="uid://bc6hmr00covc4"]
+
+[ext_resource type="ArrayMesh" uid="uid://vqbl02ymtnv3" path="res://Assets/Objects/Toilet/toiletCap.obj" id="1_qe75u"]
+[ext_resource type="ArrayMesh" uid="uid://bqj28t8ghex12" path="res://Assets/Objects/Toilet/toiletLever.obj" id="2_kkx5e"]
+[ext_resource type="ArrayMesh" uid="uid://07c7p8t44dne" path="res://Assets/Objects/Toilet/toiletSeat01.obj" id="3_nkxb0"]
+[ext_resource type="ArrayMesh" uid="uid://dtbl1kgin6pej" path="res://Assets/Objects/Toilet/toiletSeat02.obj" id="4_8vn8r"]
+[ext_resource type="ArrayMesh" uid="uid://by215ptn6qwdj" path="res://Assets/Objects/Toilet/toiletSkeleton.obj" id="5_gh1ti"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_02bjv"]
+size = Vector3(3, 1.6, 1.8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_521dw"]
+size = Vector3(1, 1.6, 1.8)
+
+[node name="Toilet" type="Node3D"]
+
+[node name="ToiletCap" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_qe75u")
+
+[node name="ToiletLever" type="MeshInstance3D" parent="."]
+mesh = ExtResource("2_kkx5e")
+
+[node name="ToiletSeat01" type="MeshInstance3D" parent="."]
+mesh = ExtResource("3_nkxb0")
+
+[node name="ToiletSeat02" type="MeshInstance3D" parent="."]
+mesh = ExtResource("4_8vn8r")
+
+[node name="ToiletSkeleton" type="MeshInstance3D" parent="."]
+mesh = ExtResource("5_gh1ti")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="ToiletSkeleton"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ToiletSkeleton/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("BoxShape3D_02bjv")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="ToiletSkeleton"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ToiletSkeleton/StaticBody3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 2.4, 0)
+shape = SubResource("BoxShape3D_521dw")

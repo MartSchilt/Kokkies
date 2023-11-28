@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c773b8hhi0x48"
-path.s3tc="res://.godot/imported/Rock029_1K-JPG_Color.jpg-305f46c8910a1cb20cedaf40d452e5b0.s3tc.ctex"
+uid="uid://cb23v7cvinssv"
+path.s3tc="res://.godot/imported/Tiles002_1K-JPG_Roughness.jpg-540930dd115d151baa5298a7d101e914.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://Assets/Textures/Rock029_1K-JPG_Color.jpg"
-dest_files=["res://.godot/imported/Rock029_1K-JPG_Color.jpg-305f46c8910a1cb20cedaf40d452e5b0.s3tc.ctex"]
+source_file="res://Assets/Textures/BigWhiteTiles/Tiles002_1K-JPG_Roughness.jpg"
+dest_files=["res://.godot/imported/Tiles002_1K-JPG_Roughness.jpg-540930dd115d151baa5298a7d101e914.s3tc.ctex"]
 
 [params]
 

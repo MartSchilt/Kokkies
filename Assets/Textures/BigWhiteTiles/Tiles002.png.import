@@ -2,27 +2,26 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cufriwb0gcshj"
-path.s3tc="res://.godot/imported/Rock029_1K-JPG_Roughness.jpg-a2d251a598b6015d1db6929d971efe1c.s3tc.ctex"
+uid="uid://dyqv2ddrjlhj5"
+path="res://.godot/imported/Tiles002.png-0f86a42198973ea3ea31cd3d6c1cb7cf.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Textures/Rock029_1K-JPG_Roughness.jpg"
-dest_files=["res://.godot/imported/Rock029_1K-JPG_Roughness.jpg-a2d251a598b6015d1db6929d971efe1c.s3tc.ctex"]
+source_file="res://Assets/Textures/BigWhiteTiles/Tiles002.png"
+dest_files=["res://.godot/imported/Tiles002.png-0f86a42198973ea3ea31cd3d6c1cb7cf.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -32,4 +31,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1
