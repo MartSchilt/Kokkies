@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://c6tuf8fhbx2jm"]
+
+[resource]
+emission_energy_multiplier = 3.24
+normal_scale = -16.0
+rim_tint = 0.0
+anisotropy = -1.0
+heightmap_scale = -7.61
+backlight_enabled = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://420o1ww40mt1"]
+[gd_scene load_steps=16 format=3 uid="uid://420o1ww40mt1"]
 
 [ext_resource type="Script" path="res://Scripts/Managers/TileManager.cs" id="1_bgbij"]
 [ext_resource type="Script" path="res://Scripts/Managers/SceneManager.cs" id="1_hbmkp"]
@@ -6,6 +6,7 @@
 [ext_resource type="Material" uid="uid://d06gkjyy7wyky" path="res://Assets/Materials/toiletFloor.tres" id="4_b11em"]
 [ext_resource type="PackedScene" uid="uid://dd8dskar7ew1t" path="res://Scenes/Toilet/toiletWallTile.tscn" id="4_ttkx2"]
 [ext_resource type="PackedScene" uid="uid://bc6hmr00covc4" path="res://Scenes/Toilet/toilet.tscn" id="5_1r3ly"]
+[ext_resource type="Material" uid="uid://c6tuf8fhbx2jm" path="res://Assets/Materials/toiletCeiling.tres" id="6_bq3ve"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2n3df"]
 sky_top_color = Color(1, 1, 1, 1)
@@ -30,11 +31,15 @@ albedo_color = Color(0.392157, 0.392157, 0.392157, 1)
 emission_enabled = true
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_1hhnj"]
-size = Vector2(20, 20)
+size = Vector2(4, 4)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rxvkk"]
 emission_enabled = true
-emission = Color(1, 1, 1, 1)
+emission = Color(0.784314, 1, 1, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_cumgn"]
+size = Vector2(4, 4)
 
 [node name="toiletGame" type="Node3D"]
 script = ExtResource("1_hbmkp")
@@ -58,24 +63,144 @@ surface_material_override/0 = SubResource("StandardMaterial3D_nbddq")
 [node name="Ceiling" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.5, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ceiling"]
-transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 5, 0, 5)
+[node name="CeilingLight0" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, -3, 0, 5)
 mesh = SubResource("PlaneMesh_1hhnj")
 surface_material_override/0 = SubResource("StandardMaterial3D_rxvkk")
+
+[node name="CeilingLight1" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 5, 0, -3)
+mesh = SubResource("PlaneMesh_1hhnj")
+surface_material_override/0 = SubResource("StandardMaterial3D_rxvkk")
+
+[node name="CeilingLight2" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 5, 0, 13)
+mesh = SubResource("PlaneMesh_1hhnj")
+surface_material_override/0 = SubResource("StandardMaterial3D_rxvkk")
+
+[node name="CeilingLight3" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 13, 0, 5)
+mesh = SubResource("PlaneMesh_1hhnj")
+surface_material_override/0 = SubResource("StandardMaterial3D_rxvkk")
+
+[node name="CeilingTile00" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, -3, 0, -3)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile01" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, -3, 0, 1)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile03" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, -3, 0, 9)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile04" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, -3, 0, 13)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile10" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 1, 0, -3)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile11" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 1, 0, 1)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile12" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 1, 0, 5)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile13" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 1, 0, 9)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile14" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 1, 0, 13)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile21" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 5, 0, 1)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile22" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 5, 0, 5)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile23" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 5, 0, 9)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile30" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 9, 0, -3)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile31" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 9, 0, 1)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile32" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 9, 0, 5)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile33" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 9, 0, 9)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile34" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 9, 0, 13)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile40" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 13, 0, -3)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile41" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 13, 0, 1)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile43" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 13, 0, 9)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
+
+[node name="CeilingTile44" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 13, 0, 13)
+mesh = SubResource("PlaneMesh_cumgn")
+surface_material_override/0 = ExtResource("6_bq3ve")
 
 [node name="SpawnLocations" type="Node3D" parent="."]
 
 [node name="0" type="Node3D" parent="SpawnLocations" groups=["SpawnLocation"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2.5, 5)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -2, 2.5, 5)
 
 [node name="1" type="Node3D" parent="SpawnLocations" groups=["SpawnLocation"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2.5, -2)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 5, 2.5, -2)
 
 [node name="2" type="Node3D" parent="SpawnLocations" groups=["SpawnLocation"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2.5, 12)
 
 [node name="3" type="Node3D" parent="SpawnLocations" groups=["SpawnLocation"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 2.5, 5)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 12, 2.5, 5)
 
 [node name="Toilets" type="Node3D" parent="."]
 
@@ -94,25 +219,33 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 12.5, 
 [node name="Lights" type="Node3D" parent="."]
 
 [node name="SpotLight0" type="SpotLight3D" parent="Lights"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 12.5, 5)
-light_energy = 10.0
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.25, 13, 5)
+light_energy = 5.0
 shadow_enabled = true
-spot_range = 14.0
+shadow_bias = 0.05
+spot_range = 15.0
+spot_attenuation = 0.5
 
 [node name="SpotLight1" type="SpotLight3D" parent="Lights"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 5, 12.5, 0)
-light_energy = 10.0
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 5, 13, -1.25)
+light_energy = 5.0
 shadow_enabled = true
-spot_range = 14.0
+shadow_bias = 0.05
+spot_range = 15.0
+spot_attenuation = 0.5
 
 [node name="SpotLight2" type="SpotLight3D" parent="Lights"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 5, 12.5, 10)
-light_energy = 10.0
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 5, 13, 11.25)
+light_energy = 5.0
 shadow_enabled = true
-spot_range = 14.0
+shadow_bias = 0.05
+spot_range = 15.0
+spot_attenuation = 0.5
 
 [node name="SpotLight3" type="SpotLight3D" parent="Lights"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10, 12.5, 5)
-light_energy = 10.0
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.25, 13, 5)
+light_energy = 5.0
 shadow_enabled = true
-spot_range = 14.0
+shadow_bias = 0.05
+spot_range = 15.0
+spot_attenuation = 0.5
