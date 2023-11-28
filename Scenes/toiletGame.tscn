@@ -1,62 +1,118 @@
-[gd_scene load_steps=10 format=3 uid="uid://420o1ww40mt1"]
+[gd_scene load_steps=14 format=3 uid="uid://420o1ww40mt1"]
 
 [ext_resource type="Script" path="res://Scripts/Managers/TileManager.cs" id="1_bgbij"]
 [ext_resource type="Script" path="res://Scripts/Managers/SceneManager.cs" id="1_hbmkp"]
 [ext_resource type="PackedScene" uid="uid://ccljx835votha" path="res://Scenes/playerToilet.tscn" id="2_lxn4v"]
+[ext_resource type="Material" uid="uid://d06gkjyy7wyky" path="res://Assets/Materials/toiletFloor.tres" id="4_b11em"]
 [ext_resource type="PackedScene" uid="uid://dd8dskar7ew1t" path="res://Scenes/Toilet/toiletWallTile.tscn" id="4_ttkx2"]
+[ext_resource type="PackedScene" uid="uid://bc6hmr00covc4" path="res://Scenes/Toilet/toilet.tscn" id="5_1r3ly"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gfvyv"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_2n3df"]
+sky_top_color = Color(1, 1, 1, 1)
+sky_horizon_color = Color(0.8, 0.79225, 0.78325, 1)
+ground_horizon_color = Color(0.8, 0.79225, 0.78325, 1)
 
-[sub_resource type="Sky" id="Sky_305bc"]
-sky_material = SubResource("ProceduralSkyMaterial_gfvyv")
+[sub_resource type="Sky" id="Sky_bbkfj"]
+sky_material = SubResource("ProceduralSkyMaterial_2n3df")
 
-[sub_resource type="Environment" id="Environment_p8al8"]
+[sub_resource type="Environment" id="Environment_v2nag"]
 background_mode = 2
-sky = SubResource("Sky_305bc")
+background_energy_multiplier = 0.5
+sky = SubResource("Sky_bbkfj")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5r5kh"]
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_yc3x5"]
-size = Vector2(50, 50)
+size = Vector2(20, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nbddq"]
+albedo_color = Color(0.392157, 0.392157, 0.392157, 1)
+emission_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1hhnj"]
+size = Vector2(20, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rxvkk"]
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
 
 [node name="toiletGame" type="Node3D"]
 script = ExtResource("1_hbmkp")
 PlayerScene = ExtResource("2_lxn4v")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.5, -0.866025, -3.78552e-08, 0, -4.37114e-08, 1, -0.866025, 0.5, 2.18557e-08, 0, 0, 0)
-light_color = Color(0.960784, 1, 1, 1)
-light_energy = 0.8
-shadow_enabled = true
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_p8al8")
+environment = SubResource("Environment_v2nag")
 
 [node name="Floor" type="Node3D" parent="."]
 script = ExtResource("1_bgbij")
-FloorMaterial = SubResource("StandardMaterial3D_5r5kh")
+FloorMaterial = ExtResource("4_b11em")
 WallTile = ExtResource("4_ttkx2")
-Width = 5.0
-Height = 5.0
+Width = 2.0
+Height = 2.0
 
 [node name="Filler" type="MeshInstance3D" parent="Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 20)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 5)
 mesh = SubResource("PlaneMesh_yc3x5")
+surface_material_override/0 = SubResource("StandardMaterial3D_nbddq")
+
+[node name="Ceiling" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ceiling"]
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, 5, 0, 5)
+mesh = SubResource("PlaneMesh_1hhnj")
+surface_material_override/0 = SubResource("StandardMaterial3D_rxvkk")
 
 [node name="SpawnLocations" type="Node3D" parent="."]
 
 [node name="0" type="Node3D" parent="SpawnLocations" groups=["SpawnLocation"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.34798, 1.04819, 1.79738)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2.5, 5)
 
 [node name="1" type="Node3D" parent="SpawnLocations" groups=["SpawnLocation"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.5853, 1.04819, 45.5311)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2.5, -2)
 
 [node name="2" type="Node3D" parent="SpawnLocations" groups=["SpawnLocation"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.38684, 2.09637, 49.2975)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2.5, 12)
 
 [node name="3" type="Node3D" parent="SpawnLocations" groups=["SpawnLocation"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.1899, 1.04819, 1.96063)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 2.5, 5)
+
+[node name="Toilets" type="Node3D" parent="."]
+
+[node name="Toilet0" parent="Toilets" instance=ExtResource("5_1r3ly")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 5)
+
+[node name="Toilet1" parent="Toilets" instance=ExtResource("5_1r3ly")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 5, 0, -2.5)
+
+[node name="Toilet2" parent="Toilets" instance=ExtResource("5_1r3ly")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 5, 0, 12.5)
+
+[node name="Toilet3" parent="Toilets" instance=ExtResource("5_1r3ly")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 12.5, 0, 5)
+
+[node name="Lights" type="Node3D" parent="."]
+
+[node name="SpotLight0" type="SpotLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 12.5, 5)
+light_energy = 10.0
+shadow_enabled = true
+spot_range = 14.0
+
+[node name="SpotLight1" type="SpotLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 5, 12.5, 0)
+light_energy = 10.0
+shadow_enabled = true
+spot_range = 14.0
+
+[node name="SpotLight2" type="SpotLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 5, 12.5, 10)
+light_energy = 10.0
+shadow_enabled = true
+spot_range = 14.0
+
+[node name="SpotLight3" type="SpotLight3D" parent="Lights"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 10, 12.5, 5)
+light_energy = 10.0
+shadow_enabled = true
+spot_range = 14.0

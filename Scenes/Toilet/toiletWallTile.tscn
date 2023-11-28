@@ -1,16 +1,45 @@
-[gd_scene load_steps=3 format=3 uid="uid://dd8dskar7ew1t"]
+[gd_scene load_steps=5 format=3 uid="uid://dd8dskar7ew1t"]
+
+[ext_resource type="Material" uid="uid://c15usbulusq4d" path="res://Assets/Materials/toiletWall.tres" id="1_vvo20"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0v3jv"]
-size = Vector2(5, 10)
+size = Vector2(5, 5)
 
-[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_6h68n"]
-data = PackedVector3Array(2.5, 0, 5, -2.5, 0, 5, 2.5, 0, -5, -2.5, 0, 5, -2.5, 0, -5, 2.5, 0, -5)
+[sub_resource type="PlaneMesh" id="PlaneMesh_snbgr"]
+material = ExtResource("1_vvo20")
+size = Vector2(5, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_22808"]
+size = Vector3(10, 0.5, 15)
 
 [node name="toiletWallTile" type="MeshInstance3D"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 2.5, 5, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 2.5, 2.5, 0)
 mesh = SubResource("PlaneMesh_0v3jv")
+surface_material_override/0 = ExtResource("1_vvo20")
+
+[node name="tile01" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.18557e-07, -5)
+mesh = SubResource("PlaneMesh_snbgr")
+
+[node name="tile02" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
+mesh = SubResource("PlaneMesh_snbgr")
+
+[node name="tile10" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
+mesh = SubResource("PlaneMesh_snbgr")
+
+[node name="tile11" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -2.18557e-07, -5)
+mesh = SubResource("PlaneMesh_snbgr")
+
+[node name="tile12" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -10)
+mesh = SubResource("PlaneMesh_snbgr")
+skeleton = NodePath("../tile02")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, -5)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-shape = SubResource("ConcavePolygonShape3D_6h68n")
+shape = SubResource("BoxShape3D_22808")
