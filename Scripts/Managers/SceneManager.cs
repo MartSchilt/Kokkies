@@ -62,6 +62,7 @@ public partial class SceneManager : Node3D
 		if (GetTree().GetNodesInGroup("SpawnLocation").Count < 1)
 		{
 			playerCharacter.GlobalPosition = new Vector3(10, 10, 10); // Spawn players above
+			playerCharacter.Rotation = new(0, 0, 0);
 		}
 		else
 		{
@@ -69,13 +70,13 @@ public partial class SceneManager : Node3D
 				if (spawn.Name == playerCharacter.GetMeta("SpawnLocation").AsString())
 				{
 					playerCharacter.GlobalPosition = spawn.GlobalPosition;
+					playerCharacter.Rotation = spawn.Rotation;
 					break;
 				}
 		}
 
 		playerCharacter.Health = playerCharacter.MaxHealth;
 		playerCharacter.Alive = true;
-		playerCharacter.Rotation = new(0, 0, 0);
 		playerCharacter.NameLabel.Text = playerCharacter.Player.Name + "#" + playerCharacter.Player.Id + $"({playerCharacter.Health}/100)";
 	}
 
