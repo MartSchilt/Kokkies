@@ -49,10 +49,15 @@ public partial class TileManager : Node3D
 					{
 						MeshInstance3D wall = (MeshInstance3D)WallTile.Instantiate();
 						if (x == 0)
-							wall.Position = new Vector3(x - halfFloorSize, 0, y - halfWallSize + z * halfWallSize * 2);
+                        {
+                            wall.Position = new Vector3(x - halfFloorSize, 0, y - halfWallSize + z * halfWallSize * 2);
+                            wall.RotateY(Mathf.DegToRad(90));
+                        }
 						else if (x == maxHeight - FLOOR_SIZE)
-							wall.Position = new Vector3(x + halfFloorSize, 0, y - halfWallSize + z * halfWallSize * 2);
-						wall.RotateY(Mathf.DegToRad(90));
+                        {
+                            wall.Position = new Vector3(x + halfFloorSize, 0, y - halfWallSize + z * halfWallSize * 2);
+                            wall.RotateY(Mathf.DegToRad(-90));
+                        }
 						wall.Name = "Wall" + x + "_" + y + "#" + z;
 						AddChild(wall);
 					}
@@ -63,9 +68,14 @@ public partial class TileManager : Node3D
 					{
 						MeshInstance3D wall = (MeshInstance3D)WallTile.Instantiate();
 						if (y == 0)
-							wall.Position = new Vector3(x - halfWallSize + z * halfWallSize * 2, 0, y - halfFloorSize);
+                        {
+                            wall.Position = new Vector3(x - halfWallSize + z * halfWallSize * 2, 0, y - halfFloorSize);
+                        }
 						else if (y == maxHeight - FLOOR_SIZE)
-							wall.Position = new Vector3(x - halfWallSize + z * halfWallSize * 2, 0, y + halfFloorSize);
+                        {
+                            wall.Position = new Vector3(x - halfWallSize + z * halfWallSize * 2, 0, y + halfFloorSize);
+                            wall.RotateY(Mathf.DegToRad(180));
+                        }
 						wall.Name = "Wall" + x + "_" + y + "#" + z;
 						AddChild(wall);
 
