@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Managers/TileManager.cs" id="1_bgbij"]
 [ext_resource type="Script" path="res://Scripts/Managers/SceneManager.cs" id="1_hbmkp"]
 [ext_resource type="PackedScene" uid="uid://ccljx835votha" path="res://Scenes/playerToilet.tscn" id="2_lxn4v"]
-[ext_resource type="PackedScene" uid="uid://boseqh4evar8o" path="res://Scenes/fenceWallTile.tscn" id="3_hp071"]
+[ext_resource type="PackedScene" uid="uid://dd8dskar7ew1t" path="res://Scenes/Toilet/toiletWallTile.tscn" id="4_ttkx2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gfvyv"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -39,7 +39,7 @@ environment = SubResource("Environment_p8al8")
 [node name="Floor" type="Node3D" parent="."]
 script = ExtResource("1_bgbij")
 FloorMaterial = SubResource("StandardMaterial3D_5r5kh")
-WallTile = ExtResource("3_hp071")
+WallTile = ExtResource("4_ttkx2")
 Width = 5.0
 Height = 5.0
 
