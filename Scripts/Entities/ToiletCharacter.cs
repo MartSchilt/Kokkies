@@ -7,5 +7,7 @@ public partial class ToiletCharacter : BaseCharacter
 	public override void _Ready()
 	{
 		base._Ready();
+		
+		DeathSound = GetNode<AudioStreamPlayer3D>("Sounds/DeathSound");
 	}
 }

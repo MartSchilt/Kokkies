@@ -51,7 +51,7 @@ public partial class ShooterCharacter : BaseCharacter
 		Ammo = MaxAmmo;
 
 		_aimCast = CameraNeck.GetNode<RayCast3D>("AimCast");
-		DeathSound = GetNode<AudioStreamPlayer3D>("Sounds/GunSound");
+		DeathSound = GetNode<AudioStreamPlayer3D>("Sounds/DeathSound");
 		HitSound = GetNode<AudioStreamPlayer3D>("Sounds/HitSound");
 		GunSound = GetNode<AudioStreamPlayer3D>("Sounds/GunSound");
 		ReloadSound = GetNode<AudioStreamPlayer3D>("Sounds/ReloadSound");
