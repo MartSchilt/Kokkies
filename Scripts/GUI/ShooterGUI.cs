@@ -1,6 +1,6 @@
 using Godot;
 
-public partial class ShooterGUI : Control
+public partial class ShooterGUI : MarginContainer
 {
 	[Export]
     public Label HealthLabel;

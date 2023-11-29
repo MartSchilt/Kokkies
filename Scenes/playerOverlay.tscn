@@ -1,19 +1,21 @@
-[gd_scene load_steps=7 format=3 uid="uid://cr31j1lpi3ub"]
+[gd_scene load_steps=8 format=3 uid="uid://cr31j1lpi3ub"]
 
 [ext_resource type="Script" path="res://Scripts/GUI/GUIManager.cs" id="1_71t3q"]
 [ext_resource type="Script" path="res://Scripts/GUI/ShooterGUI.cs" id="2_lvdmv"]
 [ext_resource type="Script" path="res://Scripts/GUI/ScoreboardGUI.cs" id="3_3guyc"]
+[ext_resource type="Script" path="res://Scripts/GUI/ToiletGUI.cs" id="3_y7gt0"]
 [ext_resource type="Script" path="res://Scripts/GUI/PauseMenu.cs" id="4_csipo"]
 
 [sub_resource type="Theme" id="Theme_fgaro"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0po1b"]
 
-[node name="GUI" type="CanvasLayer" node_paths=PackedStringArray("PauseMenu", "Scoreboard", "ShooterGUI")]
+[node name="GUI" type="CanvasLayer" node_paths=PackedStringArray("PauseMenu", "Scoreboard", "ShooterGUI", "ToiletGUI")]
 script = ExtResource("1_71t3q")
 PauseMenu = NodePath("PauseMenu")
 Scoreboard = NodePath("Scoreboard")
 ShooterGUI = NodePath("Shooter")
+ToiletGUI = NodePath("Toilet")
 
 [node name="Shooter" type="MarginContainer" parent="." node_paths=PackedStringArray("HealthLabel", "AmmoLabel")]
 visible = false
@@ -67,6 +69,20 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 2
 color = Color(0.784314, 0.784314, 0.784314, 1)
+
+[node name="Toilet" type="MarginContainer" parent="." node_paths=PackedStringArray("KeyRequest")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_y7gt0")
+KeyRequest = NodePath("KeyRequest")
+
+[node name="KeyRequest" type="Label" parent="Toilet"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Test"
 
 [node name="Scoreboard" type="MarginContainer" parent="."]
 visible = false

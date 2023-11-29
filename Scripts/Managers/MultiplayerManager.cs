@@ -94,6 +94,11 @@ public partial class MultiplayerManager : Node
     {
         GD.Print("Leaving multiplayer room...");
 
+        GameManager.Players.Clear();
+
+        if (peer == null)
+            return;
+
         // Stop hosting
         if (Multiplayer.GetUniqueId() == 1)
         {
@@ -112,8 +117,6 @@ public partial class MultiplayerManager : Node
         // Or disconnect from the host
         else
             peer.DisconnectPeer(1);
-
-        GameManager.Players.Clear();
     }
 
     private void LogVoice(bool sent, float[] data, int id = -1)

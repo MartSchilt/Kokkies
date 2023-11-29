@@ -146,9 +146,9 @@ public partial class BaseCharacter : CharacterBody3D
 			if (keyEvent.IsAction("ui_show_scoreboard"))
 			{
 				if (keyEvent.IsPressed())
-					GameManager.Main.GUI.EnableScoreboard();
+                    GameManager.Main.GUI.EnableGUI(GameManager.Main.GUI.Scoreboard);
 				else if (keyEvent.IsReleased())
-					GameManager.Main.GUI.DisableScoreboard();
+                    GameManager.Main.GUI.EnableGUI(GameManager.Main.GUI.Scoreboard);
 			}
 		}
 	}

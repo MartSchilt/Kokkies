@@ -60,8 +60,8 @@ public partial class ShooterCharacter : BaseCharacter
 		if (IsControlled())
 		{
 			OverlayManager = GameManager.Main.GUI.ShooterGUI;
-			GameManager.Main.GUI.EnableShooterGUI();
-		}
+            GameManager.Main.GUI.EnableGUI(OverlayManager);
+        }
 
 		ReloadTimer.Timeout += () =>
 		{

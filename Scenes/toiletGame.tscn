@@ -220,6 +220,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 12.5, 
 
 [node name="SpotLight0" type="SpotLight3D" parent="Lights"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -1.25, 13, 5)
+light_color = Color(0.196078, 0.196078, 1, 1)
 light_energy = 5.0
 shadow_enabled = true
 shadow_bias = 0.05
@@ -228,6 +229,7 @@ spot_attenuation = 0.5
 
 [node name="SpotLight1" type="SpotLight3D" parent="Lights"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 5, 13, -1.25)
+light_color = Color(0.196078, 1, 0.196078, 1)
 light_energy = 5.0
 shadow_enabled = true
 shadow_bias = 0.05
@@ -236,6 +238,7 @@ spot_attenuation = 0.5
 
 [node name="SpotLight2" type="SpotLight3D" parent="Lights"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 5, 13, 11.25)
+light_color = Color(1, 0.196078, 0.196078, 1)
 light_energy = 5.0
 shadow_enabled = true
 shadow_bias = 0.05
@@ -244,6 +247,7 @@ spot_attenuation = 0.5
 
 [node name="SpotLight3" type="SpotLight3D" parent="Lights"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 11.25, 13, 5)
+light_color = Color(0.686275, 0.686275, 0, 1)
 light_energy = 5.0
 shadow_enabled = true
 shadow_bias = 0.05

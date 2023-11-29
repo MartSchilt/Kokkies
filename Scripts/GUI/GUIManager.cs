@@ -9,8 +9,10 @@ public partial class GUIManager : CanvasLayer
 	public ScoreboardGUI Scoreboard;
 	[Export]
 	public ShooterGUI ShooterGUI;
+    [Export]
+    public ToiletGUI ToiletGUI;
 
-	private bool _isPaused = false;
+    private bool _isPaused = false;
 
 	public override void _Ready()
 	{
@@ -29,9 +31,10 @@ public partial class GUIManager : CanvasLayer
 	#region GUI Elements
 	public void DisableAll()
 	{
-		DisablePauseMenu();
-		DisableScoreboard();
-		DisableShooterGUI();
+        DisableGUI(PauseMenu);
+        DisableGUI(Scoreboard);
+        DisableGUI(ShooterGUI);
+        DisableGUI(ToiletGUI);
 	}
 
 	public void EnablePauseMenu()
@@ -47,22 +50,13 @@ public partial class GUIManager : CanvasLayer
 		Input.MouseMode = Input.MouseModeEnum.Captured; // Hide the mouse
 	}
 
-	public void EnableScoreboard()
+	public void EnableGUI(Control guiElement)
 	{
-		Scoreboard.Show();
+        guiElement.Show();
 	}
-	public void DisableScoreboard()
+	public void DisableGUI(Control guiElement)
 	{
-		Scoreboard.Hide();
+        guiElement.Hide();
 	}
-
-	public void EnableShooterGUI()
-	{
-		ShooterGUI.Show();
-	}
-	public void DisableShooterGUI()
-	{
-		ShooterGUI.Hide();
-	}
-	#endregion
+    #endregion
 }
