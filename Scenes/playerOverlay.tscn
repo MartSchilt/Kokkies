@@ -70,19 +70,28 @@ size_flags_vertical = 4
 mouse_filter = 2
 color = Color(0.784314, 0.784314, 0.784314, 1)
 
-[node name="Toilet" type="MarginContainer" parent="." node_paths=PackedStringArray("KeyRequest")]
+[node name="Toilet" type="MarginContainer" parent="." node_paths=PackedStringArray("ProgressBar", "KeyRequest")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_y7gt0")
-KeyRequest = NodePath("KeyRequest")
+ProgressBar = NodePath("HBoxContainer/ProgressBar")
+KeyRequest = NodePath("HBoxContainer/KeyRequest")
 
-[node name="KeyRequest" type="Label" parent="Toilet"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Toilet"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
+
+[node name="ProgressBar" type="ProgressBar" parent="Toilet/HBoxContainer"]
+custom_minimum_size = Vector2(300, 10)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="KeyRequest" type="Label" parent="Toilet/HBoxContainer"]
+layout_mode = 2
 text = "Test"
 
 [node name="Scoreboard" type="MarginContainer" parent="."]

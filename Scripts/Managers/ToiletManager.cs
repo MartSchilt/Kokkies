@@ -6,7 +6,6 @@ using System.Linq;
 public partial class ToiletManager : Node
 {
     public SceneManager SceneManager;
-    public List<Key> _keySequence;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -14,8 +13,6 @@ public partial class ToiletManager : Node
         GD.Print($"Starting {nameof(ToiletManager)}");
 
         SceneManager = GetParent() as SceneManager;
-
-        _keySequence = new List<Key>();
 
         SceneManager.SceneLoaded += GenerateKeyRequest;
     }
@@ -26,7 +23,7 @@ public partial class ToiletManager : Node
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
-    public void PressedRightKey(int playerId)
+    public void PressedRightKeys(int playerId)
     {
         // Play sound for points?
         //Rpc(nameof(PlaySound), (int)SoundType.Hit);
@@ -40,10 +37,16 @@ public partial class ToiletManager : Node
     private void GenerateKeyRequest()
     {
         Random rnd = new();
-        var key = (Key)rnd.Next(65, 90); // A till Z
-        _keySequence.Add(key);
+        var numberOfKeys = rnd.Next(3, 10);
+        List<Key> keySequence = new();
+        
+        for (int i = 0; i < numberOfKeys; i++)
+        {
+            var key = (Key)rnd.Next(65, 90); // A till Z
+            keySequence.Add(key);
+        }
         
         foreach (ToiletCharacter player in SceneManager.PlayerCharacters.Cast<ToiletCharacter>())
-            player.SetKey(key);
+            player.SetKeySequence(keySequence, numberOfKeys);
     }
 }

@@ -4,6 +4,8 @@ using System;
 public partial class ToiletGUI : MarginContainer
 {
     [Export]
+    public ProgressBar ProgressBar;
+    [Export]
     public Label KeyRequest;
 
     public override void _Ready()

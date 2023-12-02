@@ -1,12 +1,17 @@
 using Godot;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 public partial class ToiletCharacter : BaseCharacter
 {
     public ToiletGUI OverlayManager;
     public ToiletManager ToiletManager;
 
+    private List<Key> _keySequence;
     private Key _key;
+    private int _numberOfKeys;
+    private int _index = 0;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -49,16 +54,44 @@ public partial class ToiletCharacter : BaseCharacter
         {
             // Keyboard down Events
             if (keyEvent.Keycode == _key)
-                ToiletManager.Rpc(nameof(ToiletManager.PressedRightKey), Player.Id);
+                PressedRightKey();
         }
     }
 
-    public void SetKey(Key key)
+    public void SetKeySequence(List<Key> keySequence, int numberOfKeys)
     {
         if (IsControlled())
         {
-            _key = key;
-            OverlayManager.SetKeyRequest(key);
+            _numberOfKeys = numberOfKeys;
+            _keySequence = keySequence; 
+            NextKey();
         }
+    }
+
+    private void PressedRightKey()
+    {
+        double value = OverlayManager.ProgressBar.Value;
+        value += 100 / _numberOfKeys;
+        
+        if (_index >= _numberOfKeys)
+        {
+            value = 0.00;
+            _index = 0;
+            ToiletManager.Rpc(nameof(ToiletManager.PressedRightKeys), Player.Id);
+        }
+        else
+        {
+            NextKey();
+        }
+
+        OverlayManager.ProgressBar.Value = value;
+        GD.Print($"Progress: {value}");
+    }
+
+    private void NextKey()
+    {
+        _key = _keySequence[_index];
+        OverlayManager.SetKeyRequest(_key);
+        _index++;
     }
 }
