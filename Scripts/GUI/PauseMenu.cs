@@ -7,8 +7,8 @@ public partial class PauseMenu : MarginContainer
 	{
 	}
 
-	#region Buttons
-	private void _on_resume_button_down()
+    #region Buttons
+    private void _on_resume_button_down()
 	{
 		GameManager.Main.GUI.DisablePauseMenu();
 	}

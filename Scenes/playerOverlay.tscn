@@ -82,6 +82,7 @@ KeyRequest = NodePath("KeyRequest")
 [node name="KeyRequest" type="Label" parent="Toilet"]
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 8
 text = "Test"
 
 [node name="Scoreboard" type="MarginContainer" parent="."]

@@ -1,8 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://420o1ww40mt1"]
+[gd_scene load_steps=17 format=3 uid="uid://420o1ww40mt1"]
 
 [ext_resource type="Script" path="res://Scripts/Managers/TileManager.cs" id="1_bgbij"]
 [ext_resource type="Script" path="res://Scripts/Managers/SceneManager.cs" id="1_hbmkp"]
 [ext_resource type="PackedScene" uid="uid://ccljx835votha" path="res://Scenes/playerToilet.tscn" id="2_lxn4v"]
+[ext_resource type="Script" path="res://Scripts/Managers/ToiletManager.cs" id="3_vr23m"]
 [ext_resource type="Material" uid="uid://d06gkjyy7wyky" path="res://Assets/Materials/toiletFloor.tres" id="4_b11em"]
 [ext_resource type="PackedScene" uid="uid://dd8dskar7ew1t" path="res://Scenes/Toilet/toiletWallTile.tscn" id="4_ttkx2"]
 [ext_resource type="PackedScene" uid="uid://bc6hmr00covc4" path="res://Scenes/Toilet/toilet.tscn" id="5_1r3ly"]
@@ -47,6 +48,9 @@ PlayerScene = ExtResource("2_lxn4v")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_v2nag")
+
+[node name="ToiletManager" type="Node" parent="."]
+script = ExtResource("3_vr23m")
 
 [node name="Floor" type="Node3D" parent="."]
 script = ExtResource("1_bgbij")

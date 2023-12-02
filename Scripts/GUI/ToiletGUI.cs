@@ -14,8 +14,8 @@ public partial class ToiletGUI : MarginContainer
     {
     }
 
-    public void SetKeyRequest(string text)
+    public void SetKeyRequest(Key key)
     {
-        KeyRequest.Text = text;
+        KeyRequest.Text = $"{key}";
     }
 }

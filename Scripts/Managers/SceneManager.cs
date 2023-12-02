@@ -4,16 +4,19 @@ using System.Collections.Generic;
 
 public partial class SceneManager : Node3D
 {
+	[Signal]
+	public delegate void SceneLoadedEventHandler();
+
 	[Export]
 	public PackedScene PlayerScene;
 
-	private List<Node> _playerCharacters;
+	public List<Node> PlayerCharacters;
 
 	public override void _Ready()
 	{
 		GD.Print($"Starting {nameof(SceneManager)}");
-		
-		_playerCharacters = new();
+
+        PlayerCharacters = new();
 
 		if (GameManager.Players.Count <= 0)
 		{
@@ -32,7 +35,7 @@ public partial class SceneManager : Node3D
 			var currentPlayer = PlayerScene.Instantiate();
 			currentPlayer.Name = player.Id.ToString();
 			currentPlayer.SetMeta("SpawnLocation", index.ToString());
-			_playerCharacters.Add(currentPlayer);
+            PlayerCharacters.Add(currentPlayer);
 			AddChild(currentPlayer);
 			Respawn((BaseCharacter)currentPlayer);
 			
@@ -41,17 +44,19 @@ public partial class SceneManager : Node3D
 
 		try
 		{
-			GameManager.Main.GUI.Scoreboard.Update(_playerCharacters);
+			GameManager.Main.GUI.Scoreboard.Update(PlayerCharacters);
 		}
 		catch (Exception e)
 		{
 			GD.PrintErr($"GUI not loaded, are you loading the level from the menu? If not, ignore this message: {e.Message}");
 		}
-	}
+
+        EmitSignal(SignalName.SceneLoaded);
+    }
 
 	public void ResetScene()
 	{
-		foreach(var player in _playerCharacters)
+		foreach(var player in PlayerCharacters)
 		{
 			Respawn((BaseCharacter)player);
 		}
@@ -84,8 +89,8 @@ public partial class SceneManager : Node3D
 	[Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
 	public void AddPoints(int playerId, int points)
 	{
-		var playerCharacter = (BaseCharacter)_playerCharacters
-			.Find(x => x.Name.Equals(playerId.ToString()));
+		var playerCharacter = (BaseCharacter)PlayerCharacters
+            .Find(x => x.Name.Equals(playerId.ToString()));
 
 		if (playerCharacter == null) 
 			return;
@@ -96,7 +101,7 @@ public partial class SceneManager : Node3D
 			// Win the game
 		}
 
-		GameManager.Main.GUI.Scoreboard.Update(_playerCharacters);
+		GameManager.Main.GUI.Scoreboard.Update(PlayerCharacters);
 		
 		// Update ShooterGUI if this is the client's player
 		//if (playerCharacter.Name == Multiplayer.GetUniqueId().ToString())
@@ -108,8 +113,8 @@ public partial class SceneManager : Node3D
 
 	public Node GetPlayerAudio(int playerId)
 	{
-		var playerCharacter = (BaseCharacter)_playerCharacters
-			.Find(x => x.Name.Equals(playerId.ToString()));
+		var playerCharacter = (BaseCharacter)PlayerCharacters
+            .Find(x => x.Name.Equals(playerId.ToString()));
 
 		return playerCharacter.AudioPlayer;
 	}

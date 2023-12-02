@@ -12,7 +12,7 @@ public partial class GUIManager : CanvasLayer
     [Export]
     public ToiletGUI ToiletGUI;
 
-    private bool _isPaused = false;
+    public bool IsPaused = false;
 
 	public override void _Ready()
 	{
@@ -22,7 +22,7 @@ public partial class GUIManager : CanvasLayer
 	public override void _Input(InputEvent @event)
 	{
 		if (@event.IsActionPressed("ui_pause"))
-			if (_isPaused)
+			if (IsPaused)
 				DisablePauseMenu();
 			else
 				EnablePauseMenu();
@@ -39,13 +39,13 @@ public partial class GUIManager : CanvasLayer
 
 	public void EnablePauseMenu()
 	{
-		_isPaused = true;
+        IsPaused = true;
 		PauseMenu.Show();
 		Input.MouseMode = Input.MouseModeEnum.Visible; // Show the mouse
 	}
 	public void DisablePauseMenu()
 	{
-		_isPaused = false;
+        IsPaused = false;
 		PauseMenu.Hide();
 		Input.MouseMode = Input.MouseModeEnum.Captured; // Hide the mouse
 	}

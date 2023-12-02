@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Kokkies": {
+      "commandName": "Project",
+      "commandLineArgs": "-e --path \"C:\\Users\\marts\\source\\repos\\Kokkies\""
+    }
+  }
+}

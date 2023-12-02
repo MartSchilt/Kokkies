@@ -22,11 +22,12 @@ public partial class GameManager : Node
     public static int Port { get; set; }
     public static GameManager Instance { get; private set; }
     public static MainScene Main { get; private set; }
+    public static ObservableCollection<Player> Players { get; set; }
     #endregion
 
     #region Fields
     public static int MaxPlayers = 10;
-    public static ObservableCollection<Player> Players { get; set; }
+    public static int VoiceMicIndex = 0;
 
     private static int _musicBusIndex;
     #endregion
