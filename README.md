@@ -15,6 +15,12 @@ Designer: [MartSchilt](https://github.com/MartSchilt)
 
 A goofy minigame in which each player needs to take as many dumps on the toilet as possible. The players get points by finishing a dump, they poop faster by pressing certain buttons, given by prompts, and screaming into the microphone. The player race each other in a timed event, and at the end of the time the player with the highest score wins.
 
+## Credits
+Used assets and others:
+
+Button prompts - Those Awesome Guys
+https://thoseawesomeguys.com/prompts/
+
 ## Contributors:
 ~Mart
 [MartSchilt](https://github.com/MartSchilt)
