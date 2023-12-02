@@ -62,7 +62,8 @@ public partial class ToiletCharacter : BaseCharacter
         if (IsControlled())
         {
             _numberOfKeys = numberOfKeys;
-            _keySequence = keySequence; 
+            _keySequence = keySequence;
+            OverlayManager.SetKeySequence(_keySequence);
             NextKey();
         }
     }
@@ -71,7 +72,7 @@ public partial class ToiletCharacter : BaseCharacter
     {
         double value = OverlayManager.ProgressBar.Value;
         value += 100 / _numberOfKeys;
-        
+
         if (_index >= _numberOfKeys)
         {
             value = 0.00;
@@ -80,6 +81,7 @@ public partial class ToiletCharacter : BaseCharacter
         }
         else
         {
+            OverlayManager.KeyPressed(_key, _index - 1);
             NextKey();
         }
 
@@ -90,7 +92,6 @@ public partial class ToiletCharacter : BaseCharacter
     private void NextKey()
     {
         _key = _keySequence[_index];
-        OverlayManager.SetKeyRequest(_key);
         _index++;
     }
 }

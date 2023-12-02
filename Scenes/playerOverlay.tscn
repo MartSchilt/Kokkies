@@ -1,10 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://cr31j1lpi3ub"]
+[gd_scene load_steps=8 format=3 uid="uid://cr31j1lpi3ub"]
 
 [ext_resource type="Script" path="res://Scripts/GUI/GUIManager.cs" id="1_71t3q"]
 [ext_resource type="Script" path="res://Scripts/GUI/ShooterGUI.cs" id="2_lvdmv"]
 [ext_resource type="Script" path="res://Scripts/GUI/ScoreboardGUI.cs" id="3_3guyc"]
 [ext_resource type="Script" path="res://Scripts/GUI/ToiletGUI.cs" id="3_y7gt0"]
-[ext_resource type="Texture2D" uid="uid://b4sk3htayrqve" path="res://Assets/Textures/ButtonPrompts/Keyboard & Mouse/Light/X_Key_Light.png" id="4_41d54"]
 [ext_resource type="Script" path="res://Scripts/GUI/PauseMenu.cs" id="4_csipo"]
 
 [sub_resource type="Theme" id="Theme_fgaro"]
@@ -71,29 +70,31 @@ size_flags_vertical = 4
 mouse_filter = 2
 color = Color(0.784314, 0.784314, 0.784314, 1)
 
-[node name="Toilet" type="MarginContainer" parent="." node_paths=PackedStringArray("ProgressBar", "KeyRequest")]
+[node name="Toilet" type="MarginContainer" parent="." node_paths=PackedStringArray("ProgressBar", "KeySequence")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_y7gt0")
-ProgressBar = NodePath("HBoxContainer/ProgressBar")
-KeyRequest = NodePath("HBoxContainer/KeyRequest")
+ProgressBar = NodePath("HBoxContainer/VBoxContainer/ProgressBar")
+KeySequence = NodePath("HBoxContainer/VBoxContainer/KeySequence")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Toilet"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 
-[node name="ProgressBar" type="ProgressBar" parent="Toilet/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Toilet/HBoxContainer"]
+layout_mode = 2
+
+[node name="KeySequence" type="HBoxContainer" parent="Toilet/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="Toilet/HBoxContainer/VBoxContainer"]
 custom_minimum_size = Vector2(300, 10)
 layout_mode = 2
 size_flags_vertical = 4
-
-[node name="KeyRequest" type="TextureRect" parent="Toilet/HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("4_41d54")
 
 [node name="Scoreboard" type="MarginContainer" parent="."]
 visible = false
