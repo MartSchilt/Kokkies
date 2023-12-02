@@ -19,6 +19,7 @@ public partial class VoiceMic : AudioStreamPlayer
         AudioServer.SetBusName(index, busName);
         AudioServer.AddBusEffect(index, new AudioEffectCapture());
         AudioServer.SetBusMute(index, true);
+        GameManager.VoiceMicIndex = index;
 
         Bus = busName;
         Stream = new AudioStreamMicrophone();

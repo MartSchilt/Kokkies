@@ -11,72 +11,77 @@ public enum TypeVoiceInstance
 public partial class VoiceOrchestrator : Node
 {
     [Signal]
-    public delegate void receivedVoiceDataEventHandler(float[] data, int id);
+    public delegate void ReceivedVoiceDataEventHandler(float[] data, int id);
     [Signal]
-    public delegate void sentVoiceDataEventHandler(float[] data);
+    public delegate void SentVoiceDataEventHandler(float[] data);
     [Signal]
-    public delegate void createdInstanceEventHandler();
+    public delegate void CreatedInstanceEventHandler();
     [Signal]
-    public delegate void removedInstanceEventHandler();
+    public delegate void RemovedInstanceEventHandler();
 
+    #region Properties
+    private bool _listen;
     [Export]
     public bool Listen
     {
         get => _listen;
         set
         {
-            if (ID != null)
+            if (_id != null)
             {
-                var instance = instances.Find(i => i.Name == ID.ToString());
+                var instance = _instances.Find(i => i.Name == _id.ToString());
                 instance.Listen = value;
             }
 
             _listen = value;
         }
     }
+
+    private bool _recording;
     [Export]
     public bool Recording
     {
         get => _recording;
         set
         {
-            if (ID != null)
+            if (_id != null)
             {
-                var instance = instances.Find(i => i.Name == ID.ToString());
+                var instance = _instances.Find(i => i.Name == _id.ToString());
                 instance.Recording = value;
             }
 
             _recording = value;
         }
     }
+    
+    private float _inputThreshold;
     [Export]
     public float InputThreshold
     {
         get => _inputThreshold;
         set
         {
-            if (ID != null)
+            if (_id != null)
             {
-                var instance = instances.Find(i => i.Name == ID.ToString());
+                var instance = _instances.Find(i => i.Name == _id.ToString());
                 instance.InputThreshold = value;
             }
 
             _inputThreshold = value;
         }
     }
+    #endregion
+
     [Export]
     public TypeVoiceInstance TVI = TypeVoiceInstance.CSHARP;
 
-    private bool _listen;
-    private bool _recording;
-    private float _inputThreshold;
-    private List<VoiceInstance> instances;
-    private int? ID = null;
+    private List<VoiceInstance> _instances;
+    private int? _id = null;
 
     public override void _Ready()
     {
         GD.Print($"Starting {nameof(VoiceOrchestrator)}");
-        instances = new List<VoiceInstance>();
+        _instances = new List<VoiceInstance>();
 
         Multiplayer.ConnectedToServer += ConnectedOK;
         Multiplayer.ServerDisconnected += ServerDisconnected;
@@ -91,10 +96,10 @@ public partial class VoiceOrchestrator : Node
 
     public override void _PhysicsProcess(double delta)
     {
-        if (Multiplayer.HasMultiplayerPeer() && Multiplayer.GetPeers().Length > 0 && Multiplayer.IsServer() && ID == null)
+        if (Multiplayer.HasMultiplayerPeer() && Multiplayer.GetPeers().Length > 0 && Multiplayer.IsServer() && _id == null)
             CreateInstance(Multiplayer.GetUniqueId());
 
-        if (!Multiplayer.HasMultiplayerPeer() && ID == 1)
+        if (!Multiplayer.HasMultiplayerPeer() && _id == 1)
             Reset();
     }
 
@@ -113,47 +118,47 @@ public partial class VoiceOrchestrator : Node
             instance.Listen = Listen;
             instance.InputThreshold = InputThreshold;
 
-            instance.sentVoiceData += SentVoiceData;
+            instance.SentVoiceData += SentVoiceData;
 
-            ID = (int)id;
+            _id = (int)id;
         }
 
-        instance.receivedVoiceData += ReceivedVoiceData;
+        instance.ReceivedVoiceData += ReceivedVoiceData;
         instance.Name = id.ToString();
 
-        instances.Add(instance);
+        _instances.Add(instance);
         AddChild(instance);
-        EmitSignal(SignalName.createdInstance);
+        EmitSignal(SignalName.CreatedInstance);
     }
 
     public void RemoveInstance(long id)
     {
-        var _instance = instances.Find(i => i.Name == id.ToString());
+        var instance = _instances.Find(i => i.Name == id.ToString());
 
-        if (id == ID)
-            ID = null;
+        if (id == _id)
+            _id = null;
 
-        if (_instance != null)
-            instances.Remove(_instance);
+        if (instance != null)
+            _instances.Remove(instance);
 
-        EmitSignal(SignalName.removedInstance, id);
+        EmitSignal(SignalName.RemovedInstance, id);
     }
 
     public void Reset()
     {
-        for (int i = 0; i < instances.Count; i++)
+        for (int i = 0; i < _instances.Count; i++)
             RemoveInstance(i);
     }
 
     public void StartInstances()
     {
-        foreach (var instance in instances)
+        foreach (var instance in _instances)
             instance.Start = true;
     }
 
     private void ConnectedOK()
     {
-        if ((Multiplayer.HasMultiplayerPeer() || Multiplayer.IsServer()) && ID == 1)
+        if ((Multiplayer.HasMultiplayerPeer() || Multiplayer.IsServer()) && _id == 1)
             Reset();
 
         CreateInstance(Multiplayer.GetUniqueId());
@@ -176,11 +181,11 @@ public partial class VoiceOrchestrator : Node
 
     private void ReceivedVoiceData(float[] data, int id)
     {
-        EmitSignal(SignalName.receivedVoiceData, data, id);
+        EmitSignal(SignalName.ReceivedVoiceData, data, id);
     }
 
     private void SentVoiceData(float[] data)
     {
-        EmitSignal(SignalName.sentVoiceData, data);
+        EmitSignal(SignalName.SentVoiceData, data);
     }
 }

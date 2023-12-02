@@ -6,12 +6,12 @@ using System.Linq;
 public partial class VoiceInstance : Node3D
 {
     [Signal]
-    public delegate void receivedVoiceDataEventHandler(float[] data, int id);
+    public delegate void ReceivedVoiceDataEventHandler(float[] data, int id);
     [Signal]
-    public delegate void sentVoiceDataEventHandler(float[] data);
+    public delegate void SentVoiceDataEventHandler(float[] data);
 
     [Export]
-    public NodePath customAudio;
+    public NodePath CustomAudio;
 
     public bool Start = false;
     public bool Listen;
@@ -21,18 +21,18 @@ public partial class VoiceInstance : Node3D
 
     private const int MAX_SAMPLES = 10;
 
-    private int recordIndex;
-    private bool prevFrameRecording = false;
-    private Queue<float> receiveBuffer = new Queue<float>();
-    private AudioStreamWav audioWav;
-    private Node voice;
-    private AudioEffectCapture effectCapture;
-    private AudioStreamGeneratorPlayback playback;
-    private VoiceMic Mic;
+    private int _recordIndex;
+    private bool _prevFrameRecording = false;
+    private Queue<float> _receiveBuffer = new Queue<float>();
+    private AudioStreamWav _audioWav;
+    private Node _voice;
+    private AudioEffectCapture _effectCapture;
+    private AudioStreamGeneratorPlayback _playback;
+    private VoiceMic _mic;
 
     public override void _Process(double delta)
     {
-        if (playback != null)
+        if (_playback != null)
             ProcessVoice();
 
         ProcessMic();
@@ -43,13 +43,13 @@ public partial class VoiceInstance : Node3D
     {
         if (Start)
         {
-            if (playback == null)
+            if (_playback == null)
                 CreateVoice(id);
 
-            EmitSignal(SignalName.receivedVoiceData, sampleData, id);
+            EmitSignal(SignalName.ReceivedVoiceData, sampleData, id);
 
             foreach (var item in sampleData)
-                receiveBuffer.Enqueue(item);
+                _receiveBuffer.Enqueue(item);
         }
     }
 
@@ -61,13 +61,13 @@ public partial class VoiceInstance : Node3D
             switch (audioStreamPlayer)
             {
                 case AudioStreamPlayer:
-                    voice = audioStreamPlayer as AudioStreamPlayer;
+                    _voice = audioStreamPlayer as AudioStreamPlayer;
                     break;
                 case AudioStreamPlayer2D:
-                    voice = audioStreamPlayer as AudioStreamPlayer2D;
+                    _voice = audioStreamPlayer as AudioStreamPlayer2D;
                     break;
                 case AudioStreamPlayer3D:
-                    voice = audioStreamPlayer as AudioStreamPlayer3D;
+                    _voice = audioStreamPlayer as AudioStreamPlayer3D;
                     break;
                 default:
                     GD.PrintErr("Custom Audio Player is not an AudioStreamPlayer!");
@@ -76,34 +76,34 @@ public partial class VoiceInstance : Node3D
         }
         else
         {
-            voice = new AudioStreamPlayer();
-            voice.Name = "VoiceStream";
-            AddChild(voice);
+            _voice = new AudioStreamPlayer();
+            _voice.Name = "VoiceStream";
+            AddChild(_voice);
         }
 
         AudioStreamGenerator generator = new();
         generator.BufferLength = 0.1f;
 
         // Sadly the AudioStreams do not have a generic interface...
-        switch (voice)
+        switch (_voice)
         {
             case AudioStreamPlayer:
-                var voice1D = voice as AudioStreamPlayer;
+                var voice1D = _voice as AudioStreamPlayer;
                 voice1D.Stream = generator;
                 voice1D.Play();
-                playback = voice1D.GetStreamPlayback() as AudioStreamGeneratorPlayback;
+                _playback = voice1D.GetStreamPlayback() as AudioStreamGeneratorPlayback;
                 break;
             case AudioStreamPlayer2D:
-                var voice2D = voice as AudioStreamPlayer2D;
+                var voice2D = _voice as AudioStreamPlayer2D;
                 voice2D.Stream = generator;
                 voice2D.Play();
-                playback = voice2D.GetStreamPlayback() as AudioStreamGeneratorPlayback;
+                _playback = voice2D.GetStreamPlayback() as AudioStreamGeneratorPlayback;
                 break;
             case AudioStreamPlayer3D:
-                var voice3D = voice as AudioStreamPlayer3D;
+                var voice3D = _voice as AudioStreamPlayer3D;
                 voice3D.Stream = generator;
                 voice3D.Play();
-                playback = voice3D.GetStreamPlayback() as AudioStreamGeneratorPlayback;
+                _playback = voice3D.GetStreamPlayback() as AudioStreamGeneratorPlayback;
                 break;
             default:
                 GD.PrintErr("No Voice so no playback generated");
@@ -113,34 +113,34 @@ public partial class VoiceInstance : Node3D
 
     private void ProcessVoice()
     {
-        if (playback.GetFramesAvailable() < 1)
+        if (_playback.GetFramesAvailable() < 1)
             return;
 
-        if (receiveBuffer.Count > 1)
-            for (int i = 0; i < Math.Min(playback.GetFramesAvailable(), receiveBuffer.Count); i++)
-                playback.PushFrame(new(receiveBuffer.Dequeue(), receiveBuffer.Peek()));
+        if (_receiveBuffer.Count > 1)
+            for (int i = 0; i < Math.Min(_playback.GetFramesAvailable(), _receiveBuffer.Count); i++)
+                _playback.PushFrame(new(_receiveBuffer.Dequeue(), _receiveBuffer.Peek()));
     }
 
     private void CreateMic()
     {
-        Mic = new();
-        Mic.Name = nameof(VoiceMic);
-        AddChild(Mic);
-        var recordBusIndex = AudioServer.GetBusIndex(Mic.Bus);
-        effectCapture = (AudioEffectCapture)AudioServer.GetBusEffect(recordBusIndex, 0);
+        _mic = new();
+        _mic.Name = nameof(VoiceMic);
+        AddChild(_mic);
+        var recordBusIndex = AudioServer.GetBusIndex(_mic.Bus);
+        _effectCapture = (AudioEffectCapture)AudioServer.GetBusEffect(recordBusIndex, 0);
     }
 
     private void ProcessMic()
     {
         if (Recording)
         {
-            if (effectCapture == null)
+            if (_effectCapture == null)
                 CreateMic();
 
-            if (prevFrameRecording == false)
-                effectCapture.ClearBuffer();
+            if (_prevFrameRecording == false)
+                _effectCapture.ClearBuffer();
 
-            Vector2[] stereoData = effectCapture.GetBuffer(effectCapture.GetFramesAvailable());
+            Vector2[] stereoData = _effectCapture.GetBuffer(_effectCapture.GetFramesAvailable());
             if (stereoData.Length > 0)
             {
                 float[] data = new float[stereoData.Length];
@@ -160,17 +160,17 @@ public partial class VoiceInstance : Node3D
                     Speak(data, Multiplayer.GetUniqueId());
 
                 Rpc(nameof(Speak), data, Multiplayer.GetUniqueId()); // should be network unique id?
-                EmitSignal(SignalName.sentVoiceData, data);
+                EmitSignal(SignalName.SentVoiceData, data);
             }
         }
 
-        prevFrameRecording = Recording;
+        _prevFrameRecording = Recording;
     }
 
     private float GetPeakVolume()
     {
         List<float> samples = new();
-        float sample = AudioServer.GetBusPeakVolumeLeftDb(recordIndex, 0);
+        float sample = AudioServer.GetBusPeakVolumeLeftDb(_recordIndex, 0);
         samples.Add(sample);
         if (samples.Count > MAX_SAMPLES)
             samples.Remove(samples.First());
