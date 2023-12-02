@@ -1,7 +1,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 public partial class ToiletCharacter : BaseCharacter
 {

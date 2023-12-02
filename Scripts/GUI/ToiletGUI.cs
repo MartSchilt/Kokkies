@@ -6,7 +6,7 @@ public partial class ToiletGUI : MarginContainer
     [Export]
     public ProgressBar ProgressBar;
     [Export]
-    public Label KeyRequest;
+    public TextureRect KeyRequest;
 
     public override void _Ready()
     {
@@ -18,6 +18,7 @@ public partial class ToiletGUI : MarginContainer
 
     public void SetKeyRequest(Key key)
     {
-        KeyRequest.Text = $"{key}";
+        var texture = GD.Load<Texture2D>($"res://Assets/Textures/ButtonPrompts/Keyboard & Mouse/Light/{key}_Key_Light.png");
+        KeyRequest.Texture = texture;
     }
 }
