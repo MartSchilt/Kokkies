@@ -118,12 +118,12 @@ public partial class VoiceOrchestrator : Node
             instance.Listen = Listen;
             instance.InputThreshold = InputThreshold;
 
-            instance.SentVoiceData += SentVoiceData;
+            instance.SentVoiceData += SentVoice;
 
             _id = (int)id;
         }
 
-        instance.ReceivedVoiceData += ReceivedVoiceData;
+        instance.ReceivedVoiceData += ReceivedVoice;
         instance.Name = id.ToString();
 
         _instances.Add(instance);
@@ -179,12 +179,12 @@ public partial class VoiceOrchestrator : Node
         RemoveInstance(id);
     }
 
-    private void ReceivedVoiceData(float[] data, int id)
+    private void ReceivedVoice(float[] data, int id)
     {
         EmitSignal(SignalName.ReceivedVoiceData, data, id);
     }
 
-    private void SentVoiceData(float[] data)
+    private void SentVoice(float[] data)
     {
         EmitSignal(SignalName.SentVoiceData, data);
     }

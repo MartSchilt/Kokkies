@@ -21,8 +21,8 @@ public partial class MultiplayerManager : Node
 
         // VOIP
         VOrchestrator = GameManager.Main.VoiceOrchestrator;
-        VOrchestrator.sentVoiceData += (data) => LogVoice(true, data);
-        VOrchestrator.receivedVoiceData += (data, id) => LogVoice(false, data, id);
+        VOrchestrator.SentVoiceData += (data) => LogVoice(true, data);
+        VOrchestrator.ReceivedVoiceData += (data, id) => LogVoice(false, data, id);
     }
 
     [Rpc(MultiplayerApi.RpcMode.AnyPeer, CallLocal = true)]
