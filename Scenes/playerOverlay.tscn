@@ -1,18 +1,20 @@
-[gd_scene load_steps=8 format=3 uid="uid://cr31j1lpi3ub"]
+[gd_scene load_steps=9 format=3 uid="uid://cr31j1lpi3ub"]
 
 [ext_resource type="Script" path="res://Scripts/GUI/GUIManager.cs" id="1_71t3q"]
 [ext_resource type="Script" path="res://Scripts/GUI/ShooterGUI.cs" id="2_lvdmv"]
 [ext_resource type="Script" path="res://Scripts/GUI/ScoreboardGUI.cs" id="3_3guyc"]
 [ext_resource type="Script" path="res://Scripts/GUI/ToiletGUI.cs" id="3_y7gt0"]
 [ext_resource type="Script" path="res://Scripts/GUI/PauseMenu.cs" id="4_csipo"]
+[ext_resource type="Script" path="res://Scripts/GUI/SettingsMenu.cs" id="5_vpxaw"]
 
 [sub_resource type="Theme" id="Theme_fgaro"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_0po1b"]
 
-[node name="GUI" type="CanvasLayer" node_paths=PackedStringArray("PauseMenu", "Scoreboard", "ShooterGUI", "ToiletGUI")]
+[node name="GUI" type="CanvasLayer" node_paths=PackedStringArray("PauseMenu", "SettingsMenu", "Scoreboard", "ShooterGUI", "ToiletGUI")]
 script = ExtResource("1_71t3q")
 PauseMenu = NodePath("PauseMenu")
+SettingsMenu = NodePath("SettingsMenu")
 Scoreboard = NodePath("Scoreboard")
 ShooterGUI = NodePath("Shooter")
 ToiletGUI = NodePath("Toilet")
@@ -71,6 +73,7 @@ mouse_filter = 2
 color = Color(0.784314, 0.784314, 0.784314, 1)
 
 [node name="Toilet" type="MarginContainer" parent="." node_paths=PackedStringArray("ProgressBar", "KeySequence")]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -130,6 +133,133 @@ layout_mode = 2
 [node name="VBoxContainer" type="VBoxContainer" parent="Scoreboard/VBoxContainer"]
 layout_mode = 2
 
+[node name="SettingsMenu" type="MarginContainer" parent="." node_paths=PackedStringArray("SliderInputThreshold", "SpinBoxInputThreshold", "SliderMusicVolume")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 100
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 100
+theme_override_constants/margin_bottom = 50
+script = ExtResource("5_vpxaw")
+SliderInputThreshold = NodePath("SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3/InputThreshold")
+SpinBoxInputThreshold = NodePath("SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer5/Value")
+SliderMusicVolume = NodePath("SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer/MusicVolume")
+
+[node name="SmallMenu" type="ColorRect" parent="SettingsMenu"]
+custom_minimum_size = Vector2(750, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+color = Color(0.196078, 0.196078, 0.196078, 0.784314)
+
+[node name="Menu" type="MarginContainer" parent="SettingsMenu/SmallMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 25
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsMenu/SmallMenu/Menu"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SETTINGS" type="Label" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Settings
+"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="VOIPLabel" type="Label" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "VOIP Settings"
+
+[node name="Record" type="CheckBox" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+button_pressed = true
+text = "Record voice"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="Label" type="Label" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer5"]
+layout_mode = 2
+text = "Input Threshold"
+
+[node name="Value" type="SpinBox" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 0.1
+step = 0.001
+editable = false
+
+[node name="InputThreshold" type="HSlider" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+max_value = 0.1
+step = 0.001
+
+[node name="Listen" type="CheckBox" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "Voice feedback"
+
+[node name="LogVoice" type="CheckBox" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+text = "Log voice data"
+
+[node name="HSeparator6" type="HSeparator" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+
+[node name="MusicLabel" type="Label" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Music Settings"
+
+[node name="Music" type="CheckBox" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+button_pressed = true
+text = "Play music"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer"]
+layout_mode = 2
+text = "Volume"
+
+[node name="MusicVolume" type="HSlider" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = -80.0
+max_value = 0.0
+value = -10.0
+
+[node name="Back" type="Button" parent="SettingsMenu/SmallMenu/Menu/VBoxContainer"]
+layout_mode = 2
+text = "Back
+"
+
 [node name="PauseMenu" type="MarginContainer" parent="."]
 visible = false
 anchors_preset = 15
@@ -144,9 +274,10 @@ theme_override_constants/margin_bottom = 50
 script = ExtResource("4_csipo")
 
 [node name="SmallMenu" type="ColorRect" parent="PauseMenu"]
-custom_minimum_size = Vector2(400, 0)
+custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 4
 mouse_filter = 2
 color = Color(0.196078, 0.196078, 0.196078, 0.784314)
 
@@ -168,6 +299,7 @@ theme_override_constants/separation = 10
 
 [node name="MENU" type="Label" parent="PauseMenu/SmallMenu/Menu/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "Kokkie Party Pack"
 horizontal_alignment = 1
 
@@ -177,6 +309,10 @@ layout_mode = 2
 [node name="Resume" type="Button" parent="PauseMenu/SmallMenu/Menu/VBoxContainer"]
 layout_mode = 2
 text = "Resume Game"
+
+[node name="Settings" type="Button" parent="PauseMenu/SmallMenu/Menu/VBoxContainer"]
+layout_mode = 2
+text = "Settings"
 
 [node name="Back" type="Button" parent="PauseMenu/SmallMenu/Menu/VBoxContainer"]
 layout_mode = 2
@@ -264,6 +400,14 @@ text = "Voice feedback"
 layout_mode = 2
 text = "Log Voice Data"
 
+[connection signal="toggled" from="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3/Record" to="SettingsMenu" method="_on_record_toggled"]
+[connection signal="value_changed" from="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3/InputThreshold" to="SettingsMenu" method="_on_input_thresh_value_changed"]
+[connection signal="toggled" from="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3/Listen" to="SettingsMenu" method="_on_listen_toggled"]
+[connection signal="toggled" from="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3/LogVoice" to="SettingsMenu" method="_on_log_voice_toggled"]
+[connection signal="toggled" from="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3/Music" to="SettingsMenu" method="_on_music_toggled"]
+[connection signal="value_changed" from="SettingsMenu/SmallMenu/Menu/VBoxContainer/HBoxContainer/VBoxContainer3/HBoxContainer/MusicVolume" to="SettingsMenu" method="_on_music_volume_value_changed"]
+[connection signal="button_down" from="SettingsMenu/SmallMenu/Menu/VBoxContainer/Back" to="SettingsMenu" method="_on_back_button_down"]
 [connection signal="button_down" from="PauseMenu/SmallMenu/Menu/VBoxContainer/Resume" to="PauseMenu" method="_on_resume_button_down"]
+[connection signal="button_down" from="PauseMenu/SmallMenu/Menu/VBoxContainer/Settings" to="PauseMenu" method="_on_settings_button_down"]
 [connection signal="button_down" from="PauseMenu/SmallMenu/Menu/VBoxContainer/Back" to="PauseMenu" method="_on_back_button_down"]
 [connection signal="button_down" from="PauseMenu/SmallMenu/Menu/VBoxContainer/Quit" to="PauseMenu" method="_on_quit_button_down"]

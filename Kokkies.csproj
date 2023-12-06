@@ -1,11 +1,8 @@
 <Project Sdk="Godot.NET.Sdk/4.2.0">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <RollForward>LatestMajor</RollForward>
+    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'android' ">net7.0</TargetFramework>
+    <TargetFramework Condition=" '$(GodotTargetPlatform)' == 'ios' ">net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
-  <ItemGroup>
-    <Folder Include="Scenes\" />
-    <Folder Include="Scripts\Models\" />
-  </ItemGroup>
 </Project>

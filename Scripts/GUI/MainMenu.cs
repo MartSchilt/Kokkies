@@ -149,29 +149,6 @@ public partial class MainMenu : Control
 	}
 	#endregion
 
-	#region VOIP Settings
-	// TODO move to separate settings menu
-	private void _on_input_thresh_value_changed(float value)
-	{
-		_mpManager.VOrchestrator.InputThreshold = value;
-		spinBoxInputThreshold.Value = value;
-	}
-
-	private void _on_listen_toggled(bool button_pressed)
-	{
-		_mpManager.VOrchestrator.Listen = button_pressed;
-	}
-
-	private void _on_log_voice_toggled(bool button_pressed)
-	{
-		_mpManager.ShouldLogVoice = button_pressed;
-	}
-	private void _on_record_toggled(bool button_pressed)
-	{
-		_mpManager.VOrchestrator.Recording = button_pressed;
-	}
-	#endregion
-
 	private void _on_music_toggled(bool button_pressed)
 	{
 		if (button_pressed)

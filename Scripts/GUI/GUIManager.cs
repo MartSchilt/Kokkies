@@ -4,15 +4,17 @@ using System;
 public partial class GUIManager : CanvasLayer
 {
 	[Export]
-	public MarginContainer PauseMenu;
+	public PauseMenu PauseMenu;
+	[Export]
+	public SettingsMenu SettingsMenu;
 	[Export]
 	public ScoreboardGUI Scoreboard;
 	[Export]
 	public ShooterGUI ShooterGUI;
-    [Export]
-    public ToiletGUI ToiletGUI;
+	[Export]
+	public ToiletGUI ToiletGUI;
 
-    public bool IsPaused = false;
+	public bool IsPaused = false;
 
 	public override void _Ready()
 	{
@@ -31,32 +33,34 @@ public partial class GUIManager : CanvasLayer
 	#region GUI Elements
 	public void DisableAll()
 	{
-        DisableGUI(PauseMenu);
-        DisableGUI(Scoreboard);
-        DisableGUI(ShooterGUI);
-        DisableGUI(ToiletGUI);
+		DisableGUI(PauseMenu);
+		DisableGUI(SettingsMenu);
+		DisableGUI(Scoreboard);
+		DisableGUI(ShooterGUI);
+		DisableGUI(ToiletGUI);
 	}
 
 	public void EnablePauseMenu()
 	{
-        IsPaused = true;
+		IsPaused = true;
 		PauseMenu.Show();
 		Input.MouseMode = Input.MouseModeEnum.Visible; // Show the mouse
 	}
 	public void DisablePauseMenu()
 	{
-        IsPaused = false;
+		IsPaused = false;
 		PauseMenu.Hide();
+		SettingsMenu.Hide();
 		Input.MouseMode = Input.MouseModeEnum.Captured; // Hide the mouse
 	}
 
 	public void EnableGUI(Control guiElement)
 	{
-        guiElement.Show();
+		guiElement.Show();
 	}
 	public void DisableGUI(Control guiElement)
 	{
-        guiElement.Hide();
+		guiElement.Hide();
 	}
-    #endregion
+	#endregion
 }

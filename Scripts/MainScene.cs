@@ -53,7 +53,7 @@ public partial class MainScene : Node
 
 		var instance = scene.Instantiate();
 		GD.Print($"Loading {instance.Name}");
-        Scenes.AddChild(instance);
+		Scenes.AddChild(instance);
 
 		MusicManager.PlayMusic(instance.Name);
 	}

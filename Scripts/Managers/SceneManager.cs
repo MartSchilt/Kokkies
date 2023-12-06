@@ -16,7 +16,7 @@ public partial class SceneManager : Node3D
 	{
 		GD.Print($"Starting {nameof(SceneManager)}");
 
-        PlayerCharacters = new();
+		PlayerCharacters = new();
 
 		if (GameManager.Players.Count <= 0)
 		{
@@ -35,7 +35,7 @@ public partial class SceneManager : Node3D
 			var currentPlayer = PlayerScene.Instantiate();
 			currentPlayer.Name = player.Id.ToString();
 			currentPlayer.SetMeta("SpawnLocation", index.ToString());
-            PlayerCharacters.Add(currentPlayer);
+			PlayerCharacters.Add(currentPlayer);
 			AddChild(currentPlayer);
 			Respawn((BaseCharacter)currentPlayer);
 			
@@ -51,8 +51,8 @@ public partial class SceneManager : Node3D
 			GD.PrintErr($"GUI not loaded, are you loading the level from the menu? If not, ignore this message: {e.Message}");
 		}
 
-        EmitSignal(SignalName.SceneLoaded);
-    }
+		EmitSignal(SignalName.SceneLoaded);
+	}
 
 	public void ResetScene()
 	{
@@ -90,7 +90,7 @@ public partial class SceneManager : Node3D
 	public void AddPoints(int playerId, int points)
 	{
 		var playerCharacter = (BaseCharacter)PlayerCharacters
-            .Find(x => x.Name.Equals(playerId.ToString()));
+			.Find(x => x.Name.Equals(playerId.ToString()));
 
 		if (playerCharacter == null) 
 			return;
@@ -114,7 +114,7 @@ public partial class SceneManager : Node3D
 	public Node GetPlayerAudio(int playerId)
 	{
 		var playerCharacter = (BaseCharacter)PlayerCharacters
-            .Find(x => x.Name.Equals(playerId.ToString()));
+			.Find(x => x.Name.Equals(playerId.ToString()));
 
 		return playerCharacter.AudioPlayer;
 	}

@@ -63,8 +63,13 @@ public partial class GameManager : Node
             IpAddress = STANDARD_IP;
     }
 
-    public static void MusicVolume(float value)
+    public static void MusicVolume(double value)
     {
-        AudioServer.SetBusVolumeDb(_musicBusIndex, value);
+        AudioServer.SetBusVolumeDb(_musicBusIndex, (float)value);
+    }
+
+    public static void MuteMusic(bool shouldMute)
+    {
+        AudioServer.SetBusMute(_musicBusIndex, shouldMute);
     }
 }
