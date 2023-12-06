@@ -1,7 +1,7 @@
-<Project Sdk="Godot.NET.Sdk/4.2.0">
+<Project Sdk="Godot.NET.Sdk/4.1.3">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <RollForward>LatestMajor</RollForward>
+    <TargetFramework>net6.0</TargetFramework>
+	<RollForward>LatestMajor</RollForward>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
