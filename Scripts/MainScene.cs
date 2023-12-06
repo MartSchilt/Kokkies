@@ -52,7 +52,8 @@ public partial class MainScene : Node
 		_mainMenu.Hide();
 
 		var instance = scene.Instantiate();
-		Scenes.AddChild(instance);
+		GD.Print($"Loading {instance.Name}");
+        Scenes.AddChild(instance);
 
 		MusicManager.PlayMusic(instance.Name);
 	}

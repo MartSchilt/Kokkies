@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b6grihu8ora6h"]
+[gd_scene load_steps=10 format=3 uid="uid://b6grihu8ora6h"]
 
 [ext_resource type="Script" path="res://Scripts/MainScene.cs" id="1_qcti3"]
 [ext_resource type="PackedScene" uid="uid://cr31j1lpi3ub" path="res://Scenes/playerOverlay.tscn" id="2_4hedu"]
@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://deiys66qyqdgg" path="res://Assets/Music/Everet Almond - The Gunfight.mp3" id="4_tou0b"]
 [ext_resource type="Script" path="res://Scripts/Managers/MultiplayerManager.cs" id="7_5bxdu"]
 [ext_resource type="Script" path="res://Scripts/VOIP/VoiceOrchestrator.cs" id="8_gx01f"]
+[ext_resource type="AudioStream" uid="uid://tsjlfn2lk7l8" path="res://Assets/Music/toiletMusic.mp3" id="9_eccrn"]
 
 [node name="Main" type="Node" node_paths=PackedStringArray("MusicManager", "GUI", "VoiceOrchestrator", "MultiplayerManager")]
 script = ExtResource("1_qcti3")
@@ -29,7 +30,7 @@ script = ExtResource("7_5bxdu")
 
 [node name="MusicPlayer" type="Node" parent="." node_paths=PackedStringArray("musicStreams")]
 script = ExtResource("3_mljgv")
-musicStreams = [NodePath("MainMenu"), NodePath("WesternShooter")]
+musicStreams = [NodePath("MainMenu"), NodePath("WesternShooter"), NodePath("SlamDump")]
 
 [node name="MainMenu" type="AudioStreamPlayer" parent="MusicPlayer"]
 stream = ExtResource("3_r2jps")
@@ -38,5 +39,10 @@ bus = &"Music"
 
 [node name="WesternShooter" type="AudioStreamPlayer" parent="MusicPlayer"]
 stream = ExtResource("4_tou0b")
+volume_db = -10.0
+bus = &"Music"
+
+[node name="SlamDump" type="AudioStreamPlayer" parent="MusicPlayer"]
+stream = ExtResource("9_eccrn")
 volume_db = -10.0
 bus = &"Music"

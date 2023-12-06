@@ -42,7 +42,7 @@ emission_energy_multiplier = 2.0
 [sub_resource type="PlaneMesh" id="PlaneMesh_cumgn"]
 size = Vector2(4, 4)
 
-[node name="toiletGame" type="Node3D"]
+[node name="SlamDump" type="Node3D"]
 script = ExtResource("1_hbmkp")
 PlayerScene = ExtResource("2_lxn4v")
 

@@ -150,6 +150,7 @@ public partial class MainMenu : Control
 	#endregion
 
 	#region VOIP Settings
+	// TODO move to separate settings menu
 	private void _on_input_thresh_value_changed(float value)
 	{
 		_mpManager.VOrchestrator.InputThreshold = value;

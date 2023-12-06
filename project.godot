@@ -28,6 +28,13 @@ GameManager="*res://Scripts/Managers/GameManager.cs"
 project/assembly_name="Kokkies"
 project/solution_directory="res://Kokkies.sln"
 
+[file_customization]
+
+folder_colors={
+"res://Scenes/": "yellow",
+"res://Scripts/": "blue"
+}
+
 [input]
 
 ui_up={
